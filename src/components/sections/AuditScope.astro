@@ -1,0 +1,173 @@
+---
+import Button from '@/components/ui/Button.astro'
+
+/**
+ * Spells out exactly what the free audit checks.
+ *
+ * "Get a free audit" is the same offer every agency in the market makes, and it
+ * converts badly because nobody knows what they are agreeing to. Listing the
+ * actual checks — and saying plainly that some findings are things they can fix
+ * themselves — is the difference between a slogan and an offer.
+ */
+interface Group {
+  title: string
+  items: string[]
+}
+
+interface Props {
+  eyebrow: string
+  title: string
+  intro: string
+  groups: Group[]
+  note: string
+  ctaLabel: string
+  ctaHref: string
+}
+
+const { eyebrow, title, intro, groups, note, ctaLabel, ctaHref } = Astro.props
+---
+
+<section class="audit">
+  <div class="inner">
+    <header class="head">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      <p class="intro">{intro}</p>
+    </header>
+
+    <div class="groups">
+      {
+        groups.map((group) => (
+          <div class="group">
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li>
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M3 8.4 6.2 11.6 13 4.8"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="foot">
+      <p class="note">{note}</p>
+      <Button href={ctaHref} size="lg" arrow>{ctaLabel}</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .audit {
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .inner {
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: clamp(3.5rem, 2rem + 6vw, 6rem);
+  }
+
+  .head {
+    max-inline-size: 62ch;
+    margin-block-end: 2.5rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.6rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  :global([dir='rtl']) .eyebrow {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.9rem;
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .groups {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .group {
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    background: var(--surface-raised);
+  }
+
+  .group h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.9rem;
+  }
+
+  .group ul {
+    display: grid;
+    gap: 0.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .group li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem;
+    align-items: start;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  .group svg {
+    margin-block-start: 0.32em;
+    color: var(--accent);
+  }
+
+  .foot {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+    margin-block-start: 2.5rem;
+    padding-block-start: 2rem;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  @media (min-width: 55rem) {
+    .foot {
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+    }
+  }
+
+  .note {
+    margin: 0;
+    max-inline-size: 62ch;
+    color: var(--text-muted);
+  }
+</style>

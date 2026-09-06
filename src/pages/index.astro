@@ -1,12 +1,79 @@
 ---
+import AuditScope from '@/components/sections/AuditScope.astro'
 import CTABand from '@/components/sections/CTABand.astro'
+import FAQ from '@/components/sections/FAQ.astro'
 import Hero from '@/components/sections/Hero.astro'
 import ServicesGrid from '@/components/sections/ServicesGrid.astro'
 import Steps from '@/components/sections/Steps.astro'
 import { href, localizedPath } from '@/i18n/routes'
 import Page from '@/layouts/Page.astro'
+import { homepageGraph } from '@/lib/schema'
 
 const locale = 'en' as const
+
+const AUDIT_GROUPS = [
+  {
+    title: 'Your website',
+    items: [
+      'How fast it loads on a phone on mobile data',
+      'Whether Google can crawl and index every page',
+      'Titles and descriptions that are missing or duplicated',
+      'Whether the Arabic version is real or machine-translated',
+      'How many taps it takes to contact you',
+    ],
+  },
+  {
+    title: 'Your Google presence',
+    items: [
+      'Whether your Business Profile is verified and correctly categorised',
+      'Duplicate or competing listings',
+      'Missing services, hours, photos and attributes',
+      'Reviews left unanswered',
+      'Where you rank for the searches that matter near you',
+    ],
+  },
+  {
+    title: 'Your competition',
+    items: [
+      'The two or three businesses outranking you locally',
+      'What they have that you do not',
+      'Which of those gaps is worth closing first',
+    ],
+  },
+]
+
+const FAQ_ITEMS = [
+  {
+    question: 'Is the free audit actually free?',
+    answer:
+      'Yes. You get a written summary of what we found and what we would fix first. There is no obligation, and some of what we list will be things you can fix yourself without paying anyone.',
+  },
+  {
+    question: 'Do we have to move our website to you?',
+    answer:
+      'No. Plenty of what an audit turns up can be fixed on the site you already have, by whoever currently maintains it. If a rebuild genuinely is the cheaper answer we will say so and explain why, but that is your call to make.',
+  },
+  {
+    question: 'Do you work with businesses outside Riyadh?',
+    answer:
+      'Yes. We are based in Riyadh and work with businesses in Jeddah, Taif, Mecca, Al Kharj and the surrounding areas. Web and search work does not require us to be in the same city, and we will say so if a project genuinely needs an on-site visit.',
+  },
+  {
+    question: 'Can you work in Arabic?',
+    answer:
+      'Both languages, and the Arabic is written rather than translated. Arabic pages get their own copy, their own typefaces and their own spacing, because Arabic set by someone who does not read it is obvious to everyone who does.',
+  },
+  {
+    question: 'How do you charge?',
+    answer:
+      'Fixed price per project for build work, and a monthly retainer for ongoing SEO or store management. You see the price and what it covers before anything starts. We do not bill by the hour, because it makes the invoice a surprise.',
+  },
+  {
+    question: 'Who owns the website when it is finished?',
+    answer:
+      'You do. Domain, hosting and code are all in your name, and you can move to another agency at any point without asking our permission or paying to be released.',
+  },
+]
 
 const WHY = [
   {
@@ -92,6 +159,18 @@ const PROCESS = [
     tone="sunken"
   />
 
+  <AuditScope
+    eyebrow="The free audit"
+    title="What we actually look at"
+    intro="Every agency in Riyadh offers a free audit. Here is precisely what ours covers, so you know what you are agreeing to before you ask for it."
+    groups={AUDIT_GROUPS}
+    note="You get a written summary, not a sales call. Some of what we find will be things you can fix yourself, and we will tell you which ones those are."
+    ctaLabel="Get a free audit"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+
+  <FAQ eyebrow="Questions" title="What people ask before they start" items={FAQ_ITEMS} />
+
   <CTABand
     locale={locale}
     title="Not sure what your business needs?"
@@ -99,4 +178,6 @@ const PROCESS = [
     ctaLabel="Get a free audit"
     ctaHref={href(localizedPath('freeAudit', locale))}
   />
+
+  <script type="application/ld+json" set:html={homepageGraph(locale)} />
 </Page>

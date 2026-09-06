@@ -217,3 +217,43 @@ Noindexed pages (styleguide, both 404s) deliberately emit **no** canonical.
 **For the cutover checklist:** once `powersourcedigital.com` is attached, add a Cloudflare
 redirect rule sending `powersourcedigital.pages.dev/*` to the custom domain, so the temp
 host stops serving content at all.
+
+## 19. The homepage is not a re-skin of the WordPress site
+
+The old site's homepage is hero → five services → why us → process → CTA. Rebuilding that
+with nicer type would be a redesign, not an improvement, so two sections were added that the
+old site does not have and that address why its offer converts poorly.
+
+**"What we actually look at."** "Get a free audit" is the same sentence every agency in
+Riyadh uses, and it converts badly because nobody knows what they are agreeing to. The
+section lists the real checks — site, Google presence, competitors — and states plainly that
+some findings will be things the reader can fix themselves. Naming what is inspected turns a
+slogan into an offer.
+
+**A homepage FAQ answering the objections that actually block a sale:** is it really free,
+do we have to move to you, who owns the site, how do you charge. These are the questions
+that stop an enquiry, and answering them before the form is a conversion decision as much
+as an SEO one.
+
+## 20. The FAQ accordion is native `<details>`, not an ARIA widget
+
+Expand/collapse, keyboard operation, focus handling and the exposed open state all come free
+from the element, and it works with zero JavaScript. A hand-built ARIA accordion would be
+more code, more to get wrong, and non-functional before hydration.
+
+`name="faq"` makes the group exclusive natively — one open at a time, no script.
+
+## 21. FAQ markup is generated from the rendered array
+
+`faqPage()` takes the same array the accordion renders. There is no second copy of the
+questions to fall out of sync. A `FAQPage` whose markup disagrees with the visible answer is
+a structured-data policy violation, not merely a bug.
+
+`AggregateRating` and `Review` are deliberately absent from `schema.ts`. There are no genuine
+reviews yet, and fabricating them risks a manual action. They go in when real ones exist.
+
+## 22. Page weight
+
+Homepage, gzipped, including all inlined JavaScript: **16.3 kb English, 17.5 kb Arabic**,
+against a 120 kb budget. Astro inlines the component scripts, so there is no separate bundle
+request; fonts are additional and subset by `unicode-range`.
