@@ -97,3 +97,63 @@ The brief's rule is that existing English URLs must not change, and it names
 brief separately specifies `/work/` as the case-study index, while the live site uses
 `/portfolio/`. `/work/` wins and `/portfolio/` 301s to it, for the same reason as decision 9:
 a one-week-old URL with no equity to protect.
+
+## 11. Four logo colours, four different jobs
+
+The PST mark is green, red, yellow and blue — sampled from the logo file with sharp rather
+than estimated by eye: `#00A858`, `#E83030`, `#F8C828`, `#2850A0`.
+
+Four colours is too many for a UI palette; used decoratively they read as a children's
+brand. Rather than discard two, each is given exactly one job:
+
+- **green** — the brand accent. The one colour a visitor associates with PSD.
+- **blue** — desaturated and darkened into the `ink` neutral ramp. Every grey on the site
+  is quietly the logo's blue rather than a generic slate.
+- **red** — `danger` only. Form errors. Never decorative.
+- **yellow** — `warning` only. Audit "needs attention" states. Never decorative.
+
+The site is therefore built from the mark without looking like the mark.
+
+## 12. The accent is two steps darker than the logo green
+
+`#00A858` reaches only **4.44:1** on white. It cannot legally carry body-size text or a
+white button label under WCAG AA, and the brief requires Accessibility 100.
+
+`--accent` is therefore `brand-700` (`#006E3C`, 6.37:1). The true logo green survives as
+`--accent-vivid` for decorative use only — gradients, hairline card edges, icon fills on
+dark grounds — where no text sits on it.
+
+`scripts/check-contrast.mjs` reads the real token values out of `global.css`, resolves
+`var()` chains, and asserts all 30 semantic pairs in both themes. It found this failure;
+it was not caught by eye. It runs in `pnpm check`.
+
+## 13. `border-subtle` is deliberately exempt from 3:1
+
+WCAG 2.2 SC 1.4.11 governs boundaries that *identify a control*, not decorative hairlines.
+Holding a card divider to 3:1 would force a heavy border and wreck the visual language for
+no accessibility gain. The tokens are split: `--border-subtle` (decorative, untested) and
+`--border-interactive` (input and control boundaries, asserted at 3:1).
+
+## 14. Cities narrowed to the stated target market
+
+The brief listed 8 cities. The actual target is Riyadh, Jeddah, Taif "and surrounding
+areas", so the list is now those three plus Mecca (shares a metro with Jeddah and Taif) and
+Al Kharj (Riyadh metro). Dammam, Al Khobar, Medina, Tabuk and Abha are removed — pages for
+markets the business is not targeting would be thin content with no local proof behind them.
+
+That takes generated city pages from 80 to **50** (5 services × 5 cities × 2 languages).
+
+## 15. Fonts: Instrument Sans + IBM Plex Sans Arabic + Almarai
+
+All three are open-licensed (SIL OFL) and self-hosted via Fontsource, so there is no licence
+to buy. Satoshi and General Sans were the alternatives but are Fontshare-only and not on npm,
+which would mean vendoring files by hand.
+
+Arabic pairs two faces deliberately: IBM Plex Sans Arabic for headings (firmer structure at
+display sizes) and Almarai for running text (better rhythm at body sizes). Arabic gets 1.06×
+the Latin body size and 1.9 leading, and never receives the negative tracking applied to
+Latin display type — Arabic is cursive and negative tracking breaks the letter joins.
+
+Each Fontsource file carries a `unicode-range`, so an English page never downloads the
+Arabic faces and vice versa. The subsetting is done by the loader, not by shipping every
+glyph to everyone.

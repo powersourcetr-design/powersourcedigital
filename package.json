@@ -12,15 +12,19 @@
     "prebuild": "node scripts/build-redirects.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "node scripts/check-logical-props.mjs && astro check && biome check .",
+    "check": "node scripts/check-logical-props.mjs && node scripts/check-contrast.mjs && astro check && biome check .",
     "check:dir": "node scripts/check-logical-props.mjs",
     "redirects": "node scripts/build-redirects.mjs",
-    "format": "biome check --write ."
+    "format": "biome check --write .",
+    "check:contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.6",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.6.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource/almarai": "^5.3.0",
+    "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.14.1",
     "motion": "^12.23.12",

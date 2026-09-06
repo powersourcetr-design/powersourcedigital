@@ -73,19 +73,13 @@ export const CITIES = [
     region: { en: 'Makkah Province', ar: 'منطقة مكة المكرمة' },
   },
   {
-    key: 'dammam',
-    slug: { en: 'dammam', ar: 'الدمام' },
-    name: { en: 'Dammam', ar: 'الدمام' },
-    geo: { lat: 26.4207, lng: 50.0888 },
-    region: { en: 'Eastern Province', ar: 'المنطقة الشرقية' },
+    key: 'taif',
+    slug: { en: 'taif', ar: 'الطائف' },
+    name: { en: 'Taif', ar: 'الطائف' },
+    geo: { lat: 21.2703, lng: 40.4158 },
+    region: { en: 'Makkah Province', ar: 'منطقة مكة المكرمة' },
   },
-  {
-    key: 'al-khobar',
-    slug: { en: 'al-khobar', ar: 'الخبر' },
-    name: { en: 'Al Khobar', ar: 'الخبر' },
-    geo: { lat: 26.2794, lng: 50.2083 },
-    region: { en: 'Eastern Province', ar: 'المنطقة الشرقية' },
-  },
+  // "Surrounding areas" — the two that share a metro with a primary city.
   {
     key: 'mecca',
     slug: { en: 'mecca', ar: 'مكة-المكرمة' },
@@ -94,25 +88,11 @@ export const CITIES = [
     region: { en: 'Makkah Province', ar: 'منطقة مكة المكرمة' },
   },
   {
-    key: 'medina',
-    slug: { en: 'medina', ar: 'المدينة-المنورة' },
-    name: { en: 'Medina', ar: 'المدينة المنورة' },
-    geo: { lat: 24.5247, lng: 39.5692 },
-    region: { en: 'Madinah Province', ar: 'منطقة المدينة المنورة' },
-  },
-  {
-    key: 'tabuk',
-    slug: { en: 'tabuk', ar: 'تبوك' },
-    name: { en: 'Tabuk', ar: 'تبوك' },
-    geo: { lat: 28.3835, lng: 36.5662 },
-    region: { en: 'Tabuk Province', ar: 'منطقة تبوك' },
-  },
-  {
-    key: 'abha',
-    slug: { en: 'abha', ar: 'أبها' },
-    name: { en: 'Abha', ar: 'أبها' },
-    geo: { lat: 18.2465, lng: 42.5117 },
-    region: { en: 'Asir Province', ar: 'منطقة عسير' },
+    key: 'al-kharj',
+    slug: { en: 'al-kharj', ar: 'الخرج' },
+    name: { en: 'Al Kharj', ar: 'الخرج' },
+    geo: { lat: 24.1483, lng: 47.305 },
+    region: { en: 'Riyadh Province', ar: 'منطقة الرياض' },
   },
 ] as const satisfies readonly CityDef[]
 

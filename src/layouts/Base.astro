@@ -7,9 +7,11 @@ interface Props {
   locale: Locale
   title: string
   description: string
+  /** Internal pages (styleguide, thank-you) that must stay out of the index. */
+  noindex?: boolean
 }
 
-const { locale, title, description } = Astro.props
+const { locale, title, description, noindex = false } = Astro.props
 const t = useTranslations(locale)
 const dir = DIR[locale]
 ---
@@ -21,6 +23,7 @@ const dir = DIR[locale]
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="sitemap" href="/sitemap-index.xml" />
     {/* Applies the stored theme before first paint so the page never flashes
         the wrong one. Hashed into the CSP in step 6. */}

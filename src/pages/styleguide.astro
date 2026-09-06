@@ -1,0 +1,467 @@
+---
+import Base from '@/layouts/Base.astro'
+
+/**
+ * Checkpoint 1: the palette and two type specimens.
+ *
+ * Noindexed and excluded from the sitemap. Both writing directions are shown
+ * side by side rather than behind a toggle, so a review sees them together.
+ */
+
+const RAMPS = [
+  { name: 'ink', note: 'From the logo blue #2850A0, desaturated. Text and dark grounds.' },
+  { name: 'brand', note: 'From the logo green #00A858. Accent only, never a large fill.' },
+  { name: 'sand', note: 'Warm neutral for section grounds.' },
+] as const
+
+const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
+
+const LOGO_COLOURS = [
+  { hex: '#00A858', role: 'Brand accent', job: 'Interactive, affirmative' },
+  { hex: '#2850A0', role: 'Ink ramp', job: 'Every neutral on the site' },
+  { hex: '#E83030', role: 'Danger only', job: 'Form errors. Never decorative' },
+  { hex: '#F8C828', role: 'Warning only', job: 'Audit flags. Never decorative' },
+] as const
+
+const SEMANTIC = [
+  { token: 'surface', use: 'Page ground' },
+  { token: 'surface-raised', use: 'Cards, panels' },
+  { token: 'surface-sunken', use: 'Alternating bands' },
+  { token: 'text-strong', use: 'Headings' },
+  { token: 'text-default', use: 'Body copy' },
+  { token: 'text-muted', use: 'Captions, meta' },
+  { token: 'accent', use: 'Links, button fills' },
+  { token: 'accent-vivid', use: 'Decorative only' },
+  { token: 'border-subtle', use: 'Hairlines' },
+  { token: 'border-interactive', use: 'Input boundaries' },
+] as const
+
+const TYPE_SCALE = [
+  { token: 'display', label: 'Display', px: '44 → 76px' },
+  { token: 'h1', label: 'Heading 1', px: '36 → 56px' },
+  { token: 'h2', label: 'Heading 2', px: '28 → 40px' },
+  { token: 'h3', label: 'Heading 3', px: '22 → 28px' },
+] as const
+---
+
+<Base
+  locale="en"
+  noindex
+  title="Styleguide — Power Source Digital"
+  description="Internal design system reference. Not for publication."
+>
+  <div class="page">
+    <header class="head">
+      <div>
+        <p class="eyebrow">Checkpoint 1</p>
+        <h1>Palette &amp; type</h1>
+        <p class="lede">
+          Everything below is derived from the PST mark. Colours were sampled from the logo
+          file, not eyeballed. All 30 semantic pairs pass WCAG 2.2 AA in both themes —
+          <code>pnpm run check:contrast</code> proves it on every build.
+        </p>
+      </div>
+      <button type="button" id="theme-toggle" class="toggle" aria-pressed="false">
+        Toggle theme
+      </button>
+    </header>
+
+    <section aria-labelledby="mark">
+      <h2 id="mark">The mark, and what each colour does</h2>
+      <p class="note">
+        Four colours is a lot for a UI palette. Rather than drop two, each has one job —
+        so the site is built from the mark without looking like it.
+      </p>
+      <ul class="roles">
+        {
+          LOGO_COLOURS.map((c) => (
+            <li>
+              <span class="swatch-lg" style={`background:${c.hex}`} aria-hidden="true" />
+              <strong>{c.role}</strong>
+              <code>{c.hex}</code>
+              <span class="muted">{c.job}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="ramps">
+      <h2 id="ramps">Ramps</h2>
+      {
+        RAMPS.map((ramp) => (
+          <div class="ramp">
+            <div class="ramp-head">
+              <strong>{ramp.name}</strong>
+              <span class="muted">{ramp.note}</span>
+            </div>
+            <ol class="steps">
+              {STEPS.map((step) => (
+                <li>
+                  <span
+                    class="swatch"
+                    style={`background: var(--color-${ramp.name}-${step})`}
+                    aria-hidden="true"
+                  />
+                  <span class="step-label">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))
+      }
+    </section>
+
+    <section aria-labelledby="semantic">
+      <h2 id="semantic">Semantic tokens</h2>
+      <p class="note">
+        Components reference these names only, never a ramp step. That is what makes light
+        and dark two designed themes rather than one inverted one — switch the theme above
+        and every swatch here moves independently.
+      </p>
+      <ul class="tokens">
+        {
+          SEMANTIC.map((s) => (
+            <li>
+              <span class="swatch" style={`background: var(--${s.token})`} aria-hidden="true" />
+              <code>{s.token}</code>
+              <span class="muted">{s.use}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="type">
+      <h2 id="type">Type specimens</h2>
+      <p class="note">
+        Instrument Sans for Latin, IBM Plex Sans Arabic for Arabic headings, Almarai for
+        Arabic body. Self-hosted; each file carries a <code>unicode-range</code>, so an
+        English page never downloads the Arabic faces.
+      </p>
+
+      <div class="specimens">
+        <article class="specimen" dir="ltr" lang="en">
+          <p class="specimen-tag">English · Instrument Sans · LTR</p>
+          {
+            TYPE_SCALE.map((t) => (
+              <div class="row">
+                <span class="row-meta">
+                  {t.label} <span class="muted">{t.px}</span>
+                </span>
+                <p class={`sample ${t.token}`}>Build a digital presence that works.</p>
+              </div>
+            ))
+          }
+          <div class="row">
+            <span class="row-meta">Body <span class="muted">16 → 17px</span></span>
+            <p class="sample body">
+              We build professional websites, improve your visibility on Google, and manage
+              the digital tools customers use to find you. Riyadh, Jeddah, Taif and the
+              surrounding areas.
+            </p>
+          </div>
+        </article>
+
+        <article class="specimen" dir="rtl" lang="ar">
+          <p class="specimen-tag">العربية · IBM Plex Sans Arabic + Almarai · RTL</p>
+          {
+            TYPE_SCALE.map((t) => (
+              <div class="row">
+                <span class="row-meta">
+                  {t.label} <span class="muted">{t.px}</span>
+                </span>
+                <p class={`sample ${t.token}`}>حضور رقمي يعمل لصالح نشاطك.</p>
+              </div>
+            ))
+          }
+          <div class="row">
+            <span class="row-meta">Body <span class="muted">16 → 17px</span></span>
+            <p class="sample body">
+              نصمم مواقع احترافية، ونحسّن ظهورك على جوجل، وندير الأدوات الرقمية التي يستخدمها
+              عملاؤك للوصول إليك. الرياض وجدة والطائف والمناطق المحيطة.
+            </p>
+          </div>
+          <div class="row">
+            <span class="row-meta">Numerals <span class="muted">Western, LTR-isolated</span></span>
+            <p class="sample body">
+              اتصل بنا على <span class="num" dir="ltr">+966 56 065 4302</span> أو أرسل بريداً
+              إلى hello@powersourcedigital.com
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  const button = document.getElementById('theme-toggle')
+
+  const current = () =>
+    document.documentElement.dataset['theme'] ??
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+
+  button?.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark'
+    document.documentElement.dataset['theme'] = next
+    button.setAttribute('aria-pressed', String(next === 'dark'))
+    try {
+      localStorage.setItem('psd-theme', next)
+    } catch {
+      /* Storage blocked: the toggle still works for this page view. */
+    }
+  })
+</script>
+
+<style>
+  .page {
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: clamp(2rem, 1rem + 3vw, 4rem);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: start;
+    justify-content: space-between;
+    padding-block-end: 2rem;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .eyebrow {
+    color: var(--text-muted);
+    font-size: var(--text-small);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-block-end: 0.5rem;
+  }
+
+  h1 {
+    font-size: var(--text-h1);
+    margin: 0;
+  }
+
+  .lede {
+    max-inline-size: 60ch;
+    margin-block-start: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .toggle {
+    flex-shrink: 0;
+    padding: 0.6rem 1.1rem;
+    font: inherit;
+    font-size: var(--text-small);
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .toggle:hover {
+    background: var(--accent-hover);
+  }
+
+  section {
+    padding-block: clamp(2rem, 1rem + 3vw, 3.5rem);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.75rem;
+  }
+
+  .note {
+    max-inline-size: 68ch;
+    color: var(--text-muted);
+    margin-block-end: 1.75rem;
+  }
+
+  .muted {
+    color: var(--text-muted);
+  }
+
+  code {
+    font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+    font-size: 0.85em;
+  }
+
+  /* --- Logo colour roles --------------------------------------------------- */
+
+  .roles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .roles li {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1rem;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.75rem;
+  }
+
+  .swatch-lg {
+    display: block;
+    block-size: 3.5rem;
+    border-radius: 0.5rem;
+    margin-block-end: 0.6rem;
+  }
+
+  /* --- Ramps --------------------------------------------------------------- */
+
+  .ramp + .ramp {
+    margin-block-start: 2rem;
+  }
+
+  .ramp-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: baseline;
+    margin-block-end: 0.6rem;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .steps li {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: center;
+  }
+
+  .swatch {
+    display: block;
+    inline-size: 100%;
+    block-size: 3rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .step-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Semantic tokens ----------------------------------------------------- */
+
+  .tokens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tokens li {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .tokens .swatch {
+    block-size: 2.75rem;
+  }
+
+  /* --- Type specimens ------------------------------------------------------ */
+
+  .specimens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 1.5rem;
+  }
+
+  .specimen {
+    padding: 1.5rem;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+  }
+
+  .specimen-tag {
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    padding-block-end: 0.75rem;
+    margin-block-end: 1.25rem;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .row + .row {
+    margin-block-start: 1.5rem;
+  }
+
+  .row-meta {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-block-end: 0.4rem;
+  }
+
+  .sample {
+    margin: 0;
+    color: var(--text-strong);
+  }
+
+  .sample.display {
+    font-size: var(--text-display);
+    line-height: 1.03;
+    font-weight: 600;
+  }
+
+  .sample.h1 {
+    font-size: var(--text-h1);
+    line-height: 1.08;
+    font-weight: 600;
+  }
+
+  .sample.h2 {
+    font-size: var(--text-h2);
+    line-height: 1.15;
+    font-weight: 600;
+  }
+
+  .sample.h3 {
+    font-size: var(--text-h3);
+    line-height: 1.25;
+    font-weight: 600;
+  }
+
+  .sample.body {
+    font-size: var(--text-body);
+    color: var(--text-default);
+  }
+
+  /* The Arabic specimen sets its own direction, so the global [dir=rtl] body
+     rules do not reach it. Apply the Arabic faces and leading here. */
+  .specimen[dir='rtl'] .sample.body {
+    font-family: var(--font-arabic-body);
+    line-height: 1.95;
+  }
+
+  .specimen[dir='rtl'] :is(.sample.display, .sample.h1, .sample.h2, .sample.h3) {
+    font-family: var(--font-arabic);
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+</style>

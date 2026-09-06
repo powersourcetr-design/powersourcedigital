@@ -1,62 +1,92 @@
 @import "tailwindcss";
 
+/* Self-hosted faces. Each file carries a `unicode-range`, so a browser on an
+   English page never downloads the Arabic files and vice versa — the subsetting
+   is done by the loader, not by shipping every glyph to everyone. */
+@import "@fontsource-variable/instrument-sans/wght.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
+@import "@fontsource/almarai/arabic-400.css";
+@import "@fontsource/almarai/arabic-700.css";
+
 /* ==========================================================================
-   PROVISIONAL TOKENS — NOT THE CHECKPOINT 1 PALETTE
+   Brand tokens, derived from the PST mark.
 
-   The brand ramps below are placeholders so the build runs. They are NOT the
-   proposed palette: the PSD logo files and the PST flyer are still outstanding
-   (see CONTENT-NEEDED.md), and the only mark available today is the PST logo,
-   whose four colours (green / red / yellow / blue) do not match the "deep green
-   and dark navy" premise in the brief.
+   Sampled from the logo with sharp (see DECISIONS.md 11):
+     green  #00A858   red  #E83030   yellow  #F8C828   blue  #2850A0
 
-   The token STRUCTURE here is final: every colour used anywhere in the site
-   resolves through these names, so swapping in the real ramps is a change to
-   this block alone.
+   The mark carries four colours. Using all four as a UI palette would read as
+   a children's brand, so they are split by job:
+
+     green  → the brand accent. Interactive, affirmative, the one colour a
+              visitor should associate with PSD.
+     blue   → desaturated and darkened into the `ink` neutral ramp, so every
+              grey on the site is quietly the logo's blue rather than a
+              generic slate. It is the ink, not a second accent.
+     red    → semantic only. Form errors, destructive states. Never decorative.
+     yellow → semantic only. Warnings and the audit "needs attention" states.
+
+   That way the site is unmistakably built from the mark without ever looking
+   like the mark. Every colour used anywhere resolves through these names.
    ========================================================================== */
 
 @theme {
-  /* --- Brand ramps (provisional values, final structure) ----------------- */
-  --color-ink-50: #f5f6f7;
-  --color-ink-100: #e5e7ea;
-  --color-ink-200: #cbd0d6;
-  --color-ink-300: #a4acb7;
-  --color-ink-400: #768192;
-  --color-ink-500: #5a6577;
-  --color-ink-600: #47505f;
-  --color-ink-700: #3b424e;
-  --color-ink-800: #333843;
-  --color-ink-900: #2d313a;
-  --color-ink-950: #14171d;
+  /* --- Ink: the logo blue #2850A0, desaturated into a navy neutral ------- */
+  --color-ink-50: #f4f6fa;
+  --color-ink-100: #e6eaf3;
+  --color-ink-200: #ccd5e6;
+  --color-ink-300: #a5b3ce;
+  --color-ink-400: #7789ad;
+  --color-ink-500: #566890;
+  --color-ink-600: #425276;
+  --color-ink-700: #364260;
+  --color-ink-800: #2f394f;
+  --color-ink-900: #232a3b;
+  --color-ink-950: #101422;
 
-  --color-brand-50: #edfcf3;
-  --color-brand-100: #d4f7e1;
-  --color-brand-200: #adedc8;
-  --color-brand-300: #77dda8;
-  --color-brand-400: #40c584;
-  --color-brand-500: #1ba34b; /* sampled from the PST swoosh — provisional */
-  --color-brand-600: #12873c;
-  --color-brand-700: #106c32;
-  --color-brand-800: #10562b;
-  --color-brand-900: #0e4725;
-  --color-brand-950: #042813;
+  /* --- Brand: the logo green #00A858 ------------------------------------ */
+  --color-brand-50: #e8faf0;
+  --color-brand-100: #c7f2dc;
+  --color-brand-200: #92e5be;
+  --color-brand-300: #55d199;
+  --color-brand-400: #21b975;
+  --color-brand-500: #00a858; /* the logo green, exactly */
+  --color-brand-600: #008a49;
+  --color-brand-700: #006e3c;
+  --color-brand-800: #005730;
+  --color-brand-900: #00482a;
+  --color-brand-950: #002817;
 
+  /* --- Sand: warm neutral for section grounds --------------------------- */
   --color-sand-50: #faf8f4;
-  --color-sand-100: #f2eee4;
-  --color-sand-200: #e6dcc8;
-  --color-sand-300: #d5c4a4;
-  --color-sand-400: #c2a67c;
-  --color-sand-500: #b48f60;
-  --color-sand-600: #a67a54;
-  --color-sand-700: #8a6146;
-  --color-sand-800: #71503e;
-  --color-sand-900: #5d4335;
-  --color-sand-950: #32221b;
+  --color-sand-100: #f4efe5;
+  --color-sand-200: #e8dfcc;
+  --color-sand-300: #d7c8a8;
+  --color-sand-400: #c3ab80;
+  --color-sand-500: #b39463;
+  --color-sand-600: #9c7d52;
+  --color-sand-700: #816445;
+  --color-sand-800: #6a523c;
+  --color-sand-900: #584534;
+  --color-sand-950: #31251b;
+
+  /* --- Semantic only: the logo's red and yellow ------------------------- */
+  --color-danger-50: #fdeceb;
+  --color-danger-500: #e83030; /* the logo red, exactly */
+  --color-danger-600: #c81f22;
+  --color-danger-700: #a4161b;
+
+  --color-warning-50: #fef6e0;
+  --color-warning-400: #f8c828; /* the logo yellow, exactly */
+  --color-warning-600: #a97a05;
+  --color-warning-700: #855e04;
 
   /* --- Type ------------------------------------------------------------- */
-  /* Font families are placeholders until the licensed faces are installed;
-     the fallback stacks are real so nothing renders in a default serif. */
-  --font-sans: "PSD Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-arabic: "PSD Arabic", "Segoe UI", Tahoma, sans-serif;
+  /* Self-hosted via Fontsource, subset per script, swap display. */
+  --font-sans:
+    "Instrument Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Almarai", "Segoe UI", Tahoma, sans-serif;
+  --font-arabic-body: "Almarai", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
 
   /* Fluid scale. Arabic overrides the leading further down. */
   --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 4.75rem);
@@ -88,8 +118,19 @@
   --text-strong: var(--color-ink-950);
   --text-default: var(--color-ink-800);
   --text-muted: var(--color-ink-500);
+
+  /* Decorative hairlines. Not a control boundary, so no 3:1 obligation. */
   --border-subtle: var(--color-ink-200);
-  --accent: var(--color-brand-600);
+  /* Boundaries that identify a control (inputs, checkboxes). Must clear 3:1. */
+  --border-interactive: var(--color-ink-400);
+
+  /* The logo green (#00a858) only reaches 4.44:1 on white — it cannot legally
+     carry body-size text or a white button label. `accent` is therefore two
+     steps darker, and the true logo green survives as `accent-vivid` for
+     decorative use only: gradients, hairline card edges, icon fills on dark. */
+  --accent: var(--color-brand-700);
+  --accent-hover: var(--color-brand-800);
+  --accent-vivid: var(--color-brand-500);
   --accent-contrast: #ffffff;
 }
 
@@ -102,7 +143,10 @@
   --text-default: var(--color-ink-100);
   --text-muted: var(--color-ink-300);
   --border-subtle: var(--color-ink-800);
+  --border-interactive: var(--color-ink-400);
   --accent: var(--color-brand-400);
+  --accent-hover: var(--color-brand-300);
+  --accent-vivid: var(--color-brand-400);
   --accent-contrast: var(--color-ink-950);
 }
 
@@ -116,7 +160,10 @@
     --text-default: var(--color-ink-100);
     --text-muted: var(--color-ink-300);
     --border-subtle: var(--color-ink-800);
+    --border-interactive: var(--color-ink-400);
     --accent: var(--color-brand-400);
+    --accent-hover: var(--color-brand-300);
+    --accent-vivid: var(--color-brand-400);
     --accent-contrast: var(--color-ink-950);
   }
 }
@@ -139,24 +186,31 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Arabic needs more leading and a slightly larger optical size than Latin. */
-[lang="ar"] body,
+:is(h1, h2, h3, h4) {
+  color: var(--text-strong);
+  text-wrap: balance;
+}
+
+/* Arabic needs more leading and a slightly larger optical size than Latin.
+   Almarai for running text, IBM Plex Sans Arabic for headings — Plex has the
+   firmer structure at display sizes, Almarai the better rhythm at body sizes. */
+[dir="rtl"] body,
 body[dir="rtl"] {
-  font-family: var(--font-arabic);
+  font-family: var(--font-arabic-body);
   font-size: calc(var(--text-body) * 1.06);
   line-height: 1.9;
 }
 
-[dir="rtl"] h1,
-[dir="rtl"] h2,
-[dir="rtl"] h3 {
+[dir="rtl"] :is(h1, h2, h3, h4) {
+  font-family: var(--font-arabic);
   line-height: 1.4;
+  /* Arabic script is cursive; negative tracking breaks the joins. */
   letter-spacing: 0;
 }
 
-:is(h1, h2, h3, h4) {
-  color: var(--text-strong);
-  text-wrap: balance;
+/* Latin display sizes want tight tracking; Arabic must never get it. */
+[dir="ltr"] :is(h1, h2) {
+  letter-spacing: -0.02em;
 }
 
 p {
