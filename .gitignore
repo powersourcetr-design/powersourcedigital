@@ -8,3 +8,6 @@ dist/
 .DS_Store
 *.local
 .lighthouseci/
+
+# Generated at build time by scripts/build-redirects.mjs
+public/_redirects
