@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "powersourcedigital",
+  "compatibility_date": "2026-09-01",
+
+  // Assets-only Worker: there is no `main` script, so every request is served
+  // straight from the built static site. A Worker entrypoint gets added in
+  // step 5, when the lead form needs an /api/lead route.
+  "assets": {
+    "directory": "./dist",
+
+    // Astro builds with `trailingSlash: 'always'` and `format: 'directory'`,
+    // so /services/ resolves to /services/index.html.
+    "html_handling": "auto-trailing-slash",
+
+    // Serves the nearest 404.html walking up the tree, so /ar/* gets the
+    // Arabic 404 and everything else gets the English one.
+    "not_found_handling": "404-page"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

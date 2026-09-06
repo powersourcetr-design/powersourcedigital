@@ -1,0 +1,76 @@
+---
+import Base from '@/layouts/Base.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import { useTranslations } from '@/i18n/ui'
+
+const locale = 'ar' as const
+const t = useTranslations(locale)
+---
+
+<Base
+  locale={locale}
+  noindex
+  title="الصفحة غير موجودة | مصدر الطاقه ديجيتال"
+  description="هذه الصفحة غير متوفرة. تصفّح خدماتنا أو تواصل معنا."
+>
+  <div class="wrap">
+    <p class="code num">404</p>
+    <h1>{t('error.404.title')}</h1>
+    <p class="body">{t('error.404.body')}</p>
+    <div class="actions">
+      <a class="button" href={href(localizedPath('home', locale))}>{t('error.404.cta')}</a>
+      <a class="link" href={href(localizedPath('services', locale))}>{t('nav.services')}</a>
+      <a class="link" href={href(localizedPath('contact', locale))}>{t('nav.contact')}</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .wrap {
+    max-inline-size: 40rem;
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: clamp(4rem, 2rem + 10vw, 9rem);
+    text-align: start;
+  }
+
+  .code {
+    font-size: var(--text-small);
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin: 0 0 0.75rem;
+  }
+
+  h1 {
+    font-size: var(--text-h1);
+    margin: 0;
+  }
+
+  .body {
+    color: var(--text-muted);
+    margin-block: 1rem 2rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+  }
+
+  .button {
+    padding: 0.7rem 1.35rem;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-radius: 999px;
+    text-decoration: none;
+  }
+
+  .button:hover {
+    background: var(--accent-hover);
+  }
+
+  .link {
+    color: var(--accent);
+  }
+</style>

@@ -22,6 +22,9 @@ If server islands are genuinely needed later (they are not needed for anything i
 current site map), the adapter gets added then, with `output: 'server'` and
 `prerender = true` as the default — not before.
 
+> **Superseded in part by decision 16.** The deployment target turned out to be a Worker,
+> not Pages, so the `functions/` directory does not apply. The no-adapter conclusion stands.
+
 ## 2. `routes.ts` is the only place a URL is written
 
 Every href, canonical, hreflang entry and sitemap URL is produced by `localizedPath()`.
@@ -157,3 +160,34 @@ Latin display type — Arabic is cursive and negative tracking breaks the letter
 Each Fontsource file carries a `unicode-range`, so an English page never downloads the
 Arabic faces and vice versa. The subsetting is done by the loader, not by shipping every
 glyph to everyone.
+
+## 16. Workers Static Assets, not Pages — and what that costs
+
+The Cloudflare project was created through **Workers Builds**, not Pages: its deploy command
+is `npx wrangler deploy`. That is the right side of the fork to be on — Cloudflare has put
+Pages into maintenance and points new static projects at Workers static assets — but it is a
+different deployment model, so the choice is recorded rather than absorbed silently.
+
+`wrangler.jsonc` declares an **assets-only Worker**: no `main` script, so every request is
+served from `./dist` by the runtime. `_headers` and `_redirects` are supported here exactly
+as they were on Pages, and both land in `dist/` from `public/`.
+
+**What this invalidates from decision 1:** the `functions/` directory is a *Pages* convention
+and does nothing on a Worker. The lead endpoint cannot be `functions/api/lead.ts`. In step 5
+it becomes a real Worker entrypoint — `main` in `wrangler.jsonc`, routing `/api/lead` itself
+and falling through to `env.ASSETS.fetch()` for everything else. D1 and KV bindings attach to
+that same Worker, which is if anything simpler than the Pages Functions split.
+
+The conclusion of decision 1 stands: no `@astrojs/cloudflare` adapter. Astro still builds a
+plain static site; the Worker serves it.
+
+## 17. Per-locale 404 pages need an explicit build step
+
+Astro special-cases only the root `404.astro`, emitting it as `404.html`. Every other
+locale's 404 lands at `<locale>/404/index.html`. Cloudflare's `not_found_handling:
+"404-page"` walks up the tree looking for `404.html` specifically, so `/ar/does-not-exist`
+would have fallen through to the *English* 404.
+
+A small `astro:build:done` integration copies each locale's 404 to `<locale>/404.html`. The
+sitemap filter excludes anything noindexed by path segment rather than by hand-written
+regex — `/ar/404/` had already slipped into the sitemap once before that was tightened.
