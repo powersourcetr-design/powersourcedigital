@@ -61,7 +61,6 @@ const en = {
   'a11y.skipToContent': 'Skip to content',
   'a11y.breadcrumb': 'Breadcrumb',
   'a11y.languageSwitcher': 'Change language',
-  'a11y.themeToggle': 'Switch between light and dark theme',
   'a11y.quickActions': 'Quick actions',
 
   'lang.switchTo': 'العربية',
@@ -120,7 +119,6 @@ const ar = {
   'a11y.skipToContent': 'تخطَّ إلى المحتوى',
   'a11y.breadcrumb': 'مسار التنقل',
   'a11y.languageSwitcher': 'تغيير اللغة',
-  'a11y.themeToggle': 'التبديل بين الوضع الفاتح والداكن',
   'a11y.quickActions': 'إجراءات سريعة',
 
   'lang.switchTo': 'English',

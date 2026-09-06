@@ -257,3 +257,62 @@ reviews yet, and fabricating them risks a manual action. They go in when real on
 Homepage, gzipped, including all inlined JavaScript: **16.3 kb English, 17.5 kb Arabic**,
 against a 120 kb budget. Astro inlines the component scripts, so there is no separate bundle
 request; fonts are additional and subset by `unicode-range`.
+
+## 23. One theme, designed light — the toggle is gone
+
+The light/dark toggle has been removed entirely, along with the `prefers-color-scheme`
+block, the `data-theme` attribute and the pre-paint init script.
+
+A theme switch makes a product feel configurable. An agency's own site should read as
+art-directed: one look, chosen on purpose.
+
+I first built this as a single **dark** theme, on the strength of the Musemind reference.
+That was wrong — Musemind is white — and the client's judgement ("white background is much
+cleaner") was correct. Recorded because the reversal cost real time and the lesson is
+specific: read the reference before inferring from its reputation.
+
+The light ground reinstates the constraint from decision 12. On white the logo green
+(`#00A858`) reaches only 4.44:1, so `--accent` is `brand-700` for anything carrying text and
+`--accent-vivid` keeps the true mark colour for graphics. On a dark ground that tension
+disappears, which was the one genuine argument for dark — not enough on its own.
+
+All 18 semantic pairs pass; the contrast script checks a single theme.
+
+## 24. The design follows the reference the client actually gave
+
+Read off musemind.agency rather than guessed at: pure white ground, not off-white; body copy
+in a soft grey (`#3f4d6f` here, 8.39:1) rather than near-black, because near-black on white
+is harsher than it looks over long pages; headings at weight 700 with ~1.14 leading.
+
+What that produced here:
+
+- **Display type up to 120px** with one accent word in the brand green.
+- **A slow bloom and faint vertical grid rules** behind the hero, both GPU-composited and
+  neither the LCP element.
+- **One dark panel** — the closing CTA — as the single strong contrast note on a white site.
+- **Scroll reveals via CSS `animation-timeline: view()`**, so no JavaScript. Browsers without
+  support show the finished state rather than a blank page waiting on a script.
+- **A stat row** whose figures can be verified: five services in-house, two written
+  languages, five cities. No invented project counts or years in business.
+
+## 25. The real logo, made transparent from the only file that exists
+
+The header and footer now carry the actual PST mark rather than an abstract swoosh.
+
+The only source available is a JPEG on a white ground with a grey drop shadow, so
+`scripts/logo-alpha.mjs` derives alpha from how close each pixel is to neutral white rather
+than from a hard threshold. That dissolves the ground and the shadow while keeping the
+yellow S — bright but saturated — fully opaque, and avoids the halo a threshold cut leaves
+on JPEG edges. Output is trimmed to the mark.
+
+A vector original would still be better and is worth asking PST for; this is a good
+reconstruction, not a substitute.
+
+## 26. Arabic display type gets its own ramp
+
+Arabic sets visually larger and denser than Latin at the same pixel size, and its ascenders
+and descenders need real room. The Latin mega ramp (up to 120px) was shouting in Arabic and
+crowding its own leading.
+
+`[dir="rtl"] h1` uses a smaller clamp and looser leading. The two languages are meant to look
+equally *confident*, which is a design goal, not equally *sized*, which is not.

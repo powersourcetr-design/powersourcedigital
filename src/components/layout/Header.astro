@@ -1,7 +1,8 @@
 ---
 import Button from '@/components/ui/Button.astro'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher.astro'
-import ThemeToggle from '@/components/layout/ThemeToggle.astro'
+import { Image } from 'astro:assets'
+import logo from '@/assets/pst-logo.png'
 import { type Locale, type RouteKey, href, localizedPath } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 
@@ -26,15 +27,15 @@ const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = [
 <header class="header">
   <div class="bar">
     <a class="brand" href={href(localizedPath('home', locale))}>
-      <span class="mark" aria-hidden="true">
-        <svg viewBox="0 0 40 26" width="40" height="26" fill="none">
-          <path
-            d="M38 13c0 6.6-8.1 12-18 12S2 19.6 2 13 10.1 1 20 1c4.6 0 8.8 1.2 12 3.1"
-            stroke="var(--accent-vivid)"
-            stroke-width="3.4"
-            stroke-linecap="round"></path>
-        </svg>
-      </span>
+      <Image
+        src={logo}
+        alt="Power Source Digital"
+        width={132}
+        height={71}
+        loading="eager"
+        densities={[1, 2]}
+        class="mark"
+      />
       <span class="wordmark">
         <strong>Power Source</strong>
         <em>Digital</em>
@@ -55,7 +56,6 @@ const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = [
     </nav>
 
     <div class="actions">
-      <ThemeToggle locale={locale} />
       <LanguageSwitcher locale={locale} routeKey={routeKey} targetSlug={targetSlug} />
       <Button href={href(localizedPath('freeAudit', locale))} class="audit">
         {t('cta.freeAudit')}
@@ -162,12 +162,8 @@ const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = [
 
   .mark {
     display: block;
-    line-height: 0;
-  }
-
-  /* The swoosh is a directional form: it opens toward the reading direction. */
-  :global([dir='rtl']) .mark svg {
-    transform: scaleX(-1);
+    block-size: 2.15rem;
+    inline-size: auto;
   }
 
   .wordmark {

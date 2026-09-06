@@ -11,10 +11,11 @@ import Base from '@/layouts/Base.astro'
 const RAMPS = [
   { name: 'ink', note: 'From the logo blue #2850A0, desaturated. Text and dark grounds.' },
   { name: 'brand', note: 'From the logo green #00A858. Accent only, never a large fill.' },
-  { name: 'sand', note: 'Warm neutral for section grounds.' },
+  { name: 'sand', note: 'The one warm note, used sparingly.' },
 ] as const
 
 const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
+const SAND_STEPS = [200, 300, 400, 600] as const
 
 const LOGO_COLOURS = [
   { hex: '#00A858', role: 'Brand accent', job: 'Interactive, affirmative' },
@@ -26,13 +27,15 @@ const LOGO_COLOURS = [
 const SEMANTIC = [
   { token: 'surface', use: 'Page ground' },
   { token: 'surface-raised', use: 'Cards, panels' },
-  { token: 'surface-sunken', use: 'Alternating bands' },
+  { token: 'surface-panel', use: 'Panels, cards' },
+  { token: 'surface-invert', use: 'Inverted blocks' },
   { token: 'text-strong', use: 'Headings' },
   { token: 'text-default', use: 'Body copy' },
   { token: 'text-muted', use: 'Captions, meta' },
   { token: 'accent', use: 'Links, button fills' },
   { token: 'accent-vivid', use: 'Decorative only' },
   { token: 'border-subtle', use: 'Hairlines' },
+  { token: 'border-strong', use: 'Panel edges' },
   { token: 'border-interactive', use: 'Input boundaries' },
 ] as const
 
@@ -56,14 +59,11 @@ const TYPE_SCALE = [
         <p class="eyebrow">Checkpoint 1</p>
         <h1>Palette &amp; type</h1>
         <p class="lede">
-          Everything below is derived from the PST mark. Colours were sampled from the logo
-          file, not eyeballed. All 30 semantic pairs pass WCAG 2.2 AA in both themes —
+          One theme, designed dark. Colours were sampled from the logo file, not eyeballed.
+          Every semantic pair passes WCAG 2.2 AA, and
           <code>pnpm run check:contrast</code> proves it on every build.
         </p>
       </div>
-      <button type="button" id="theme-toggle" class="toggle" aria-pressed="false">
-        Toggle theme
-      </button>
     </header>
 
     <section aria-labelledby="mark">
@@ -96,7 +96,7 @@ const TYPE_SCALE = [
               <span class="muted">{ramp.note}</span>
             </div>
             <ol class="steps">
-              {STEPS.map((step) => (
+              {(ramp.name === 'sand' ? SAND_STEPS : STEPS).map((step) => (
                 <li>
                   <span
                     class="swatch"
@@ -115,9 +115,8 @@ const TYPE_SCALE = [
     <section aria-labelledby="semantic">
       <h2 id="semantic">Semantic tokens</h2>
       <p class="note">
-        Components reference these names only, never a ramp step. That is what makes light
-        and dark two designed themes rather than one inverted one — switch the theme above
-        and every swatch here moves independently.
+        Components reference these names only, never a ramp step, so the whole look is
+        retunable from one block in <code>global.css</code>.
       </p>
       <ul class="tokens">
         {
@@ -195,25 +194,6 @@ const TYPE_SCALE = [
   </main>
 </Base>
 
-<script>
-  const button = document.getElementById('theme-toggle')
-
-  const current = () =>
-    document.documentElement.dataset['theme'] ??
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-
-  button?.addEventListener('click', () => {
-    const next = current() === 'dark' ? 'light' : 'dark'
-    document.documentElement.dataset['theme'] = next
-    button.setAttribute('aria-pressed', String(next === 'dark'))
-    try {
-      localStorage.setItem('psd-theme', next)
-    } catch {
-      /* Storage blocked: the toggle still works for this page view. */
-    }
-  })
-</script>
-
 <style>
   .page {
     display: block;
@@ -252,21 +232,6 @@ const TYPE_SCALE = [
     color: var(--text-muted);
   }
 
-  .toggle {
-    flex-shrink: 0;
-    padding: 0.6rem 1.1rem;
-    font: inherit;
-    font-size: var(--text-small);
-    color: var(--accent-contrast);
-    background: var(--accent);
-    border: 0;
-    border-radius: 999px;
-    cursor: pointer;
-  }
-
-  .toggle:hover {
-    background: var(--accent-hover);
-  }
 
   section {
     padding-block: clamp(2rem, 1rem + 3vw, 3.5rem);

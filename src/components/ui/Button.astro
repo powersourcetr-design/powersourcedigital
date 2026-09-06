@@ -100,12 +100,12 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boole
   .btn-secondary {
     background: transparent;
     color: var(--text-strong);
-    border-color: var(--border-interactive);
+    border-color: var(--border-strong);
   }
 
   .btn-secondary:hover {
     border-color: var(--text-strong);
-    background: var(--surface-raised);
+    background: color-mix(in srgb, var(--surface-invert) 8%, transparent);
   }
 
   .btn-ghost {

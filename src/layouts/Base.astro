@@ -41,20 +41,6 @@ const canonical = `${SITE}${href(decodeURI(Astro.url.pathname))}`
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     {!noindex && <link rel="canonical" href={canonical} />}
     <link rel="sitemap" href="/sitemap-index.xml" />
-    {/* Applies the stored theme before first paint so the page never flashes
-        the wrong one. Hashed into the CSP in step 6. */}
-    <script is:inline>
-      (() => {
-        try {
-          const stored = localStorage.getItem('psd-theme')
-          if (stored === 'light' || stored === 'dark') {
-            document.documentElement.dataset.theme = stored
-          }
-        } catch {
-          /* Private mode or blocked storage: fall through to prefers-color-scheme. */
-        }
-      })()
-    </script>
   </head>
   <body>
     <a class="skip-link" href="#content">{t('a11y.skipToContent')}</a>

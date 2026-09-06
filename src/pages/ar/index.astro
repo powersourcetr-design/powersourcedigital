@@ -122,13 +122,19 @@ const PROCESS = [
 >
   <Hero
     eyebrow="الرياض · جدة · الطائف"
-    title="حضور رقمي يعمل لصالح نشاطك التجاري."
+    titleLead="حضور رقمي"
+    titleAccent="يعمل"
+    titleTail="لصالح نشاطك التجاري."
     body="نبني مواقع احترافية، ونحسّن طريقة ظهورك على جوجل، وندير الأدوات الرقمية التي يستخدمها عملاؤك أصلاً للوصول إليك والتواصل معك."
     primaryLabel="احصل على تدقيق مجاني"
     primaryHref={href(localizedPath('freeAudit', locale))}
     secondaryLabel="تعرّف على ما نقدمه"
     secondaryHref={href(localizedPath('services', locale))}
-    chips={['المواقع', 'تحسين محركات البحث', 'الملف التجاري على جوجل', 'المتاجر الإلكترونية', 'التصميم']}
+    stats={[
+      { value: '5', label: 'خدمات، تُنفَّذ جميعها داخلياً' },
+      { value: '2', label: 'لغتان، كلتاهما مكتوبة لا مترجمة' },
+      { value: '5', label: 'مدن في أنحاء المملكة' },
+    ]}
   />
 
   <ServicesGrid

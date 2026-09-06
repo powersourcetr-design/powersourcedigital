@@ -10,41 +10,37 @@
 @import "@fontsource/almarai/arabic-700.css";
 
 /* ==========================================================================
-   Brand tokens, derived from the PST mark.
+   One theme, designed light.
 
-   Sampled from the logo with sharp (see DECISIONS.md 11):
-     green  #00A858   red  #E83030   yellow  #F8C828   blue  #2850A0
+   There is no dark mode and no toggle. A single committed look is what makes an
+   agency site read as art-directed rather than configurable.
 
-   The mark carries four colours. Using all four as a UI palette would read as
-   a children's brand, so they are split by job:
+   White ground, following the reference the client gave (musemind.agency):
+   pure white rather than an off-white, body copy set in a soft grey rather than
+   near-black, and headings at weight 700 with tight leading. Near-black body
+   text on white is harsher than it looks and makes long pages tiring; the grey
+   still clears AA comfortably.
 
-     green  → the brand accent. Interactive, affirmative, the one colour a
-              visitor should associate with PSD.
-     blue   → desaturated and darkened into the `ink` neutral ramp, so every
-              grey on the site is quietly the logo's blue rather than a
-              generic slate. It is the ink, not a second accent.
-     red    → semantic only. Form errors, destructive states. Never decorative.
-     yellow → semantic only. Warnings and the audit "needs attention" states.
-
-   That way the site is unmistakably built from the mark without ever looking
-   like the mark. Every colour used anywhere resolves through these names.
+   Sampled from the mark: green #00A858, blue #2850A0, red #E83030,
+   yellow #F8C828 — see DECISIONS.md 11.
    ========================================================================== */
 
 @theme {
-  /* --- Ink: the logo blue #2850A0, desaturated into a navy neutral ------- */
+  /* --- Ink: the logo blue #2850A0, desaturated into the ground ----------- */
   --color-ink-50: #f4f6fa;
   --color-ink-100: #e6eaf3;
   --color-ink-200: #ccd5e6;
   --color-ink-300: #a5b3ce;
   --color-ink-400: #7789ad;
   --color-ink-500: #566890;
-  --color-ink-600: #425276;
-  --color-ink-700: #364260;
-  --color-ink-800: #2f394f;
-  --color-ink-900: #232a3b;
-  --color-ink-950: #101422;
+  --color-ink-600: #3f4d6f;
+  --color-ink-700: #2c3650;
+  --color-ink-800: #1e2637;
+  --color-ink-900: #141a27;
+  --color-ink-950: #0a0d14;
+  --color-ink-990: #06080d;
 
-  /* --- Brand: the logo green #00A858 ------------------------------------ */
+  /* --- Brand: the logo green -------------------------------------------- */
   --color-brand-50: #e8faf0;
   --color-brand-100: #c7f2dc;
   --color-brand-200: #92e5be;
@@ -57,115 +53,78 @@
   --color-brand-900: #00482a;
   --color-brand-950: #002817;
 
-  /* --- Sand: warm neutral for section grounds --------------------------- */
-  --color-sand-50: #faf8f4;
-  --color-sand-100: #f4efe5;
+  /* --- Sand: the one warm note, used sparingly -------------------------- */
   --color-sand-200: #e8dfcc;
   --color-sand-300: #d7c8a8;
   --color-sand-400: #c3ab80;
-  --color-sand-500: #b39463;
   --color-sand-600: #9c7d52;
-  --color-sand-700: #816445;
-  --color-sand-800: #6a523c;
-  --color-sand-900: #584534;
-  --color-sand-950: #31251b;
 
   /* --- Semantic only: the logo's red and yellow ------------------------- */
-  --color-danger-50: #fdeceb;
   --color-danger-500: #e83030; /* the logo red, exactly */
   --color-danger-600: #c81f22;
-  --color-danger-700: #a4161b;
-
-  --color-warning-50: #fef6e0;
   --color-warning-400: #f8c828; /* the logo yellow, exactly */
-  --color-warning-600: #a97a05;
   --color-warning-700: #855e04;
 
   /* --- Type ------------------------------------------------------------- */
-  /* Self-hosted via Fontsource, subset per script, swap display. */
   --font-sans:
     "Instrument Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-arabic: "IBM Plex Sans Arabic", "Almarai", "Segoe UI", Tahoma, sans-serif;
   --font-arabic-body: "Almarai", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
 
-  /* Fluid scale. Arabic overrides the leading further down. */
-  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 4.75rem);
+  /* A deliberately large display scale. Agency sites earn their confidence
+     from type size before anything else. */
+  --text-mega: clamp(3rem, 1.2rem + 8.4vw, 7.5rem);
+  --text-display: clamp(2.5rem, 1.3rem + 5.6vw, 5rem);
   --text-h1: clamp(2.25rem, 1.5rem + 3.4vw, 3.5rem);
-  --text-h2: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
-  --text-h3: clamp(1.375rem, 1.15rem + 1vw, 1.75rem);
-  --text-body: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --text-h2: clamp(1.875rem, 1.3rem + 2.4vw, 3rem);
+  --text-h3: clamp(1.25rem, 1.1rem + 0.8vw, 1.6rem);
+  --text-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --text-lead: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
   --text-small: 0.875rem;
 
   /* --- Layout ----------------------------------------------------------- */
-  --spacing-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
-  --container-site: 80rem; /* 1280px */
+  --spacing-gutter: clamp(1.25rem, 0.6rem + 2.4vw, 2.5rem);
+  --container-site: 82rem;
+  --section-pad: clamp(4rem, 2rem + 8vw, 9rem);
 
   /* --- Motion ----------------------------------------------------------- */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-reveal: 500ms;
+  --duration-reveal: 620ms;
 }
 
 /* --------------------------------------------------------------------------
-   Semantic aliases. Components reference these, never a ramp step directly,
-   so light and dark are each designed rather than auto-inverted.
+   Semantic aliases. Components reference these names only, never a ramp step,
+   so the whole look is retunable from this one block.
    -------------------------------------------------------------------------- */
 
 :root {
   color-scheme: light;
-  --surface: #ffffff;
-  --surface-raised: var(--color-ink-50);
-  --surface-sunken: var(--color-sand-50);
-  --text-strong: var(--color-ink-950);
-  --text-default: var(--color-ink-800);
-  --text-muted: var(--color-ink-500);
 
-  /* Decorative hairlines. Not a control boundary, so no 3:1 obligation. */
-  --border-subtle: var(--color-ink-200);
-  /* Boundaries that identify a control (inputs, checkboxes). Must clear 3:1. */
+  --surface: #ffffff;
+  --surface-raised: #f7f8fa;
+  --surface-panel: #ffffff;
+  --surface-invert: var(--color-ink-950);
+
+  --text-strong: var(--color-ink-950);
+  --text-default: var(--color-ink-600);
+  --text-muted: var(--color-ink-500);
+  --text-invert: #ffffff;
+
+  --border-subtle: #e7eaef;
+  --border-strong: #d3d9e2;
+  /* Boundaries that identify a control must clear 3:1 on their own. */
   --border-interactive: var(--color-ink-400);
 
-  /* The logo green (#00a858) only reaches 4.44:1 on white — it cannot legally
-     carry body-size text or a white button label. `accent` is therefore two
-     steps darker, and the true logo green survives as `accent-vivid` for
-     decorative use only: gradients, hairline card edges, icon fills on dark. */
+  /* The logo green reaches only 4.44:1 on white and cannot carry body text, so
+     the interactive accent is darker. `accent-vivid` keeps the true mark colour
+     for graphics, where no text sits on it. */
   --accent: var(--color-brand-700);
   --accent-hover: var(--color-brand-800);
   --accent-vivid: var(--color-brand-500);
   --accent-contrast: #ffffff;
-}
 
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --surface: var(--color-ink-950);
-  --surface-raised: var(--color-ink-900);
-  --surface-sunken: #0d1014;
-  --text-strong: #ffffff;
-  --text-default: var(--color-ink-100);
-  --text-muted: var(--color-ink-300);
-  --border-subtle: var(--color-ink-800);
-  --border-interactive: var(--color-ink-400);
-  --accent: var(--color-brand-400);
-  --accent-hover: var(--color-brand-300);
-  --accent-vivid: var(--color-brand-400);
-  --accent-contrast: var(--color-ink-950);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --surface: var(--color-ink-950);
-    --surface-raised: var(--color-ink-900);
-    --surface-sunken: #0d1014;
-    --text-strong: #ffffff;
-    --text-default: var(--color-ink-100);
-    --text-muted: var(--color-ink-300);
-    --border-subtle: var(--color-ink-800);
-    --border-interactive: var(--color-ink-400);
-    --accent: var(--color-brand-400);
-    --accent-hover: var(--color-brand-300);
-    --accent-vivid: var(--color-brand-400);
-    --accent-contrast: var(--color-ink-950);
-  }
+  --danger: var(--color-danger-600);
+  --warning: var(--color-warning-700);
 }
 
 /* --------------------------------------------------------------------------
@@ -175,42 +134,47 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  background-color: var(--surface);
 }
 
 body {
+  position: relative;
   background-color: var(--surface);
   color: var(--text-default);
   font-family: var(--font-sans);
   font-size: var(--text-body);
-  line-height: 1.65;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 :is(h1, h2, h3, h4) {
   color: var(--text-strong);
   text-wrap: balance;
+  font-weight: 700;
+  line-height: 1.14;
 }
 
 /* Arabic needs more leading and a slightly larger optical size than Latin.
-   Almarai for running text, IBM Plex Sans Arabic for headings — Plex has the
-   firmer structure at display sizes, Almarai the better rhythm at body sizes. */
+   Almarai for running text, IBM Plex Sans Arabic for headings. */
 [dir="rtl"] body,
 body[dir="rtl"] {
   font-family: var(--font-arabic-body);
-  font-size: calc(var(--text-body) * 1.06);
+  font-size: calc(var(--text-body) * 1.05);
   line-height: 1.9;
 }
 
 [dir="rtl"] :is(h1, h2, h3, h4) {
   font-family: var(--font-arabic);
-  line-height: 1.4;
+  line-height: 1.35;
   /* Arabic script is cursive; negative tracking breaks the joins. */
   letter-spacing: 0;
 }
 
 /* Latin display sizes want tight tracking; Arabic must never get it. */
 [dir="ltr"] :is(h1, h2) {
-  letter-spacing: -0.02em;
+  letter-spacing: -0.028em;
 }
 
 p {
@@ -220,7 +184,12 @@ p {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
 }
 
 /* Icons that carry direction (arrows, chevrons) flip with the writing mode. */
@@ -228,11 +197,78 @@ p {
   transform: scaleX(-1);
 }
 
-/* Phone numbers stay LTR inside RTL text. */
+/* Phone numbers and codes stay LTR inside RTL text. */
 .num {
   font-variant-numeric: tabular-nums;
   unicode-bidi: isolate;
   direction: ltr;
+}
+
+/* --------------------------------------------------------------------------
+   Shared section furniture
+   -------------------------------------------------------------------------- */
+
+.shell {
+  max-inline-size: var(--container-site);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* A small capitalised label above every section heading, with a rule running
+   to the start edge. `gap` and flex order flip for free in RTL. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.eyebrow::before {
+  content: "";
+  inline-size: 1.75rem;
+  block-size: 1px;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+[dir="rtl"] .eyebrow {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.95rem;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll reveal.
+
+   Uses CSS scroll-driven animation where supported, which costs no JavaScript
+   at all. Browsers without it simply show the content — the fallback is the
+   finished state, never a blank page waiting on a script.
+   -------------------------------------------------------------------------- */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 20%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* --------------------------------------------------------------------------

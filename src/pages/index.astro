@@ -122,18 +122,18 @@ const PROCESS = [
 >
   <Hero
     eyebrow="Riyadh · Jeddah · Taif"
-    title="Build a digital presence that works for your business."
+    titleLead="Build a presence that"
+    titleAccent="works"
+    titleTail="for your business."
     body="We build professional websites, improve how you appear on Google, and manage the digital tools your customers already use to find you and get in touch."
     primaryLabel="Get a free audit"
     primaryHref={href(localizedPath('freeAudit', locale))}
     secondaryLabel="See what we do"
     secondaryHref={href(localizedPath('services', locale))}
-    chips={[
-      'Websites',
-      'SEO',
-      'Google Business Profile',
-      'E-commerce',
-      'Graphic design',
+    stats={[
+      { value: '5', label: 'Services, every one delivered in-house' },
+      { value: '2', label: 'Languages, both written rather than translated' },
+      { value: '5', label: 'Cities across the Kingdom' },
     ]}
   />
 

@@ -77,7 +77,7 @@ const services = await getServices(locale)
 
 <style>
   .services {
-    background: var(--surface-sunken);
+    background: var(--surface-raised);
     border-block-end: 1px solid var(--border-subtle);
   }
 
@@ -85,7 +85,7 @@ const services = await getServices(locale)
     max-inline-size: var(--container-site);
     margin-inline: auto;
     padding-inline: var(--spacing-gutter);
-    padding-block: clamp(3.5rem, 2rem + 6vw, 6rem);
+    padding-block: var(--section-pad);
   }
 
   .head {
@@ -93,19 +93,6 @@ const services = await getServices(locale)
     margin-block-end: 2.5rem;
   }
 
-  .eyebrow {
-    margin: 0 0 0.6rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-
-  :global([dir='rtl']) .eyebrow {
-    letter-spacing: 0;
-    text-transform: none;
-    font-size: 0.9rem;
-  }
 
   h2 {
     font-size: var(--text-h2);

@@ -2,40 +2,72 @@
 import Button from '@/components/ui/Button.astro'
 
 /**
- * Asymmetric hero. The gradient mesh is pure CSS on a GPU-composited layer and
- * sits behind the text, never as the LCP element — the heading is.
+ * The hero carries the whole first impression, so it is deliberately the
+ * loudest thing on the site: display type at up to 120px, one accent word, and
+ * a slow glow behind it.
+ *
+ * The glow is a GPU-composited radial gradient on its own layer. It never
+ * becomes the LCP element — the heading is — and it is not animated on the
+ * paint-critical property.
  */
 interface Props {
   eyebrow: string
-  title: string
+  /** Rendered before the accent word. */
+  titleLead: string
+  /** The one word or phrase set in the brand green. */
+  titleAccent: string
+  /** Rendered after the accent word. */
+  titleTail: string
   body: string
   primaryLabel: string
   primaryHref: string
   secondaryLabel: string
   secondaryHref: string
-  chips: string[]
+  stats: { value: string; label: string }[]
 }
 
-const { eyebrow, title, body, primaryLabel, primaryHref, secondaryLabel, secondaryHref, chips } =
-  Astro.props
+const {
+  eyebrow,
+  titleLead,
+  titleAccent,
+  titleTail,
+  body,
+  primaryLabel,
+  primaryHref,
+  secondaryLabel,
+  secondaryHref,
+  stats,
+} = Astro.props
 ---
 
 <section class="hero">
-  <div class="mesh" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="grid-lines" aria-hidden="true"></div>
 
-  <div class="inner">
+  <div class="shell inner">
     <p class="eyebrow">{eyebrow}</p>
-    <h1>{title}</h1>
-    <p class="body">{body}</p>
+
+    <h1>
+      {titleLead}{' '}<em>{titleAccent}</em>{' '}{titleTail}
+    </h1>
+
+    <p class="lead">{body}</p>
 
     <div class="actions">
       <Button href={primaryHref} size="lg" arrow>{primaryLabel}</Button>
       <Button href={secondaryHref} size="lg" variant="secondary">{secondaryLabel}</Button>
     </div>
 
-    <ul class="chips">
-      {chips.map((chip) => <li>{chip}</li>)}
-    </ul>
+    <dl class="stats">
+      {
+        stats.map((stat) => (
+          <div>
+            <dt class="num">{stat.value}</dt>
+            <dd>{stat.label}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </div>
 </section>
 
@@ -43,118 +75,128 @@ const { eyebrow, title, body, primaryLabel, primaryHref, secondaryLabel, seconda
   .hero {
     position: relative;
     overflow: hidden;
-    border-block-end: 1px solid var(--border-subtle);
+    isolation: isolate;
   }
 
-  .mesh {
+  /* A single large radial bloom behind the headline. */
+  .glow {
     position: absolute;
-    inset: 0;
-    z-index: 0;
-    background:
-      radial-gradient(
-        42rem 28rem at 78% -10%,
-        color-mix(in srgb, var(--accent-vivid) 22%, transparent),
-        transparent 65%
-      ),
-      radial-gradient(
-        34rem 24rem at 6% 8%,
-        color-mix(in srgb, var(--color-sand-300) 34%, transparent),
-        transparent 70%
-      );
+    inset-block-start: -30%;
+    inset-inline-end: -10%;
+    inline-size: min(70rem, 120%);
+    aspect-ratio: 1;
+    z-index: -2;
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--accent-vivid) 17%, transparent),
+      color-mix(in srgb, var(--color-sand-300) 20%, transparent) 45%,
+      transparent 70%
+    );
+    filter: blur(24px);
     will-change: transform;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .mesh {
-      animation: drift 22s ease-in-out infinite alternate;
+    .glow {
+      animation: bloom 18s ease-in-out infinite alternate;
     }
   }
 
-  @keyframes drift {
+  @keyframes bloom {
     from {
       transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.85;
     }
     to {
-      transform: translate3d(-2%, 1.5%, 0) scale(1.06);
+      transform: translate3d(-4%, 3%, 0) scale(1.12);
+      opacity: 1;
     }
   }
 
-  .inner {
-    position: relative;
-    z-index: 1;
+  /* Faint vertical rules, the printed-grid cue agency sites use to signal
+     that the layout is deliberate. */
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     max-inline-size: var(--container-site);
     margin-inline: auto;
     padding-inline: var(--spacing-gutter);
-    padding-block: clamp(3.5rem, 2rem + 9vw, 7.5rem);
+    background-image: linear-gradient(
+      to right,
+      var(--border-subtle) 1px,
+      transparent 1px
+    );
+    background-size: 25% 100%;
+    background-clip: content-box;
+    opacity: 1;
+    mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 68%, transparent);
   }
 
-  .eyebrow {
-    display: inline-block;
-    margin: 0 0 1.1rem;
-    padding: 0.35rem 0.85rem;
-    border: 1px solid var(--border-subtle);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--surface) 70%, transparent);
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  :global([dir='rtl']) .eyebrow {
-    letter-spacing: 0;
-    text-transform: none;
-    font-size: 0.85rem;
+  .inner {
+    padding-block: clamp(4rem, 2rem + 10vw, 9rem) clamp(3rem, 2rem + 5vw, 6rem);
   }
 
   h1 {
-    font-size: var(--text-display);
-    line-height: 1.02;
-    font-weight: 600;
+    font-size: var(--text-mega);
+    line-height: 0.98;
     margin: 0;
+    max-inline-size: 15ch;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  /* Arabic sets visually larger and denser than Latin at the same size, and its
+     ascenders and descenders need real room. The Latin mega scale would be
+     shouting here, so Arabic gets its own smaller ramp and looser leading —
+     the two look equally confident, which is the point, rather than equally
+     sized, which is not. */
+  [dir="rtl"] h1 {
+    font-size: clamp(2.25rem, 1rem + 5.4vw, 4.75rem);
+    line-height: 1.34;
     max-inline-size: 18ch;
   }
 
-  :global([dir='rtl']) h1 {
-    line-height: 1.32;
-    max-inline-size: 20ch;
-  }
-
-  .body {
-    margin-block: 1.4rem 2.2rem;
-    max-inline-size: 56ch;
-    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+  .lead {
+    margin-block: clamp(1.5rem, 1rem + 1.5vw, 2.25rem) clamp(2rem, 1.5rem + 2vw, 3rem);
+    max-inline-size: 54ch;
+    font-size: var(--text-lead);
     color: var(--text-muted);
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.9rem;
   }
 
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    list-style: none;
-    margin: 3rem 0 0;
-    padding: 0;
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: 1.75rem;
+    margin: clamp(3.5rem, 2rem + 6vw, 6rem) 0 0;
+    padding-block-start: 2rem;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .stats div {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .stats dt {
+    font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+    font-weight: 600;
+    color: var(--text-strong);
+    line-height: 1;
+  }
+
+  .stats dd {
+    margin: 0;
     font-size: 0.9rem;
     color: var(--text-muted);
-  }
-
-  .chips li {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .chips li::before {
-    content: '';
-    inline-size: 5px;
-    block-size: 5px;
-    border-radius: 999px;
-    background: var(--accent-vivid);
   }
 </style>
