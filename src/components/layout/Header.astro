@@ -1,0 +1,304 @@
+---
+import Button from '@/components/ui/Button.astro'
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher.astro'
+import ThemeToggle from '@/components/layout/ThemeToggle.astro'
+import { type Locale, type RouteKey, href, localizedPath } from '@/i18n/routes'
+import { useTranslations } from '@/i18n/ui'
+
+interface Props {
+  locale: Locale
+  routeKey: RouteKey
+  targetSlug?: string | undefined
+}
+
+const { locale, routeKey, targetSlug } = Astro.props
+const t = useTranslations(locale)
+
+const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = [
+  { key: 'services', label: 'nav.services' },
+  { key: 'work', label: 'nav.work' },
+  { key: 'process', label: 'nav.process' },
+  { key: 'about', label: 'nav.about' },
+  { key: 'contact', label: 'nav.contact' },
+]
+---
+
+<header class="header">
+  <div class="bar">
+    <a class="brand" href={href(localizedPath('home', locale))}>
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 40 26" width="40" height="26" fill="none">
+          <path
+            d="M38 13c0 6.6-8.1 12-18 12S2 19.6 2 13 10.1 1 20 1c4.6 0 8.8 1.2 12 3.1"
+            stroke="var(--accent-vivid)"
+            stroke-width="3.4"
+            stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <span class="wordmark">
+        <strong>Power Source</strong>
+        <em>Digital</em>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label={t('nav.primary')}>
+      {
+        NAV.map((item) => (
+          <a
+            href={href(localizedPath(item.key, locale))}
+            aria-current={item.key === routeKey ? 'page' : undefined}
+          >
+            {t(item.label)}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="actions">
+      <ThemeToggle locale={locale} />
+      <LanguageSwitcher locale={locale} routeKey={routeKey} targetSlug={targetSlug} />
+      <Button href={href(localizedPath('freeAudit', locale))} class="audit">
+        {t('cta.freeAudit')}
+      </Button>
+      <button
+        type="button"
+        class="burger"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label={t('nav.menu')}
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile" id="mobile-nav" hidden>
+    <nav aria-label={t('nav.menu')}>
+      {
+        NAV.map((item) => (
+          <a
+            href={href(localizedPath(item.key, locale))}
+            aria-current={item.key === routeKey ? 'page' : undefined}
+          >
+            {t(item.label)}
+          </a>
+        ))
+      }
+      <a href={href(localizedPath('pricing', locale))}>{t('nav.pricing')}</a>
+      <a href={href(localizedPath('blog', locale))}>{t('nav.blog')}</a>
+    </nav>
+    <Button href={href(localizedPath('freeAudit', locale))} size="lg" class="mobile-cta" arrow>
+      {t('cta.freeAudit')}
+    </Button>
+  </div>
+</header>
+
+<script>
+  const setup = () => {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]')
+    const panel = document.getElementById('mobile-nav')
+    if (!toggle || !panel) return
+
+    const close = () => {
+      panel.hidden = true
+      toggle.setAttribute('aria-expanded', 'false')
+    }
+
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true'
+      panel.hidden = open
+      toggle.setAttribute('aria-expanded', String(!open))
+    })
+
+    // Escape closes and returns focus to the control that opened it.
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !panel.hidden) {
+        close()
+        toggle.focus()
+      }
+    })
+
+    // Following a link inside the panel should not leave it open behind the
+    // new page when View Transitions keep the DOM alive.
+    for (const link of panel.querySelectorAll('a')) {
+      link.addEventListener('click', close)
+    }
+  }
+
+  setup()
+  document.addEventListener('astro:after-swap', setup)
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: 0.85rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--text-strong);
+    flex-shrink: 0;
+  }
+
+  .mark {
+    display: block;
+    line-height: 0;
+  }
+
+  /* The swoosh is a directional form: it opens toward the reading direction. */
+  :global([dir='rtl']) .mark svg {
+    transform: scaleX(-1);
+  }
+
+  .wordmark {
+    display: grid;
+    line-height: 1.05;
+  }
+
+  .wordmark strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .wordmark em {
+    font-style: normal;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  :global([dir='rtl']) .wordmark em {
+    letter-spacing: 0;
+  }
+
+  .nav {
+    display: none;
+    gap: 0.35rem;
+    margin-inline: auto;
+  }
+
+  .nav a {
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    color: var(--text-default);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 180ms var(--ease-out-expo);
+  }
+
+  .nav a:hover {
+    background: var(--surface-raised);
+    color: var(--text-strong);
+  }
+
+  .nav a[aria-current='page'] {
+    color: var(--text-strong);
+    font-weight: 500;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-inline-start: auto;
+  }
+
+  .audit {
+    display: none;
+  }
+
+  .burger {
+    display: inline-grid;
+    gap: 5px;
+    align-content: center;
+    justify-items: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .burger span {
+    display: block;
+    inline-size: 1.05rem;
+    block-size: 1.6px;
+    background: var(--text-strong);
+    transition: transform 200ms var(--ease-out-expo);
+  }
+
+  .burger[aria-expanded='true'] span:first-child {
+    transform: translateY(3.3px) rotate(45deg);
+  }
+
+  .burger[aria-expanded='true'] span:last-child {
+    transform: translateY(-3.3px) rotate(-45deg);
+  }
+
+  .mobile {
+    border-block-start: 1px solid var(--border-subtle);
+    padding-inline: var(--spacing-gutter);
+    padding-block: 1rem 1.5rem;
+  }
+
+  .mobile nav {
+    display: grid;
+  }
+
+  .mobile nav a {
+    padding-block: 0.85rem;
+    color: var(--text-default);
+    text-decoration: none;
+    border-block-end: 1px solid var(--border-subtle);
+    font-size: 1.05rem;
+  }
+
+  .mobile nav a[aria-current='page'] {
+    color: var(--accent);
+  }
+
+  .mobile-cta {
+    margin-block-start: 1.25rem;
+    inline-size: 100%;
+  }
+
+  @media (min-width: 900px) {
+    .nav {
+      display: flex;
+    }
+
+    .audit {
+      display: inline-flex;
+      margin-inline-start: 0.5rem;
+    }
+
+    .burger,
+    .mobile {
+      display: none;
+    }
+  }
+</style>

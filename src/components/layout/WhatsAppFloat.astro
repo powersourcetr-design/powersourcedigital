@@ -1,0 +1,181 @@
+---
+import type { Locale } from '@/i18n/routes'
+import { useTranslations } from '@/i18n/ui'
+import { whatsappUrl } from '@/lib/whatsapp'
+
+/**
+ * Fixed WhatsApp button, bottom `end` corner so it flips in RTL.
+ *
+ * The prefilled message names whatever the visitor is reading, so the enquiry
+ * arrives with context instead of a bare "hello".
+ */
+interface Props {
+  locale: Locale
+  service?: string | undefined
+  city?: string | undefined
+}
+
+const { locale, service, city } = Astro.props
+const t = useTranslations(locale)
+const url = whatsappUrl({ locale, service, city })
+---
+
+<a
+  class="wa"
+  href={url}
+  target="_blank"
+  rel="noopener"
+  aria-label={t('whatsapp.aria')}
+  data-whatsapp
+>
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path
+      d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.17.2-.35.22-.65.08-.3-.15-1.26-.47-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.38-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.07-.13-.27-.2-.57-.35Z"
+    ></path>
+    <path
+      d="M12.04 2A9.94 9.94 0 0 0 2.1 11.94c0 1.75.46 3.46 1.33 4.97L2 22l5.23-1.37a9.9 9.9 0 0 0 4.8 1.22h.01a9.94 9.94 0 0 0 9.94-9.94A9.94 9.94 0 0 0 12.04 2Zm0 18.2h-.01a8.25 8.25 0 0 1-4.2-1.15l-.3-.18-3.11.82.83-3.03-.2-.31a8.24 8.24 0 0 1-1.26-4.4 8.26 8.26 0 1 1 8.25 8.25Z"
+    ></path>
+  </svg>
+  <span class="label">{t('whatsapp.label')}</span>
+</a>
+
+<script>
+  const PULSE_KEY = 'psd-wa-used'
+
+  const setup = () => {
+    const float = document.querySelector<HTMLAnchorElement>('[data-whatsapp]')
+    if (!float) return
+
+    let used = false
+    try {
+      used = localStorage.getItem(PULSE_KEY) === '1'
+    } catch {
+      /* Storage blocked: treat as unused, the pulse is cosmetic. */
+    }
+    if (used) float.dataset['quiet'] = 'true'
+
+    const reveal = () => {
+      float.dataset['visible'] = String(window.scrollY > 300)
+    }
+    reveal()
+    window.addEventListener('scroll', reveal, { passive: true })
+
+    float.addEventListener('click', () => {
+      float.dataset['quiet'] = 'true'
+      try {
+        localStorage.setItem(PULSE_KEY, '1')
+      } catch {
+        /* Ignore. */
+      }
+      window.dispatchEvent(
+        new CustomEvent('psd:analytics', {
+          detail: { event: 'whatsapp_click', page: location.pathname },
+        }),
+      )
+    })
+  }
+
+  setup()
+  document.addEventListener('astro:after-swap', setup)
+</script>
+
+<style>
+  .wa {
+    position: fixed;
+    inset-block-end: 1.25rem;
+    inset-inline-end: 1.25rem;
+    z-index: 60;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    block-size: 3.5rem;
+    inline-size: 3.5rem;
+    padding: 0;
+    border-radius: 999px;
+    background: #25d366;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.22);
+    overflow: hidden;
+
+    /* Hidden until scrolled; `visible` is set by the script. Without JS the
+       button simply stays put and visible, which is the safe failure. */
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 300ms var(--ease-out-expo),
+      transform 300ms var(--ease-out-expo),
+      inline-size 260ms var(--ease-out-expo);
+  }
+
+  .wa[data-visible='false'] {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.9);
+    pointer-events: none;
+  }
+
+  .wa svg {
+    flex-shrink: 0;
+    inline-size: 3.5rem;
+  }
+
+  .label {
+    max-inline-size: 0;
+    opacity: 0;
+    white-space: nowrap;
+    font-weight: 500;
+    transition:
+      max-inline-size 260ms var(--ease-out-expo),
+      opacity 200ms var(--ease-out-expo),
+      padding-inline-end 260ms var(--ease-out-expo);
+    padding-inline-end: 0;
+  }
+
+  /* Expand into a labelled pill on pointer devices only. */
+  @media (hover: hover) and (min-width: 768px) {
+    .wa:hover,
+    .wa:focus-visible {
+      inline-size: auto;
+    }
+
+    .wa:hover .label,
+    .wa:focus-visible .label {
+      max-inline-size: 14rem;
+      opacity: 1;
+      padding-inline-end: 1.25rem;
+    }
+  }
+
+  /* Idle pulse every 8s until the button has been used once. */
+  @media (prefers-reduced-motion: no-preference) {
+    .wa:not([data-quiet]) {
+      animation: wa-pulse 8s var(--ease-out-expo) 2s infinite;
+    }
+  }
+
+  @keyframes wa-pulse {
+    0%,
+    92%,
+    100% {
+      box-shadow: 0 6px 20px rgb(0 0 0 / 0.22);
+    }
+    94% {
+      box-shadow:
+        0 6px 20px rgb(0 0 0 / 0.22),
+        0 0 0 0 rgb(37 211 102 / 0.55);
+    }
+    99% {
+      box-shadow:
+        0 6px 20px rgb(0 0 0 / 0.22),
+        0 0 0 14px rgb(37 211 102 / 0);
+    }
+  }
+
+  /* Sits above the mobile action bar rather than under it. */
+  @media (max-width: 767px) {
+    .wa {
+      inset-block-end: 4.75rem;
+    }
+  }
+</style>

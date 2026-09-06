@@ -1,0 +1,136 @@
+---
+/**
+ * The one button. Renders an <a> when given an href, a <button> otherwise, so
+ * a link is never faked with a click handler.
+ *
+ * Directional arrows use `.icon-directional`, which flips under [dir=rtl] —
+ * an arrow pointing "forward" points left in Arabic.
+ */
+interface Props {
+  href?: string | undefined
+  variant?: 'primary' | 'secondary' | 'ghost' | undefined
+  size?: 'md' | 'lg' | undefined
+  arrow?: boolean | undefined
+  type?: 'button' | 'submit' | undefined
+  class?: string | undefined
+  [key: string]: unknown
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  arrow = false,
+  type = 'button',
+  class: className,
+  ...rest
+} = Astro.props
+
+const Tag = href ? 'a' : 'button'
+const classes = ['btn', `btn-${variant}`, `btn-${size}`, className].filter(Boolean).join(' ')
+---
+
+<Tag class={classes} href={href} type={href ? undefined : type} {...rest}>
+  <span><slot /></span>
+  {
+    arrow && (
+      <svg
+        class="icon-directional"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 8h11M9 4l4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    )
+  }
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color 180ms var(--ease-out-expo),
+      border-color 180ms var(--ease-out-expo),
+      transform 180ms var(--ease-out-expo);
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-md {
+    padding: 0.7rem 1.35rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-lg {
+    padding: 0.95rem 1.8rem;
+    font-size: 1.0625rem;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-strong);
+    border-color: var(--border-interactive);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--text-strong);
+    background: var(--surface-raised);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--accent);
+    padding-inline: 0;
+  }
+
+  .btn-ghost:hover {
+    color: var(--accent-hover);
+  }
+
+  .btn svg {
+    flex-shrink: 0;
+  }
+
+  /* The arrow nudges forward on hover — forward being start-to-end, so it
+     moves left in Arabic without a second rule. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .btn:hover svg {
+      transform: translateX(2px);
+    }
+
+    :global([dir='rtl']) .btn:hover svg {
+      transform: scaleX(-1) translateX(2px);
+    }
+  }
+</style>

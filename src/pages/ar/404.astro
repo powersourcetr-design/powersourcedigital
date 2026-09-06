@@ -1,5 +1,5 @@
 ---
-import Base from '@/layouts/Base.astro'
+import Page from '@/layouts/Page.astro'
 import { href, localizedPath } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 
@@ -7,8 +7,9 @@ const locale = 'ar' as const
 const t = useTranslations(locale)
 ---
 
-<Base
+<Page
   locale={locale}
+  routeKey="notFound"
   noindex
   title="الصفحة غير موجودة | مصدر الطاقه ديجيتال"
   description="هذه الصفحة غير متوفرة. تصفّح خدماتنا أو تواصل معنا."
@@ -23,7 +24,7 @@ const t = useTranslations(locale)
       <a class="link" href={href(localizedPath('contact', locale))}>{t('nav.contact')}</a>
     </div>
   </div>
-</Base>
+</Page>
 
 <style>
   .wrap {

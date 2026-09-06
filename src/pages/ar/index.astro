@@ -1,83 +1,92 @@
 ---
-import Base from '@/layouts/Base.astro'
-import { localizedPath, href } from '@/i18n/routes'
-import { useTranslations } from '@/i18n/ui'
-import { SERVICES, servicePath, CITIES, cityServicePath } from '@/i18n/slugs'
+import CTABand from '@/components/sections/CTABand.astro'
+import Hero from '@/components/sections/Hero.astro'
+import ServicesGrid from '@/components/sections/ServicesGrid.astro'
+import Steps from '@/components/sections/Steps.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
 
 const locale = 'ar' as const
-const t = useTranslations(locale)
+
+const WHY = [
+  {
+    title: 'نبدأ من النشاط نفسه',
+    body: 'قبل أي تصميم نريد أن نعرف من يشتري منك، وما الذي يسأل عنه قبل الشراء، وما الذي يعيقه اليوم.',
+  },
+  {
+    title: 'الجوال أولاً',
+    body: 'معظم زوارك يدخلون من الجوال وعلى شبكة بيانات. هذه هي النسخة التي نبنيها ونختبرها أولاً، لا التي نُصغّرها لاحقاً.',
+  },
+  {
+    title: 'السيو ليس إضافة لاحقة',
+    body: 'البنية والسرعة والروابط الداخلية تُقرَّر أثناء بناء الموقع. معالجتها بعد الإطلاق تكلف أكثر وتعطي أقل.',
+  },
+  {
+    title: 'العربية تُكتب ولا تُترجم',
+    body: 'النسخة العربية مكتوبة لقارئ سعودي، بنصها وخطها وتباعدها الخاص. الترجمة الآلية يكشفها أي قارئ من السطر الأول.',
+  },
+]
+
+const PROCESS = [
+  {
+    title: 'نطّلع',
+    body: 'نراجع موقعك وملفك على جوجل والمنافسين الذين يسبقونك في النتائج، ثم نخبرك بما وجدناه. هذه المرحلة مجانية.',
+  },
+  {
+    title: 'نخطط',
+    body: 'قائمة مرتبة بما يجب إصلاحه، مع سبب كل بند وسعره. وأنت تقرر ما تنفذه منها.',
+  },
+  {
+    title: 'ننفذ',
+    body: 'تصميم وتطوير ومحتوى، مع مراجعة في كل مرحلة بدلاً من تسليم واحد في النهاية.',
+  },
+  {
+    title: 'نحسّن',
+    body: 'بعد الإطلاق نتابع ما يبحث عنه الناس فعلاً وما ينقرون عليه، ونبني عليه جولة العمل التالية.',
+  },
+]
 ---
 
-<Base
+<Page
   locale={locale}
+  routeKey="home"
   title="خدمات رقمية للشركات في الرياض | مصدر الطاقه ديجيتال"
-  description="تصميم المواقع وتحسين محركات البحث وإدارة الملف التجاري على جوجل والتصميم الجرافيكي وإدارة المتاجر الإلكترونية في جميع أنحاء المملكة."
+  description="نبني المواقع، ونحسّن ظهورك على جوجل، وندير المتاجر الإلكترونية للشركات في الرياض وجدة والطائف وفي أنحاء المملكة العربية السعودية."
 >
-  <section class="wrap">
-    <p class="eyebrow">فحص المسار — المرحلة الأولى</p>
-    <h1>مصدر الطاقه ديجيتال</h1>
-    <p>
-      الهيكل جاهز. كل رابط في الأسفل مُولَّد من
-      <code class="num">src/i18n/routes.ts</code>
-      وليس مكتوباً يدوياً.
-    </p>
+  <Hero
+    eyebrow="الرياض · جدة · الطائف"
+    title="حضور رقمي يعمل لصالح نشاطك التجاري."
+    body="نبني مواقع احترافية، ونحسّن طريقة ظهورك على جوجل، وندير الأدوات الرقمية التي يستخدمها عملاؤك أصلاً للوصول إليك والتواصل معك."
+    primaryLabel="احصل على تدقيق مجاني"
+    primaryHref={href(localizedPath('freeAudit', locale))}
+    secondaryLabel="تعرّف على ما نقدمه"
+    secondaryHref={href(localizedPath('services', locale))}
+    chips={['المواقع', 'تحسين محركات البحث', 'الملف التجاري على جوجل', 'المتاجر الإلكترونية', 'التصميم']}
+  />
 
-    <h2>{t('nav.services')}</h2>
-    <ul>
-      {
-        SERVICES.map((service) => (
-          <li>
-            <a href={href(servicePath(service.key, locale))}>{service.slug.ar}</a>
-          </li>
-        ))
-      }
-    </ul>
+  <ServicesGrid
+    locale={locale}
+    eyebrow="ما نقدمه"
+    title="خمس خدمات مصممة لتعمل معاً"
+    intro="معظم الشركات تبيع واحدة منها وتُسند البقية إلى غيرها. نحن ننفذ الخمس داخلياً، ما يعني أن الموقع وعمل البحث والمتجر تُقرَّر معاً لا عبر ثلاث جهات لا يتحدث بعضها إلى بعض."
+  />
 
-    <h2>الخدمة × المدينة</h2>
-    <ul>
-      {
-        CITIES.slice(0, 3).map((city) => (
-          <li>
-            <a href={href(cityServicePath('seo', city.key, locale))}>
-              {cityServicePath('seo', city.key, locale)}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <Steps eyebrow="لماذا نحن" title="ما الذي يصنع الفرق فعلاً" steps={WHY} />
 
-    <p>
-      <span class="num" dir="ltr">+966 56 065 4302</span>
-    </p>
+  <Steps
+    eyebrow="طريقة العمل"
+    title="مسار واضح يمكنك متابعته"
+    intro="لا مرحلة استكشاف طويلة قبل أن ترى شيئاً، ولا فاتورة قبل أن تعرف ما الذي تشتريه."
+    steps={PROCESS}
+    variant="timeline"
+    tone="sunken"
+  />
 
-    <p><a href={href(localizedPath('home', 'en'))}>{t('lang.switchTo')}</a></p>
-  </section>
-</Base>
-
-<style>
-  .wrap {
-    max-inline-size: var(--container-site);
-    margin-inline: auto;
-    padding-inline: var(--spacing-gutter);
-    padding-block: 4rem;
-  }
-
-  .eyebrow {
-    color: var(--text-muted);
-    font-size: var(--text-small);
-    letter-spacing: 0;
-  }
-
-  h1 {
-    font-size: var(--text-display);
-  }
-
-  h2 {
-    font-size: var(--text-h2);
-    margin-block-start: 2.5rem;
-  }
-
-  a {
-    color: var(--accent);
-  }
-</style>
+  <CTABand
+    locale={locale}
+    title="لست متأكداً مما يحتاجه نشاطك؟"
+    body="سنطّلع على موقعك وحضورك على جوجل ونخبرك بما سنعالجه أولاً، بما في ذلك ما يمكنك تنفيذه بنفسك دون أن تدفع لأحد."
+    ctaLabel="احصل على تدقيق مجاني"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>

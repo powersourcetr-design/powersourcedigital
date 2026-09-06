@@ -1,0 +1,137 @@
+---
+/**
+ * Numbered steps, used for both "why us" and the process timeline.
+ *
+ * The connecting rule is drawn with a border on the list rather than a
+ * pseudo-element per item, so it starts and ends where the content does and
+ * flips with the writing direction for free.
+ */
+interface Step {
+  title: string
+  body: string
+}
+
+interface Props {
+  eyebrow: string
+  title: string
+  intro?: string | undefined
+  steps: Step[]
+  variant?: 'plain' | 'timeline' | undefined
+  tone?: 'default' | 'sunken' | undefined
+}
+
+const { eyebrow, title, intro, steps, variant = 'plain', tone = 'default' } = Astro.props
+---
+
+<section class:list={['section', tone === 'sunken' && 'sunken']}>
+  <div class="inner">
+    <header class="head">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      {intro && <p class="intro">{intro}</p>}
+    </header>
+
+    <ol class:list={['steps', variant]}>
+      {
+        steps.map((step, index) => (
+          <li>
+            <span class="num">{String(index + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .section {
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .sunken {
+    background: var(--surface-sunken);
+  }
+
+  .inner {
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: clamp(3.5rem, 2rem + 6vw, 6rem);
+  }
+
+  .head {
+    max-inline-size: 62ch;
+    margin-block-end: 2.5rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.6rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  :global([dir='rtl']) .eyebrow {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.9rem;
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .steps {
+    display: grid;
+    gap: 2rem 1.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+  }
+
+  .steps li {
+    display: grid;
+    align-content: start;
+    gap: 0.4rem;
+  }
+
+  /* The timeline variant adds a rule above each item, forming one continuous
+     line across the row. `border-block-start` needs no direction handling. */
+  .timeline li {
+    padding-block-start: 1.1rem;
+    border-block-start: 2px solid var(--border-subtle);
+  }
+
+  .timeline li:first-child {
+    border-block-start-color: var(--accent-vivid);
+  }
+
+  .num {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .steps p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+</style>

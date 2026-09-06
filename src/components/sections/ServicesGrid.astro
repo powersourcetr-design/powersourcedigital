@@ -1,0 +1,226 @@
+---
+import Button from '@/components/ui/Button.astro'
+import { type Locale, href, localizedPath } from '@/i18n/routes'
+import { servicePath } from '@/i18n/slugs'
+import { useTranslations } from '@/i18n/ui'
+import { getServices, serviceKeyOf } from '@/lib/content'
+
+/**
+ * Bento grid of the five services, read from the content collection so this
+ * can never list a service whose page does not exist.
+ *
+ * The first card spans two columns on wide screens — web design is the entry
+ * point for most enquiries, and an even grid of five reads as an afterthought.
+ */
+interface Props {
+  locale: Locale
+  eyebrow: string
+  title: string
+  intro: string
+}
+
+const { locale, eyebrow, title, intro } = Astro.props
+const t = useTranslations(locale)
+const services = await getServices(locale)
+---
+
+<section class="services">
+  <div class="inner">
+    <header class="head">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      <p class="intro">{intro}</p>
+    </header>
+
+    <ul class="grid">
+      {
+        services.map((entry, index) => (
+          <li class:list={['card', index === 0 && 'wide']}>
+            <a href={href(servicePath(serviceKeyOf(entry), locale))}>
+              <span class="num">{String(index + 1).padStart(2, '0')}</span>
+              <h3>{entry.data.title}</h3>
+              <p class="tagline">{entry.data.tagline}</p>
+              <p class="summary">{entry.data.summary}</p>
+              {entry.data.platforms.length > 0 && (
+                <p class="platforms">{entry.data.platforms.join(' · ')}</p>
+              )}
+              <span class="more">
+                {t('cta.learnMore')}
+                <svg
+                  class="icon-directional"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 8h11M9 4l4 4-4 4"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <Button href={href(localizedPath('services', locale))} variant="secondary" arrow>
+      {t('cta.allServices')}
+    </Button>
+  </div>
+</section>
+
+<style>
+  .services {
+    background: var(--surface-sunken);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .inner {
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: clamp(3.5rem, 2rem + 6vw, 6rem);
+  }
+
+  .head {
+    max-inline-size: 62ch;
+    margin-block-end: 2.5rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.6rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  :global([dir='rtl']) .eyebrow {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.9rem;
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    list-style: none;
+    margin: 0 0 2.5rem;
+    padding: 0;
+  }
+
+  @media (min-width: 60rem) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .wide {
+      grid-column: span 2;
+    }
+  }
+
+  .card a {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.35rem;
+    block-size: 100%;
+    padding: 1.6rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition:
+      border-color 200ms var(--ease-out-expo),
+      transform 200ms var(--ease-out-expo);
+  }
+
+  /* A single-pixel gradient edge on hover, rather than a drop shadow. */
+  .card a::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--accent-vivid),
+      transparent
+    );
+    opacity: 0;
+    transition: opacity 220ms var(--ease-out-expo);
+  }
+
+  .card a:hover::before {
+    opacity: 1;
+  }
+
+  .card a:hover {
+    border-color: var(--border-interactive);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .card a:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  .num {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    margin: 0;
+  }
+
+  .tagline {
+    margin: 0;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .summary {
+    margin: 0.4rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .platforms {
+    margin: 0.6rem 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-block-start: 1.1rem;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+</style>

@@ -1,5 +1,5 @@
 ---
-import Base from '@/layouts/Base.astro'
+import Page from '@/layouts/Page.astro'
 import { href, localizedPath } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 
@@ -7,8 +7,9 @@ const locale = 'en' as const
 const t = useTranslations(locale)
 ---
 
-<Base
+<Page
   locale={locale}
+  routeKey="notFound"
   noindex
   title="Page not found | Power Source Digital"
   description="That page is not here. Find our services, or get in touch."
@@ -23,7 +24,7 @@ const t = useTranslations(locale)
       <a class="link" href={href(localizedPath('contact', locale))}>{t('nav.contact')}</a>
     </div>
   </div>
-</Base>
+</Page>
 
 <style>
   .wrap {

@@ -14,8 +14,14 @@ import { extname, join, relative } from 'node:path'
 const ROOTS = ['src/components', 'src/layouts', 'src/pages']
 const EXTENSIONS = new Set(['.astro', '.ts', '.tsx', '.css'])
 
-/** Tailwind utilities that bake in a physical direction. */
-const TAILWIND = String.raw`\b-?(ml|mr|pl|pr|left|right|border-l|border-r|rounded-l|rounded-r|rounded-tl|rounded-tr|rounded-bl|rounded-br|text-left|text-right|float-left|float-right|inset-l|inset-r|origin-left|origin-right)(-[a-z0-9./[\]%-]+)?\b`
+/**
+ * Tailwind utilities that bake in a physical direction.
+ *
+ * `left` and `right` require a value suffix (`left-0`, not the bare word), so
+ * prose that happens to mention a direction is not a violation. Comments are
+ * stripped before matching for the same reason.
+ */
+const TAILWIND = String.raw`\b-?(ml|mr|pl|pr|border-l|border-r|rounded-l|rounded-r|rounded-tl|rounded-tr|rounded-bl|rounded-br|text-left|text-right|float-left|float-right|origin-left|origin-right|left|right|inset-l|inset-r)-[a-z0-9./[\]%-]+\b`
 
 /** Raw CSS properties with the same problem. */
 const CSS = String.raw`(?<![-\w])(margin|padding|border)-(left|right)\s*:|(?<![-\w])(left|right)\s*:\s*(?!auto\s*;?\s*\/\*\s*ok)`
@@ -39,16 +45,32 @@ async function* walk(dir) {
   }
 }
 
+/**
+ * Blanks out comment bodies while preserving every newline, so line numbers
+ * stay accurate and prose describing a direction ("points left in Arabic") is
+ * not reported as a physical utility.
+ */
+function stripComments(source) {
+  const blank = (match) => match.replace(/[^\n]/g, ' ')
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, blank) // /* block */ and CSS comments
+    .replace(/<!--[\s\S]*?-->/g, blank) // HTML comments
+    .replace(/(^|[^:])\/\/[^\n]*/g, (m, p1) => p1 + blank(m.slice(p1.length))) // // line
+}
+
 const violations = []
 
 for (const root of ROOTS) {
   for await (const file of walk(root)) {
     const source = await readFile(file, 'utf8')
-    const lines = source.split('\n')
+    const scannable = stripComments(source)
+    const lines = scannable.split('\n')
+    const originalLines = source.split('\n')
 
     lines.forEach((line, index) => {
-      // Allow an explicit opt-out for the rare genuinely-physical case.
-      if (line.includes('dir-ok')) return
+      // Allow an explicit opt-out for the rare genuinely-physical case. The
+      // marker lives in a comment, so it is read from the original line.
+      if (originalLines[index]?.includes('dir-ok')) return
 
       for (const { name, re } of patterns) {
         re.lastIndex = 0
@@ -59,7 +81,7 @@ for (const root of ROOTS) {
             line: index + 1,
             name,
             text: match[0].trim(),
-            source: line.trim(),
+            source: (originalLines[index] ?? line).trim(),
           })
         }
       }

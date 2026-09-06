@@ -1,0 +1,206 @@
+---
+import { type Locale, href, localizedPath } from '@/i18n/routes'
+import { servicePath } from '@/i18n/slugs'
+import { useTranslations } from '@/i18n/ui'
+import { getServices, serviceKeyOf } from '@/lib/content'
+import { EMAIL, PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from '@/lib/whatsapp'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = useTranslations(locale)
+
+// Service names come from the content collection so the footer cannot list a
+// service whose page does not exist.
+const services = await getServices(locale)
+const year = new Date().getFullYear()
+---
+
+<footer class="footer">
+  <div class="inner">
+    <div class="about">
+      <span class="wordmark">
+        <strong>Power Source Digital</strong>
+        <em lang="ar" dir="rtl">مصدر الطاقه ديجيتال</em>
+      </span>
+      <p>{t('footer.about')}</p>
+      <p class="sister">{t('footer.sister')}</p>
+    </div>
+
+    <nav class="col" aria-labelledby="f-services">
+      <h2 id="f-services">{t('footer.services')}</h2>
+      {
+        services.map((entry) => (
+          <a href={href(servicePath(serviceKeyOf(entry), locale))}>{entry.data.title}</a>
+        ))
+      }
+    </nav>
+
+    <nav class="col" aria-labelledby="f-company">
+      <h2 id="f-company">{t('footer.company')}</h2>
+      <a href={href(localizedPath('about', locale))}>{t('nav.about')}</a>
+      <a href={href(localizedPath('work', locale))}>{t('nav.work')}</a>
+      <a href={href(localizedPath('process', locale))}>{t('nav.process')}</a>
+      <a href={href(localizedPath('pricing', locale))}>{t('nav.pricing')}</a>
+      <a href={href(localizedPath('blog', locale))}>{t('nav.blog')}</a>
+      <a href={href(localizedPath('contact', locale))}>{t('nav.contact')}</a>
+    </nav>
+
+    <div class="col">
+      <h2>{t('footer.talk')}</h2>
+      <a href={whatsappUrl({ locale })} target="_blank" rel="noopener">
+        {t('contact.whatsapp')} — <span class="num" dir="ltr">{PHONE_DISPLAY}</span>
+      </a>
+      <a href={PHONE_HREF}>
+        {t('contact.phone')} — <span class="num" dir="ltr">{PHONE_DISPLAY}</span>
+      </a>
+      <a href={`mailto:${EMAIL}`}><span dir="ltr">{EMAIL}</span></a>
+      <p class="place">{t('contact.location')}</p>
+    </div>
+  </div>
+
+  <div class="base">
+    <p><span class="num" dir="ltr">©&nbsp;{year}</span> Power Source Digital. {t('footer.rights')}</p>
+    <nav aria-label={t('footer.legal')}>
+      <a href={href(localizedPath('privacy', locale))}>{t('footer.privacy')}</a>
+      <a href={href(localizedPath('terms', locale))}>{t('footer.terms')}</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-block-start: clamp(4rem, 2rem + 8vw, 7rem);
+    background: var(--surface-raised);
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .inner {
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: clamp(3rem, 2rem + 4vw, 4.5rem);
+  }
+
+  .about {
+    grid-column: span 1;
+  }
+
+  @media (min-width: 900px) {
+    .about {
+      grid-column: span 2;
+      padding-inline-end: 3rem;
+    }
+  }
+
+  .wordmark {
+    display: grid;
+    gap: 0.15rem;
+    margin-block-end: 1rem;
+  }
+
+  .wordmark strong {
+    font-size: 1.05rem;
+    color: var(--text-strong);
+  }
+
+  .wordmark em {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  .about p {
+    color: var(--text-muted);
+    max-inline-size: 44ch;
+    margin: 0 0 0.9rem;
+  }
+
+  .sister {
+    font-size: 0.875rem;
+  }
+
+  .col {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+  }
+
+  .col h2 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin: 0 0 0.3rem;
+  }
+
+  :global([dir='rtl']) .col h2 {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.85rem;
+  }
+
+  .col a {
+    color: var(--text-default);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .col a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .place {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .base {
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .base > * {
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+  }
+
+  .base {
+    display: grid;
+    gap: 0.5rem;
+    padding-inline: var(--spacing-gutter);
+    padding-block: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .base nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .base a {
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 700px) {
+    .base {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
+  }
+
+  /* Clears the mobile action bar. */
+  @media (max-width: 767px) {
+    .base {
+      padding-block-end: 5rem;
+    }
+  }
+</style>

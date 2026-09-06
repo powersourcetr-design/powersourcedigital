@@ -50,7 +50,7 @@ const TYPE_SCALE = [
   title="Styleguide — Power Source Digital"
   description="Internal design system reference. Not for publication."
 >
-  <div class="page">
+  <main id="content" class="page">
     <header class="head">
       <div>
         <p class="eyebrow">Checkpoint 1</p>
@@ -192,7 +192,7 @@ const TYPE_SCALE = [
         </article>
       </div>
     </section>
-  </div>
+  </main>
 </Base>
 
 <script>
@@ -216,6 +216,7 @@ const TYPE_SCALE = [
 
 <style>
   .page {
+    display: block;
     max-inline-size: var(--container-site);
     margin-inline: auto;
     padding-inline: var(--spacing-gutter);

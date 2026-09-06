@@ -1,81 +1,102 @@
 ---
-import Base from '@/layouts/Base.astro'
-import { localizedPath, href } from '@/i18n/routes'
-import { useTranslations } from '@/i18n/ui'
-import { SERVICES, servicePath, CITIES, cityServicePath } from '@/i18n/slugs'
+import CTABand from '@/components/sections/CTABand.astro'
+import Hero from '@/components/sections/Hero.astro'
+import ServicesGrid from '@/components/sections/ServicesGrid.astro'
+import Steps from '@/components/sections/Steps.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
 
 const locale = 'en' as const
-const t = useTranslations(locale)
+
+const WHY = [
+  {
+    title: 'We start with the business',
+    body: 'Before anything is designed we want to know who buys from you, what they ask before they buy, and what currently gets in the way.',
+  },
+  {
+    title: 'Built for phones first',
+    body: 'Most of your visitors arrive on a phone, often on mobile data. That is the version we build and test first, not the one we shrink down afterwards.',
+  },
+  {
+    title: 'Search is not an add-on',
+    body: 'Structure, speed and internal linking are decided while the site is being built. Retrofitting SEO afterwards costs more and works less well.',
+  },
+  {
+    title: 'Arabic is written, not translated',
+    body: 'The Arabic site is authored for a Saudi reader, with its own copy, its own type and its own spacing. Machine-translated Arabic is obvious to anyone who reads it.',
+  },
+]
+
+const PROCESS = [
+  {
+    title: 'Look',
+    body: 'We go through your site, your Google profile and the two or three competitors who outrank you, then tell you what we found. This part is free.',
+  },
+  {
+    title: 'Plan',
+    body: 'A ranked list of what to fix, with the reasoning and a price. You decide how much of it to do.',
+  },
+  {
+    title: 'Build',
+    body: 'Design, development and content, with something to review at each stage rather than a single reveal at the end.',
+  },
+  {
+    title: 'Improve',
+    body: 'After launch we track what people actually search and click, and use it to decide the next round of work.',
+  },
+]
 ---
 
-<Base
+<Page
   locale={locale}
+  routeKey="home"
   title="Digital Services for Businesses in Riyadh | Power Source Digital"
-  description="Websites, SEO, Google Business Profile, graphic design and e-commerce management for businesses across Saudi Arabia."
+  description="We build websites, improve how you appear on Google, and manage online stores for businesses in Riyadh, Jeddah, Taif and across Saudi Arabia."
 >
-  <section class="wrap">
-    <p class="eyebrow">Pipeline check — Checkpoint 1</p>
-    <h1>Power Source Digital</h1>
-    <p>
-      Scaffold is live. Every link below is generated from
-      <code>src/i18n/routes.ts</code>, not hardcoded.
-    </p>
+  <Hero
+    eyebrow="Riyadh · Jeddah · Taif"
+    title="Build a digital presence that works for your business."
+    body="We build professional websites, improve how you appear on Google, and manage the digital tools your customers already use to find you and get in touch."
+    primaryLabel="Get a free audit"
+    primaryHref={href(localizedPath('freeAudit', locale))}
+    secondaryLabel="See what we do"
+    secondaryHref={href(localizedPath('services', locale))}
+    chips={[
+      'Websites',
+      'SEO',
+      'Google Business Profile',
+      'E-commerce',
+      'Graphic design',
+    ]}
+  />
 
-    <h2>{t('nav.services')}</h2>
-    <ul>
-      {
-        SERVICES.map((service) => (
-          <li>
-            <a href={href(servicePath(service.key, locale))}>{service.slug.en}</a>
-            {' → '}
-            <a href={href(servicePath(service.key, 'ar'))}>{service.slug.ar}</a>
-          </li>
-        ))
-      }
-    </ul>
+  <ServicesGrid
+    locale={locale}
+    eyebrow="What we do"
+    title="Five services, built to work together"
+    intro="Most agencies sell one of these and outsource the rest. We deliver all five in-house, which means the website, the search work and the store are decided together instead of by three companies who never speak."
+  />
 
-    <h2>Service × City</h2>
-    <ul>
-      {
-        CITIES.slice(0, 3).map((city) => (
-          <li>
-            <a href={href(cityServicePath('seo', city.key, locale))}>
-              {cityServicePath('seo', city.key, locale)}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <Steps
+    eyebrow="Why us"
+    title="What actually makes the difference"
+    steps={WHY}
+  />
 
-    <p><a href={href(localizedPath('home', 'ar'))}>{t('lang.switchTo')}</a></p>
-  </section>
-</Base>
+  <Steps
+    eyebrow="How we work"
+    title="A process you can follow"
+    intro="No long discovery phase before you see anything, and no invoice before you know what you are buying."
+    steps={PROCESS}
+    variant="timeline"
+    tone="sunken"
+  />
 
-<style>
-  .wrap {
-    max-inline-size: var(--container-site);
-    margin-inline: auto;
-    padding-inline: var(--spacing-gutter);
-    padding-block: 4rem;
-  }
-
-  .eyebrow {
-    color: var(--text-muted);
-    font-size: var(--text-small);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  h1 {
-    font-size: var(--text-display);
-  }
-
-  h2 {
-    font-size: var(--text-h2);
-    margin-block-start: 2.5rem;
-  }
-
-  a {
-    color: var(--accent);
-  }
-</style>
+  <CTABand
+    locale={locale}
+    title="Not sure what your business needs?"
+    body="We will look at your website and your Google presence and tell you what we would fix first — including the things you can do yourself without paying anyone."
+    ctaLabel="Get a free audit"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>

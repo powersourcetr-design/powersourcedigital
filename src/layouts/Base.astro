@@ -8,7 +8,7 @@ interface Props {
   title: string
   description: string
   /** Internal pages (styleguide, thank-you) that must stay out of the index. */
-  noindex?: boolean
+  noindex?: boolean | undefined
 }
 
 const { locale, title, description, noindex = false } = Astro.props
@@ -58,9 +58,7 @@ const canonical = `${SITE}${href(decodeURI(Astro.url.pathname))}`
   </head>
   <body>
     <a class="skip-link" href="#content">{t('a11y.skipToContent')}</a>
-    <main id="content">
-      <slot />
-    </main>
+    <slot />
   </body>
 </html>
 

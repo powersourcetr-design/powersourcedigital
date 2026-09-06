@@ -1,0 +1,39 @@
+---
+import Footer from '@/components/layout/Footer.astro'
+import Header from '@/components/layout/Header.astro'
+import MobileActionBar from '@/components/layout/MobileActionBar.astro'
+import WhatsAppFloat from '@/components/layout/WhatsAppFloat.astro'
+import type { Locale, RouteKey } from '@/i18n/routes'
+import Base from './Base.astro'
+
+/**
+ * Every public page. Base handles <head> and the document shell; this adds the
+ * chrome and the two conversion surfaces.
+ *
+ * `service` and `city` are threaded down to WhatsApp so the prefilled message
+ * names whatever the visitor is actually reading.
+ */
+interface Props {
+  locale: Locale
+  routeKey: RouteKey
+  title: string
+  description: string
+  /** The other locale's slug, for dynamic routes. */
+  targetSlug?: string | undefined
+  service?: string | undefined
+  city?: string | undefined
+  noindex?: boolean | undefined
+}
+
+const { locale, routeKey, title, description, targetSlug, service, city, noindex } = Astro.props
+---
+
+<Base locale={locale} title={title} description={description} noindex={noindex}>
+  <Header locale={locale} routeKey={routeKey} targetSlug={targetSlug} />
+  <main id="content">
+    <slot />
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppFloat locale={locale} service={service} city={city} />
+  <MobileActionBar locale={locale} service={service} city={city} />
+</Base>

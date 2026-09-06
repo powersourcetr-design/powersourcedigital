@@ -1,0 +1,160 @@
+---
+import Button from '@/components/ui/Button.astro'
+
+/**
+ * Asymmetric hero. The gradient mesh is pure CSS on a GPU-composited layer and
+ * sits behind the text, never as the LCP element — the heading is.
+ */
+interface Props {
+  eyebrow: string
+  title: string
+  body: string
+  primaryLabel: string
+  primaryHref: string
+  secondaryLabel: string
+  secondaryHref: string
+  chips: string[]
+}
+
+const { eyebrow, title, body, primaryLabel, primaryHref, secondaryLabel, secondaryHref, chips } =
+  Astro.props
+---
+
+<section class="hero">
+  <div class="mesh" aria-hidden="true"></div>
+
+  <div class="inner">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <p class="body">{body}</p>
+
+    <div class="actions">
+      <Button href={primaryHref} size="lg" arrow>{primaryLabel}</Button>
+      <Button href={secondaryHref} size="lg" variant="secondary">{secondaryLabel}</Button>
+    </div>
+
+    <ul class="chips">
+      {chips.map((chip) => <li>{chip}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .mesh {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(
+        42rem 28rem at 78% -10%,
+        color-mix(in srgb, var(--accent-vivid) 22%, transparent),
+        transparent 65%
+      ),
+      radial-gradient(
+        34rem 24rem at 6% 8%,
+        color-mix(in srgb, var(--color-sand-300) 34%, transparent),
+        transparent 70%
+      );
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mesh {
+      animation: drift 22s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(-2%, 1.5%, 0) scale(1.06);
+    }
+  }
+
+  .inner {
+    position: relative;
+    z-index: 1;
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: clamp(3.5rem, 2rem + 9vw, 7.5rem);
+  }
+
+  .eyebrow {
+    display: inline-block;
+    margin: 0 0 1.1rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  :global([dir='rtl']) .eyebrow {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    line-height: 1.02;
+    font-weight: 600;
+    margin: 0;
+    max-inline-size: 18ch;
+  }
+
+  :global([dir='rtl']) h1 {
+    line-height: 1.32;
+    max-inline-size: 20ch;
+  }
+
+  .body {
+    margin-block: 1.4rem 2.2rem;
+    max-inline-size: 56ch;
+    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+    color: var(--text-muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    margin: 3rem 0 0;
+    padding: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .chips li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .chips li::before {
+    content: '';
+    inline-size: 5px;
+    block-size: 5px;
+    border-radius: 999px;
+    background: var(--accent-vivid);
+  }
+</style>
