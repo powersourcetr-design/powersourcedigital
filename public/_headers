@@ -1,0 +1,27 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Frame-Options: DENY
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+
+# HTML is always revalidated so a deploy is visible immediately.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Astro fingerprints everything under /_astro/, so it is immutable.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# NOTE: Content-Security-Policy is deliberately absent until step 6.
+# The policy has to be written against the real set of inline scripts (theme
+# init, consent gate, analytics loader) and their hashes. Shipping a permissive
+# placeholder CSP now would be worse than none: it would look like protection
+# while allowing everything, and it would silently break the strict policy work.

@@ -1,0 +1,83 @@
+---
+import Base from '@/layouts/Base.astro'
+import { localizedPath, href } from '@/i18n/routes'
+import { useTranslations } from '@/i18n/ui'
+import { SERVICES, servicePath, CITIES, cityServicePath } from '@/i18n/slugs'
+
+const locale = 'ar' as const
+const t = useTranslations(locale)
+---
+
+<Base
+  locale={locale}
+  title="خدمات رقمية للشركات في الرياض | مصدر الطاقه ديجيتال"
+  description="تصميم المواقع وتحسين محركات البحث وإدارة الملف التجاري على جوجل والتصميم الجرافيكي وإدارة المتاجر الإلكترونية في جميع أنحاء المملكة."
+>
+  <section class="wrap">
+    <p class="eyebrow">فحص المسار — المرحلة الأولى</p>
+    <h1>مصدر الطاقه ديجيتال</h1>
+    <p>
+      الهيكل جاهز. كل رابط في الأسفل مُولَّد من
+      <code class="num">src/i18n/routes.ts</code>
+      وليس مكتوباً يدوياً.
+    </p>
+
+    <h2>{t('nav.services')}</h2>
+    <ul>
+      {
+        SERVICES.map((service) => (
+          <li>
+            <a href={href(servicePath(service.key, locale))}>{service.slug.ar}</a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>الخدمة × المدينة</h2>
+    <ul>
+      {
+        CITIES.slice(0, 3).map((city) => (
+          <li>
+            <a href={href(cityServicePath('seo', city.key, locale))}>
+              {cityServicePath('seo', city.key, locale)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p>
+      <span class="num" dir="ltr">+966 56 065 4302</span>
+    </p>
+
+    <p><a href={href(localizedPath('home', 'en'))}>{t('lang.switchTo')}</a></p>
+  </section>
+</Base>
+
+<style>
+  .wrap {
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: 4rem;
+  }
+
+  .eyebrow {
+    color: var(--text-muted);
+    font-size: var(--text-small);
+    letter-spacing: 0;
+  }
+
+  h1 {
+    font-size: var(--text-display);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin-block-start: 2.5rem;
+  }
+
+  a {
+    color: var(--accent);
+  }
+</style>

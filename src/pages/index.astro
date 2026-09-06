@@ -1,0 +1,81 @@
+---
+import Base from '@/layouts/Base.astro'
+import { localizedPath, href } from '@/i18n/routes'
+import { useTranslations } from '@/i18n/ui'
+import { SERVICES, servicePath, CITIES, cityServicePath } from '@/i18n/slugs'
+
+const locale = 'en' as const
+const t = useTranslations(locale)
+---
+
+<Base
+  locale={locale}
+  title="Digital Services for Businesses in Riyadh | Power Source Digital"
+  description="Websites, SEO, Google Business Profile, graphic design and e-commerce management for businesses across Saudi Arabia."
+>
+  <section class="wrap">
+    <p class="eyebrow">Pipeline check — Checkpoint 1</p>
+    <h1>Power Source Digital</h1>
+    <p>
+      Scaffold is live. Every link below is generated from
+      <code>src/i18n/routes.ts</code>, not hardcoded.
+    </p>
+
+    <h2>{t('nav.services')}</h2>
+    <ul>
+      {
+        SERVICES.map((service) => (
+          <li>
+            <a href={href(servicePath(service.key, locale))}>{service.slug.en}</a>
+            {' → '}
+            <a href={href(servicePath(service.key, 'ar'))}>{service.slug.ar}</a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>Service × City</h2>
+    <ul>
+      {
+        CITIES.slice(0, 3).map((city) => (
+          <li>
+            <a href={href(cityServicePath('seo', city.key, locale))}>
+              {cityServicePath('seo', city.key, locale)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p><a href={href(localizedPath('home', 'ar'))}>{t('lang.switchTo')}</a></p>
+  </section>
+</Base>
+
+<style>
+  .wrap {
+    max-inline-size: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    padding-block: 4rem;
+  }
+
+  .eyebrow {
+    color: var(--text-muted);
+    font-size: var(--text-small);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  h1 {
+    font-size: var(--text-display);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin-block-start: 2.5rem;
+  }
+
+  a {
+    color: var(--accent);
+  }
+</style>

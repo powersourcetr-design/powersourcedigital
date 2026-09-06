@@ -1,0 +1,41 @@
+{
+  "name": "powersourcedigital",
+  "type": "module",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.34.5",
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "node scripts/build-redirects.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "node scripts/check-logical-props.mjs && astro check && biome check .",
+    "check:dir": "node scripts/check-logical-props.mjs",
+    "redirects": "node scripts/build-redirects.mjs",
+    "format": "biome check --write ."
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.6",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.6.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "astro": "^5.14.1",
+    "motion": "^12.23.12",
+    "sharp": "^0.34.4",
+    "tailwindcss": "^4.1.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@biomejs/biome": "^2.2.4",
+    "typescript": "^5.9.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

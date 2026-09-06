@@ -1,0 +1,64 @@
+---
+import { DIR, LOCALE_TAG, type Locale } from '@/i18n/routes'
+import { useTranslations } from '@/i18n/ui'
+import '@/styles/global.css'
+
+interface Props {
+  locale: Locale
+  title: string
+  description: string
+}
+
+const { locale, title, description } = Astro.props
+const t = useTranslations(locale)
+const dir = DIR[locale]
+---
+
+<!doctype html>
+<html lang={LOCALE_TAG[locale]} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {/* Applies the stored theme before first paint so the page never flashes
+        the wrong one. Hashed into the CSP in step 6. */}
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('psd-theme')
+          if (stored === 'light' || stored === 'dark') {
+            document.documentElement.dataset.theme = stored
+          }
+        } catch {
+          /* Private mode or blocked storage: fall through to prefers-color-scheme. */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">{t('a11y.skipToContent')}</a>
+    <main id="content">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    padding: 0.75rem 1.25rem;
+    background: var(--surface-raised);
+    color: var(--text-strong);
+    transform: translateY(-120%);
+    transition: transform 150ms var(--ease-out-expo);
+    z-index: 100;
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+</style>
