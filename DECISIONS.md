@@ -191,3 +191,29 @@ would have fallen through to the *English* 404.
 A small `astro:build:done` integration copies each locale's 404 to `<locale>/404.html`. The
 sitemap filter excludes anything noindexed by path segment rather than by hand-written
 regex — `/ar/404/` had already slipped into the sitemap once before that was tightened.
+
+## 18. Canonicals, not a noindex flag, protect the temp domain
+
+The site went live on `powersourcedigital.pages.dev` before the custom domain was attached.
+That deployment is fully crawlable and its `robots.txt` explicitly invites Googlebot, so
+without intervention it would compete with `powersourcedigital.com` for identical content —
+a duplicate-content problem on a project whose entire point is SEO.
+
+Every indexable page now carries a self-referencing canonical that is **always absolute and
+always on the production domain**, never on the host that happens to be serving. Google
+consolidates the temp domain into the real one on its own.
+
+The rejected alternative was `X-Robots-Tag: noindex` on preview deployments. It works, but
+it has to be switched off at launch, and forgetting to switch it off deindexes the live
+site. A canonical needs no launch-day action and cannot fail that way.
+
+`Astro.url.pathname` arrives percent-encoded for Arabic routes, so it is decoded before
+`href()` re-encodes it. That keeps canonicals byte-identical to the hrefs emitted everywhere
+else — a canonical that differs from the linked URL by even its encoding is a canonical
+Google may ignore. Round-trip verified for Arabic service and city paths.
+
+Noindexed pages (styleguide, both 404s) deliberately emit **no** canonical.
+
+**For the cutover checklist:** once `powersourcedigital.com` is attached, add a Cloudflare
+redirect rule sending `powersourcedigital.pages.dev/*` to the custom domain, so the temp
+host stops serving content at all.

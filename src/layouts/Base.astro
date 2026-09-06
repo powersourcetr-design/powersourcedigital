@@ -1,5 +1,5 @@
 ---
-import { DIR, LOCALE_TAG, type Locale } from '@/i18n/routes'
+import { DIR, LOCALE_TAG, SITE, type Locale, href } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 import '@/styles/global.css'
 
@@ -14,6 +14,21 @@ interface Props {
 const { locale, title, description, noindex = false } = Astro.props
 const t = useTranslations(locale)
 const dir = DIR[locale]
+
+/**
+ * Self-referencing canonical, always absolute and always on the production
+ * domain — never on the host that happens to be serving.
+ *
+ * This is what stops the temporary *.pages.dev deployment from competing with
+ * powersourcedigital.com for its own content. It is deliberately not a
+ * "noindex the preview" flag: a flag has to be remembered at launch, and
+ * forgetting it would deindex the real site. A canonical is self-correcting.
+ *
+ * `Astro.url.pathname` arrives percent-encoded for Arabic routes, so it is
+ * decoded before `href()` re-encodes it, keeping canonicals byte-identical to
+ * the hrefs emitted elsewhere.
+ */
+const canonical = `${SITE}${href(decodeURI(Astro.url.pathname))}`
 ---
 
 <!doctype html>
@@ -24,6 +39,7 @@ const dir = DIR[locale]
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
     <link rel="sitemap" href="/sitemap-index.xml" />
     {/* Applies the stored theme before first paint so the page never flashes
         the wrong one. Hashed into the CSP in step 6. */}
