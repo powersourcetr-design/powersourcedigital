@@ -3,6 +3,7 @@ import ServiceDetail from '@/components/sections/ServiceDetail.astro'
 import { getService } from '@/i18n/slugs'
 import Page from '@/layouts/Page.astro'
 import { getServices, serviceKeyOf } from '@/lib/content'
+import { render } from 'astro:content'
 import type { GetStaticPaths } from 'astro'
 
 /**
@@ -31,6 +32,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 const { entry, siblings, slugPair } = Astro.props
+const { Content } = await render(entry)
 const locale = 'ar' as const
 ---
 
@@ -48,6 +50,7 @@ const locale = 'ar' as const
     entry={entry}
     siblings={siblings}
     copy={{
+      bodyTitle: 'كيف يسير هذا العمل',
       includedTitle: 'ما يشمله العمل',
       platformsTitle: 'المنصات',
       faqEyebrow: 'أسئلة',
@@ -57,5 +60,7 @@ const locale = 'ar' as const
       ctaBody:
         'التدقيق المجاني يشمل موقعك وحضورك على جوجل والمنافسين الذين يسبقونك. تحصل على ملخص مكتوب لا على مكالمة بيع.',
     }}
-  />
+  >
+    <Content />
+  </ServiceDetail>
 </Page>

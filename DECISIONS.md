@@ -444,3 +444,26 @@ that grows keeps surfacing its most current article.
 Process moved to the footer and the mobile menu. The top nav is the highest-value real
 estate on the site and a process page is not what a paid visitor is looking for; a guide
 answering their actual question is.
+
+## 39. Service pages carry a long-form body
+
+The service content collection always had a markdown body; it was simply empty, so the
+pages were a hero, a checklist and an FAQ. That is thin for a page meant to rank on a
+commercial term and thin for a buyer deciding between quotes.
+
+Each of the ten entries now has 320–540 words of body copy, rendered between the
+deliverables checklist and the FAQ. The scannable proof comes first for someone skimming;
+the detail sits below it for someone still deciding.
+
+The Arabic bodies are written, not translated. They make different arguments where the
+market differs — the Arabic e-commerce page carries the Salla/Zid versus Shopify comparison
+in terms of ZATCA and Arabic admin support, which is what a Saudi store owner is weighing.
+
+Arabic word counts run lower than English (322–411 against 400–540) and that is expected:
+Arabic carries more meaning per word. Matching the counts would mean padding.
+
+## 40. Blog FAQ headings no longer repeat the article title
+
+`Article.astro` passed `entry.data.title` as the FAQ section heading, so a post rendered its
+own title twice — once as the `h1` and again over the questions. It now takes a proper
+heading from the route's copy block.

@@ -25,6 +25,7 @@ interface Props {
     sidebarCtaBody: string
     sidebarCtaLabel: string
     faqEyebrow: string
+    faqTitle: string
     ctaTitle: string
     ctaBody: string
     ctaLabel: string
@@ -170,7 +171,7 @@ const slugs = translationSlug
 
   {
     entry.data.faq.length > 0 && (
-      <FAQ eyebrow={copy.faqEyebrow} title={entry.data.title} items={entry.data.faq} />
+      <FAQ eyebrow={copy.faqEyebrow} title={copy.faqTitle} items={entry.data.faq} />
     )
   }
 

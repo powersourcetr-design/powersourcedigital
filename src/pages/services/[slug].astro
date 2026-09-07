@@ -3,6 +3,7 @@ import ServiceDetail from '@/components/sections/ServiceDetail.astro'
 import { getService } from '@/i18n/slugs'
 import Page from '@/layouts/Page.astro'
 import { getServices, serviceKeyOf } from '@/lib/content'
+import { render } from 'astro:content'
 import type { GetStaticPaths } from 'astro'
 
 /**
@@ -30,6 +31,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 const { entry, siblings, slugPair } = Astro.props
+const { Content } = await render(entry)
 const locale = 'en' as const
 ---
 
@@ -47,6 +49,7 @@ const locale = 'en' as const
     entry={entry}
     siblings={siblings}
     copy={{
+      bodyTitle: 'How this works',
       includedTitle: 'What is included',
       platformsTitle: 'Platforms',
       faqEyebrow: 'Questions',
@@ -56,5 +59,7 @@ const locale = 'en' as const
       ctaBody:
         'A free audit covers your site, your Google presence and the competitors ahead of you. You get a written summary, not a sales call.',
     }}
-  />
+  >
+    <Content />
+  </ServiceDetail>
 </Page>
