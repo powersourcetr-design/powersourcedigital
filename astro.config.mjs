@@ -4,6 +4,9 @@ import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
+import { internalLinks } from './scripts/remark-internal-links.mjs'
+import { href, localizedPath } from './src/i18n/routes'
+import { servicePath } from './src/i18n/slugs'
 
 /**
  * Astro special-cases only the root `404.astro`, emitting it as `404.html`.
@@ -57,6 +60,12 @@ export default defineConfig({
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',
+  },
+
+  markdown: {
+    // Resolves `route:` links in post bodies against the route table, so an
+    // Arabic post never hand-writes a percent-encoded path. See the plugin.
+    remarkPlugins: [internalLinks({ href, localizedPath, servicePath })],
   },
 
   image: {

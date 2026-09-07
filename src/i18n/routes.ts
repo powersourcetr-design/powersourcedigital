@@ -213,15 +213,56 @@ export function alternates(
   key: RouteKey,
   slugs?: Partial<Record<Locale, string>>,
 ): { hreflang: string; url: string }[] {
-  const entries = LOCALES.map((locale) => ({
+  const isDynamic = (ROUTES[key] as RouteDef).dynamic === true
+
+  // A dynamic route only exists in a locale we hold a slug for. Blog posts are
+  // deliberately allowed to be single-language — an article written for the
+  // Saudi market does not always have an English counterpart worth writing —
+  // so the missing half has to be omitted rather than guessed at. Emitting an
+  // hreflang for a page nobody authored advertises a 404 to Google, and
+  // building that URL throws anyway, because a dynamic route needs a slug.
+  const available = LOCALES.filter((locale) => !isDynamic || Boolean(slugs?.[locale]))
+
+  // One language is not a cluster. hreflang describes alternatives, and a page
+  // whose only alternative is itself says nothing worth serialising.
+  if (available.length < 2) return []
+
+  const entries = available.map((locale) => ({
     hreflang: LOCALE_TAG[locale],
     url: absoluteUrl(localizedPath(key, locale, slugs?.[locale])),
   }))
-  const fallback = absoluteUrl(localizedPath(key, DEFAULT_LOCALE, slugs?.[DEFAULT_LOCALE]))
-  return [...entries, { hreflang: 'x-default', url: fallback }]
+
+  // x-default heads the cluster with the default locale where it exists, and
+  // otherwise with whichever locale does, so it never names a missing page.
+  const fallbackLocale = available.includes(DEFAULT_LOCALE) ? DEFAULT_LOCALE : available[0]
+  if (!fallbackLocale) return entries
+
+  return [
+    ...entries,
+    {
+      hreflang: 'x-default',
+      url: absoluteUrl(localizedPath(key, fallbackLocale, slugs?.[fallbackLocale])),
+    },
+  ]
 }
 
 /** The equivalent page in the other language, for the language switcher. */
 export function otherLocale(locale: Locale): Locale {
   return locale === 'en' ? 'ar' : 'en'
+}
+
+/** True for routes that need a slug — service details, blog posts and the rest. */
+export function isDynamic(key: RouteKey): boolean {
+  return (ROUTES[key] as RouteDef).dynamic === true
+}
+
+/**
+ * The index a page belongs under, for when its twin in the other language does
+ * not exist: a blog post falls back to the blog, a service to the services
+ * index. Pages with no parent fall back to home, which is the section index for
+ * anything that is not in a section.
+ */
+export function sectionIndex(key: RouteKey): RouteKey {
+  const parent = (ROUTES[key] as RouteDef).parent
+  return parent && parent in ROUTES ? (parent as RouteKey) : 'home'
 }

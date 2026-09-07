@@ -31,7 +31,7 @@ faq:
 
 Building an online store in Saudi Arabia realistically costs between **4,000 and 20,000 SAR** for something that works and takes real orders. Below that you are usually buying a stock theme you still have to fill in yourself. Above it, you are paying for custom design or integration with systems you already run.
 
-This breaks the number down: what is inside the price, what most quotes quietly leave out, and what you will pay every month afterwards. If you want the figures directly, ours are published on the [e-commerce development](/ecommerce-development/) page.
+This breaks the number down: what is inside the price, what most quotes quietly leave out, and what you will pay every month afterwards. If you want the figures directly, ours are published on the [e-commerce development](route:landingEcommerce) page.
 
 ## Why quotes vary so wildly
 
@@ -107,4 +107,4 @@ The answers explain almost every price difference you will see.
 
 A realistic budget for a store genuinely ready to sell in Saudi Arabia is **8,000 to 12,000 SAR** once, plus around **500 SAR monthly** to run. Less is possible, but it means the work you did not pay for is work you will do yourself.
 
-Our prices and exactly what each tier includes are published in full on the [e-commerce development](/ecommerce-development/) page, so you can hold them against any other quote you have.
+Our prices and exactly what each tier includes are published in full on the [e-commerce development](route:landingEcommerce) page, so you can hold them against any other quote you have.

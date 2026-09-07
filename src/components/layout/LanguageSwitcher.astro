@@ -3,9 +3,11 @@ import {
   type Locale,
   type RouteKey,
   href,
+  isDynamic,
   isLive,
   localizedPath,
   otherLocale,
+  sectionIndex,
 } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 
@@ -33,8 +35,13 @@ const target = otherLocale(locale)
 // case — fall back to that locale's home rather than linking into a 404. The
 // brief calls for the section index; home is the section index for a page that
 // is not in a section.
-const targetKey: RouteKey = isLive(routeKey) ? routeKey : 'home'
-const path = localizedPath(targetKey, target, isLive(routeKey) ? targetSlug : undefined)
+// A dynamic route with no slug for the other locale has no twin there. Blog
+// posts are allowed to exist in one language only, so this is a normal state
+// and not an error: the reader goes to the blog index in their language rather
+// than to a URL that was never built.
+const hasTwin = !isDynamic(routeKey) || Boolean(targetSlug)
+const targetKey: RouteKey = !isLive(routeKey) ? 'home' : hasTwin ? routeKey : sectionIndex(routeKey)
+const path = localizedPath(targetKey, target, targetKey === routeKey ? targetSlug : undefined)
 ---
 
 <a
