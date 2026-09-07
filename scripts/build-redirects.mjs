@@ -15,7 +15,9 @@ import { dirname, join } from 'node:path'
 /** [from, to, status] — `from` is the live WordPress URL, `to` is the new one. */
 const REDIRECTS = [
   // --- English -------------------------------------------------------------
-  ['/portfolio/', '/work/', 301],
+  // /work/ is not built yet, so portfolio traffic goes to the services index
+  // rather than 301-ing into a 404. Restore this when the case studies land.
+  ['/portfolio/', '/services/', 301],
 
   // --- Arabic: services index and details -----------------------------------
   ['/ar/خدماتنا/', '/ar/الخدمات/', 301],
@@ -32,14 +34,15 @@ const REDIRECTS = [
   ['/hello-world/', '/blog/', 301],
   ['/category/blog/', '/blog/', 301],
 
-  // Legacy footer links that 404 on the live site; the new site serves these.
-  ['/privacy-policy/', '/privacy/', 301],
+  // NOTE: /privacy-policy/ deliberately has no rule. The new /privacy/ page is
+  // not written yet, and a 301 to a missing page is worse than a clean 404.
+  // Add the rule in the same commit that adds the page.
 
   // --- WordPress surface that should never have been public -----------------
   ['/wp-admin/*', '/', 301],
   ['/wp-login.php', '/', 301],
-  ['/feed/', '/rss.xml', 301],
-  ['/comments/feed/', '/rss.xml', 301],
+  ['/feed/', '/blog/', 301],
+  ['/comments/feed/', '/blog/', 301],
 ]
 
 const encodePath = (path) =>

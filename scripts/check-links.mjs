@@ -66,4 +66,41 @@ if (broken.size > 0) {
   process.exit(1)
 }
 
-console.log('✓ Every internal link resolves to a built page.')
+/**
+ * The same check for _redirects targets.
+ *
+ * A redirect whose destination was never built is worse than no redirect: the
+ * crawler follows the 301, finds a 404, and the old URL's history is spent on
+ * nothing. Page links were already checked above; these never were, and three
+ * of them reached production.
+ */
+const REDIRECTS_FILE = join('public', '_redirects')
+
+if (existsSync(REDIRECTS_FILE)) {
+  const deadTargets = []
+
+  for (const line of readFileSync(REDIRECTS_FILE, 'utf8').split('\n')) {
+    const rule = line.trim()
+    if (!rule || rule.startsWith('#')) continue
+
+    const [from, to] = rule.split(/\s+/)
+    if (!to) continue
+    // The site root always exists; splat rules resolve at the edge, not on disk.
+    if (to === '/' || to.includes('*')) continue
+    if (resolves(to)) continue
+
+    deadTargets.push([decodeURIComponent(from), decodeURIComponent(to)])
+  }
+
+  if (deadTargets.length > 0) {
+    console.error(`\n✗ ${deadTargets.length} redirect(s) point at pages that were not built:\n`)
+    for (const [from, to] of deadTargets) console.error(`  ${from}  →  ${to}`)
+    console.error(
+      '\nRetarget them at a page that exists, or drop the rule until it does.\n' +
+        'A 301 into a 404 spends the old URL and returns nothing.\n',
+    )
+    process.exit(1)
+  }
+}
+
+console.log('✓ Every internal link and redirect target resolves to a built page.')
