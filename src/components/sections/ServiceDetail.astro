@@ -1,0 +1,310 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import CTABand from '@/components/sections/CTABand.astro'
+import FAQ from '@/components/sections/FAQ.astro'
+import Button from '@/components/ui/Button.astro'
+import { type Locale, href, localizedPath } from '@/i18n/routes'
+import { servicePath } from '@/i18n/slugs'
+import { useTranslations } from '@/i18n/ui'
+import { type ServiceEntry, serviceKeyOf } from '@/lib/content'
+import { graph, service as serviceSchema } from '@/lib/schema'
+
+/**
+ * One service page, rendered from a content-collection entry.
+ *
+ * Both locales use this component; only the entry differs. Nothing here reads a
+ * hardcoded string, so an Arabic page cannot quietly inherit English copy.
+ */
+interface Props {
+  locale: Locale
+  entry: ServiceEntry
+  /** The other services, for the cross-links at the foot. */
+  siblings: ServiceEntry[]
+  /** Copy that belongs to this page rather than the service content. */
+  copy: {
+    includedTitle: string
+    platformsTitle: string
+    faqEyebrow: string
+    faqTitle: string
+    siblingsTitle: string
+    ctaTitle: string
+    ctaBody: string
+  }
+}
+
+const { locale, entry, siblings, copy } = Astro.props
+const t = useTranslations(locale)
+
+const path = servicePath(serviceKeyOf(entry), locale)
+const schema = serviceSchema({
+  locale,
+  name: entry.data.title,
+  description: entry.data.description,
+  path,
+})
+---
+
+<Breadcrumbs
+  locale={locale}
+  items={[
+    { name: t('nav.home'), path: localizedPath('home', locale) },
+    { name: t('nav.services'), path: localizedPath('services', locale) },
+    { name: entry.data.title, path },
+  ]}
+/>
+
+<section class="head shell">
+  <p class="eyebrow">{t('nav.services')}</p>
+  <h1>{entry.data.title}</h1>
+  <p class="tagline">{entry.data.tagline}</p>
+  <p class="summary">{entry.data.summary}</p>
+  <div class="actions">
+    <Button href={href(localizedPath('freeAudit', locale))} size="lg" arrow>
+      {t('cta.freeAudit')}
+    </Button>
+    <Button href={href(localizedPath('contact', locale))} size="lg" variant="secondary">
+      {t('cta.talkToUs')}
+    </Button>
+  </div>
+</section>
+
+<section class="included shell">
+  <div class="included-inner">
+    <div class="included-head">
+      <h2>{copy.includedTitle}</h2>
+      {
+        entry.data.platforms.length > 0 && (
+          <div class="platforms">
+            <h3>{copy.platformsTitle}</h3>
+            <ul>
+              {entry.data.platforms.map((platform) => (
+                <li>{platform}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+
+    <ul class="deliverables">
+      {
+        entry.data.deliverables.map((item) => (
+          <li>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M3 8.4 6.2 11.6 13 4.8"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span>{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+{
+  entry.data.faq.length > 0 && (
+    <FAQ eyebrow={copy.faqEyebrow} title={copy.faqTitle} items={entry.data.faq} />
+  )
+}
+
+<section class="siblings shell">
+  <h2>{copy.siblingsTitle}</h2>
+  <ul>
+    {
+      siblings.map((sibling) => (
+        <li>
+          <a href={href(servicePath(serviceKeyOf(sibling), locale))}>
+            <span class="sibling-title">{sibling.data.title}</span>
+            <span class="sibling-tagline">{sibling.data.tagline}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<CTABand
+  locale={locale}
+  title={copy.ctaTitle}
+  body={copy.ctaBody}
+  ctaLabel={t('cta.freeAudit')}
+  ctaHref={href(localizedPath('freeAudit', locale))}
+  service={entry.data.title}
+/>
+
+<script type="application/ld+json" set:html={graph([schema])} />
+
+<style>
+  .head {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 16ch;
+  }
+
+  .tagline {
+    margin: 1rem 0 0;
+    font-size: var(--text-lead);
+    color: var(--accent);
+    font-weight: 500;
+    max-inline-size: 46ch;
+  }
+
+  .summary {
+    margin: 0.85rem 0 2rem;
+    max-inline-size: 60ch;
+    color: var(--text-muted);
+    font-size: var(--text-lead);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+
+  .included {
+    padding-block: var(--section-pad);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .included-inner {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .included-inner {
+      grid-template-columns: 20rem 1fr;
+      gap: 4rem;
+    }
+
+    .included-head {
+      position: sticky;
+      inset-block-start: 6rem;
+      align-self: start;
+    }
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0;
+  }
+
+  .platforms {
+    margin-block-start: 2rem;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .platforms h3 {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+  }
+
+  :global([dir='rtl']) .platforms h3 {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.9rem;
+  }
+
+  .platforms ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .platforms li {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--text-default);
+  }
+
+  .deliverables {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .deliverables li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+    align-items: start;
+    padding: 1rem 1.1rem;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.75rem;
+  }
+
+  .deliverables svg {
+    margin-block-start: 0.2em;
+    color: var(--accent);
+  }
+
+  .siblings {
+    padding-block: var(--section-pad);
+  }
+
+  .siblings h2 {
+    margin-block-end: 1.5rem;
+  }
+
+  .siblings ul {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .siblings a {
+    display: grid;
+    gap: 0.3rem;
+    block-size: 100%;
+    padding: 1.25rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.9rem;
+    text-decoration: none;
+    transition:
+      border-color 200ms var(--ease-out-expo),
+      background-color 200ms var(--ease-out-expo);
+  }
+
+  .siblings a:hover {
+    border-color: var(--border-interactive);
+    background: var(--surface-raised);
+  }
+
+  .sibling-title {
+    color: var(--text-strong);
+    font-weight: 600;
+  }
+
+  .sibling-tagline {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,194 @@
+---
+import AuditForm from '@/components/sections/AuditForm.astro'
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import FAQ from '@/components/sections/FAQ.astro'
+import { localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+import { EMAIL, PHONE_DISPLAY, PHONE_HREF } from '@/lib/whatsapp'
+
+const locale = 'ar' as const
+
+const CHECKS = [
+  'السرعة على الجوال وعلى شبكة البيانات، لا على إنترنت المكتب',
+  'قدرة جوجل على الزحف إلى كل صفحة ينبغي فهرستها',
+  'العناوين والأوصاف الناقصة أو المكررة أو المقطوعة',
+  'هل النسخة العربية مكتوبة أم مترجمة آلياً',
+  'كم نقرة يحتاجها شخص غريب ليتواصل معك',
+  'الملف التجاري على جوجل: التصنيف والاكتمال والتكرار والتقييمات',
+  'المنافسون الذين يسبقونك في النتائج، وما الذي لديهم',
+]
+
+const FAQ_ITEMS = [
+  {
+    question: 'ما الذي سأحصل عليه فعلاً؟',
+    answer:
+      'ملخص مكتوب بما وجدناه، مرتباً بحسب ما سنعالجه أولاً وسببه. ليس ملفاً جاهزاً وُضع شعارك عليه، ولا مكالمة يتحدث فيها أحدهم إليك أربعين دقيقة.',
+  },
+  {
+    question: 'كم يستغرق؟',
+    answer:
+      'يومان إلى ثلاثة أيام عمل في الغالب. وإذا كان الموقع كبيراً أو الملف التجاري متشابكاً فقد يطول، وسنخبرك بذلك مسبقاً بدل أن نختفي.',
+  },
+  {
+    question: 'كم تكلفته؟',
+    answer:
+      'لا شيء، ولا التزام بعده. بعض ما سنجده يمكنك أنت أو مطورك الحالي إصلاحه دون أن تدفع لأحد، وسنوضح أي البنود هي كذلك.',
+  },
+  {
+    question: 'لماذا تقدمونه مجاناً؟',
+    answer:
+      'لأن معظم المنشآت لا تستطيع التمييز بين مشكلة حقيقية وعرض بيع، والتدقيق الذي يذكر مشكلات محددة وقابلة للتحقق هو أسرع طريقة لإظهار أينا نحن. وإذا كان العمل يستحق التنفيذ فستعرف بمن تتصل.',
+  },
+]
+---
+
+<Page
+  locale={locale}
+  routeKey="freeAudit"
+  title="تدقيق مجاني لموقعك وحضورك على جوجل | مصدر الطاقه ديجيتال"
+  description="مراجعة مجانية ودون التزام لموقعك ولملفك التجاري على جوجل وللمنافسين الذين يسبقونك، مع ملخص مكتوب بما ينبغي معالجته أولاً."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'الرئيسية', path: localizedPath('home', locale) },
+      { name: 'تدقيق مجاني', path: localizedPath('freeAudit', locale) },
+    ]}
+  />
+
+  <div class="layout shell">
+    <div class="pitch">
+      <p class="eyebrow">تدقيق مجاني</p>
+      <h1>اعرف ما الذي يكلفك عملاء محتملين.</h1>
+      <p class="lead">
+        نتصفح موقعك وحضورك على جوجل كما يفعل العميل، ثم نكتب ما يقف في الطريق. دون رسوم،
+        ودون التزام، ودون مكالمة طويلة.
+      </p>
+
+      <h2>ما الذي نفحصه</h2>
+      <ul class="checks">
+        {
+          CHECKS.map((check) => (
+            <li>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M3 8.4 6.2 11.6 13 4.8"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span>{check}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="direct">
+        تفضّل الحديث أولاً؟ اتصل على
+        <a href={PHONE_HREF} class="num" dir="ltr">{PHONE_DISPLAY}</a>
+        أو راسلنا على <a href={`mailto:${EMAIL}`} dir="ltr">{EMAIL}</a>.
+      </p>
+    </div>
+
+    <div class="form-column">
+      <AuditForm
+        locale={locale}
+        copy={{
+          intro:
+            'املأ الحقول وسيفتح واتساب ومعه إجاباتك مكتوبة. لا يُحفظ شيء في هذه الصفحة.',
+          legendAbout: 'عن نشاطك',
+          legendNeed: 'ما الذي تحتاجه',
+          name: 'اسمك',
+          business: 'اسم النشاط',
+          website: 'الموقع الإلكتروني',
+          websiteHint: 'اتركه فارغاً إن لم يكن لديك موقع بعد، فهذه معلومة مفيدة أيضاً.',
+          city: 'المدينة',
+          cityOther: 'مدينة أخرى',
+          service: 'ما المشكلة الأساسية؟',
+          servicePick: 'لست متأكداً بعد',
+          message: 'أي تفاصيل أخرى',
+          messageHint: 'ما جربته سابقاً، أو ما تريد معالجته أولاً.',
+          submit: 'أرسل عبر واتساب',
+          orEmail: 'أو راسلنا على',
+          noJs:
+            'جافاسكربت معطّلة، لذا لن يفتح الزر واتساب. استخدم رقم الهاتف أو البريد الإلكتروني في هذه الصفحة.',
+        }}
+      />
+    </div>
+  </div>
+
+  <FAQ eyebrow="عن العرض" title="قبل أن تسأل" items={FAQ_ITEMS} />
+</Page>
+
+<style>
+  .layout {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  @media (min-width: 62rem) {
+    .layout {
+      grid-template-columns: 1fr 28rem;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .form-column {
+      position: sticky;
+      inset-block-start: 5.5rem;
+    }
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 18ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 2.5rem;
+    max-inline-size: 56ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  h2 {
+    font-size: var(--text-h3);
+    margin: 0 0 1rem;
+  }
+
+  .checks {
+    display: grid;
+    gap: 0.7rem;
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+
+  .checks li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+    align-items: start;
+    color: var(--text-default);
+  }
+
+  .checks svg {
+    margin-block-start: 0.28em;
+    color: var(--accent);
+  }
+
+  .direct {
+    margin: 0;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+  }
+
+  .direct a {
+    color: var(--accent);
+  }
+</style>

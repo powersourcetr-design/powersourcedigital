@@ -1,0 +1,61 @@
+---
+import ServiceDetail from '@/components/sections/ServiceDetail.astro'
+import { getService } from '@/i18n/slugs'
+import Page from '@/layouts/Page.astro'
+import { getServices, serviceKeyOf } from '@/lib/content'
+import type { GetStaticPaths } from 'astro'
+
+/**
+ * The five Arabic service pages.
+ *
+ * The directory name is Arabic script, which is what produces
+ * /ar/الخدمات/<slug>/ without a rewrite. `scripts/check-route-parity`
+ * asserts the built paths against src/i18n/routes.ts so the two cannot drift.
+ */
+export const getStaticPaths = (async () => {
+  const services = await getServices('ar')
+
+  return services.map((entry) => {
+    const key = serviceKeyOf(entry)
+    const def = getService(key)
+
+    return {
+      params: { slug: def.slug.ar },
+      props: {
+        entry,
+        siblings: services.filter((other) => other.id !== entry.id),
+        slugPair: { en: def.slug.en, ar: def.slug.ar },
+      },
+    }
+  })
+}) satisfies GetStaticPaths
+
+const { entry, siblings, slugPair } = Astro.props
+const locale = 'ar' as const
+---
+
+<Page
+  locale={locale}
+  routeKey="serviceDetail"
+  title={`${entry.data.metaTitle} | مصدر الطاقه ديجيتال`}
+  description={entry.data.description}
+  targetSlug={slugPair.en}
+  slugs={slugPair}
+  service={entry.data.title}
+>
+  <ServiceDetail
+    locale={locale}
+    entry={entry}
+    siblings={siblings}
+    copy={{
+      includedTitle: 'ما يشمله العمل',
+      platformsTitle: 'المنصات',
+      faqEyebrow: 'أسئلة',
+      faqTitle: 'ما يسأل عنه العملاء في هذه الخدمة',
+      siblingsTitle: 'الخدمات الأربع الأخرى',
+      ctaTitle: 'تريد معرفة أين تقف اليوم؟',
+      ctaBody:
+        'التدقيق المجاني يشمل موقعك وحضورك على جوجل والمنافسين الذين يسبقونك. تحصل على ملخص مكتوب لا على مكالمة بيع.',
+    }}
+  />
+</Page>

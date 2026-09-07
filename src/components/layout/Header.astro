@@ -3,7 +3,7 @@ import Button from '@/components/ui/Button.astro'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher.astro'
 import { Image } from 'astro:assets'
 import logo from '@/assets/pst-logo.png'
-import { type Locale, type RouteKey, href, localizedPath } from '@/i18n/routes'
+import { type Locale, type RouteKey, href, isLive, localizedPath } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 
 interface Props {
@@ -15,13 +15,23 @@ interface Props {
 const { locale, routeKey, targetSlug } = Astro.props
 const t = useTranslations(locale)
 
-const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = [
-  { key: 'services', label: 'nav.services' },
-  { key: 'work', label: 'nav.work' },
-  { key: 'process', label: 'nav.process' },
-  { key: 'about', label: 'nav.about' },
-  { key: 'contact', label: 'nav.contact' },
-]
+// Filtered through `isLive` so navigation never points at an unbuilt route.
+const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
+  [
+    { key: 'services', label: 'nav.services' },
+    { key: 'work', label: 'nav.work' },
+    { key: 'process', label: 'nav.process' },
+    { key: 'about', label: 'nav.about' },
+    { key: 'contact', label: 'nav.contact' },
+  ] as { key: RouteKey; label: Parameters<typeof t>[0] }[]
+).filter((item) => isLive(item.key))
+
+const EXTRA_NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
+  [
+    { key: 'pricing', label: 'nav.pricing' },
+    { key: 'blog', label: 'nav.blog' },
+  ] as { key: RouteKey; label: Parameters<typeof t>[0] }[]
+).filter((item) => isLive(item.key))
 ---
 
 <header class="header">
@@ -86,8 +96,11 @@ const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = [
           </a>
         ))
       }
-      <a href={href(localizedPath('pricing', locale))}>{t('nav.pricing')}</a>
-      <a href={href(localizedPath('blog', locale))}>{t('nav.blog')}</a>
+      {
+        EXTRA_NAV.map((item) => (
+          <a href={href(localizedPath(item.key, locale))}>{t(item.label)}</a>
+        ))
+      }
     </nav>
     <Button href={href(localizedPath('freeAudit', locale))} size="lg" class="mobile-cta" arrow>
       {t('cta.freeAudit')}

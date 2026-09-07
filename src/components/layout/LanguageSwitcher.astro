@@ -1,5 +1,12 @@
 ---
-import { type Locale, type RouteKey, href, localizedPath, otherLocale } from '@/i18n/routes'
+import {
+  type Locale,
+  type RouteKey,
+  href,
+  isLive,
+  localizedPath,
+  otherLocale,
+} from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 
 /**
@@ -21,7 +28,13 @@ interface Props {
 const { locale, routeKey, targetSlug, class: className } = Astro.props
 const t = useTranslations(locale)
 const target = otherLocale(locale)
-const path = localizedPath(routeKey, target, targetSlug)
+
+// If this route has no page in the other language — the 404 pages are the live
+// case — fall back to that locale's home rather than linking into a 404. The
+// brief calls for the section index; home is the section index for a page that
+// is not in a section.
+const targetKey: RouteKey = isLive(routeKey) ? routeKey : 'home'
+const path = localizedPath(targetKey, target, isLive(routeKey) ? targetSlug : undefined)
 ---
 
 <a

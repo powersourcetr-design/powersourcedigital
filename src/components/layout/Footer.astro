@@ -1,5 +1,5 @@
 ---
-import { type Locale, href, localizedPath } from '@/i18n/routes'
+import { type Locale, type RouteKey, href, isLive, localizedPath } from '@/i18n/routes'
 import { servicePath } from '@/i18n/slugs'
 import { useTranslations } from '@/i18n/ui'
 import { getServices, serviceKeyOf } from '@/lib/content'
@@ -16,6 +16,25 @@ const t = useTranslations(locale)
 // service whose page does not exist.
 const services = await getServices(locale)
 const year = new Date().getFullYear()
+
+// Same rule as the header: the footer never links at a route without a page.
+const COMPANY: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
+  [
+    { key: 'about', label: 'nav.about' },
+    { key: 'work', label: 'nav.work' },
+    { key: 'process', label: 'nav.process' },
+    { key: 'pricing', label: 'nav.pricing' },
+    { key: 'blog', label: 'nav.blog' },
+    { key: 'contact', label: 'nav.contact' },
+  ] as { key: RouteKey; label: Parameters<typeof t>[0] }[]
+).filter((item) => isLive(item.key))
+
+const LEGAL: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
+  [
+    { key: 'privacy', label: 'footer.privacy' },
+    { key: 'terms', label: 'footer.terms' },
+  ] as { key: RouteKey; label: Parameters<typeof t>[0] }[]
+).filter((item) => isLive(item.key))
 ---
 
 <footer class="footer">
@@ -40,12 +59,11 @@ const year = new Date().getFullYear()
 
     <nav class="col" aria-labelledby="f-company">
       <h2 id="f-company">{t('footer.company')}</h2>
-      <a href={href(localizedPath('about', locale))}>{t('nav.about')}</a>
-      <a href={href(localizedPath('work', locale))}>{t('nav.work')}</a>
-      <a href={href(localizedPath('process', locale))}>{t('nav.process')}</a>
-      <a href={href(localizedPath('pricing', locale))}>{t('nav.pricing')}</a>
-      <a href={href(localizedPath('blog', locale))}>{t('nav.blog')}</a>
-      <a href={href(localizedPath('contact', locale))}>{t('nav.contact')}</a>
+      {
+        COMPANY.map((item) => (
+          <a href={href(localizedPath(item.key, locale))}>{t(item.label)}</a>
+        ))
+      }
     </nav>
 
     <div class="col">
@@ -63,10 +81,15 @@ const year = new Date().getFullYear()
 
   <div class="base">
     <p><span class="num" dir="ltr">©&nbsp;{year}</span> Power Source Digital. {t('footer.rights')}</p>
-    <nav aria-label={t('footer.legal')}>
-      <a href={href(localizedPath('privacy', locale))}>{t('footer.privacy')}</a>
-      <a href={href(localizedPath('terms', locale))}>{t('footer.terms')}</a>
-    </nav>
+    {
+      LEGAL.length > 0 && (
+        <nav aria-label={t('footer.legal')}>
+          {LEGAL.map((item) => (
+            <a href={href(localizedPath(item.key, locale))}>{t(item.label)}</a>
+          ))}
+        </nav>
+      )
+    }
   </div>
 </footer>
 

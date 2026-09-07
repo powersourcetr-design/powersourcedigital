@@ -1,0 +1,60 @@
+---
+import ServiceDetail from '@/components/sections/ServiceDetail.astro'
+import { getService } from '@/i18n/slugs'
+import Page from '@/layouts/Page.astro'
+import { getServices, serviceKeyOf } from '@/lib/content'
+import type { GetStaticPaths } from 'astro'
+
+/**
+ * The five English service pages, generated from the content collection.
+ *
+ * `slugPair` is handed to the layout so hreflang and the language switcher both
+ * point at the Arabic twin of *this* service rather than the services index.
+ */
+export const getStaticPaths = (async () => {
+  const services = await getServices('en')
+
+  return services.map((entry) => {
+    const key = serviceKeyOf(entry)
+    const def = getService(key)
+
+    return {
+      params: { slug: def.slug.en },
+      props: {
+        entry,
+        siblings: services.filter((other) => other.id !== entry.id),
+        slugPair: { en: def.slug.en, ar: def.slug.ar },
+      },
+    }
+  })
+}) satisfies GetStaticPaths
+
+const { entry, siblings, slugPair } = Astro.props
+const locale = 'en' as const
+---
+
+<Page
+  locale={locale}
+  routeKey="serviceDetail"
+  title={`${entry.data.metaTitle} | Power Source Digital`}
+  description={entry.data.description}
+  targetSlug={slugPair.ar}
+  slugs={slugPair}
+  service={entry.data.title}
+>
+  <ServiceDetail
+    locale={locale}
+    entry={entry}
+    siblings={siblings}
+    copy={{
+      includedTitle: 'What is included',
+      platformsTitle: 'Platforms',
+      faqEyebrow: 'Questions',
+      faqTitle: 'What people ask about this',
+      siblingsTitle: 'The other four services',
+      ctaTitle: 'Want to know where you stand?',
+      ctaBody:
+        'A free audit covers your site, your Google presence and the competitors ahead of you. You get a written summary, not a sales call.',
+    }}
+  />
+</Page>

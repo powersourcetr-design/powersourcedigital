@@ -1,0 +1,112 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import CTABand from '@/components/sections/CTABand.astro'
+import FAQ from '@/components/sections/FAQ.astro'
+import Steps from '@/components/sections/Steps.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'ar' as const
+
+const STAGES = [
+  {
+    title: 'نطّلع',
+    body: 'نراجع موقعك وملفك على جوجل والمنافسين الذين يسبقونك، ونكتب ما وجدناه. مجاناً، والنتيجة لك سواء تعاقدت معنا أم لا.',
+  },
+  {
+    title: 'نخطط',
+    body: 'قائمة مرتبة بالأعمال، مع سبب كل بند وسعر ثابت بجانبه. أنت تختار ما تنفذه، ويمكنك التوقف بعد أي مرحلة.',
+  },
+  {
+    title: 'ننفذ',
+    body: 'تصميم ثم محتوى ثم تطوير، مع شيء ملموس تراه بعد كل مرحلة. لا صمت لأربعة أسابيع ينتهي بتسليم إما أن يعجبك أو تتعايش معه.',
+  },
+  {
+    title: 'نحسّن',
+    body: 'بعد الإطلاق نتابع ما يبحث عنه الناس وما ينقرونه وما يتركونه، وهذا ما يحدد الجولة التالية بدل قائمة كتبناها قبل وجود الموقع.',
+  },
+]
+
+const FAQ_ITEMS = [
+  {
+    question: 'ما الذي تحتاجونه منا للبدء؟',
+    answer:
+      'أقل مما تطلبه معظم الشركات. صلاحية الوصول إلى الموقع وإلى الملف التجاري، وشخص واحد يستطيع اعتماد القرارات، وإجابات صريحة عما جُرِّب سابقاً. وما عدا ذلك نكتبه نحن وتصححه أنت.',
+  },
+  {
+    question: 'ما الذي يؤخر المشاريع عادة؟',
+    answer:
+      'المحتوى، في كل مرة تقريباً، لا البرمجة. الصور وبيانات المنتجات واعتماد النصوص هي ما يتوقف عليه الجدول الزمني فعلاً، ولهذا نطلبها مبكراً ونتابعها.',
+  },
+  {
+    question: 'كم جولة تعديلات مشمولة؟',
+    answer:
+      'جولتان في كل مرحلة، وهو عدد كافٍ حين يكون هناك ما تراجعه في كل خطوة بدل تسليم واحد في النهاية. وما زاد على ذلك نُسعّره بوضوح بدل استيعابه بصمت على حساب عمل آخر.',
+  },
+  {
+    question: 'هل يمكننا التوقف في منتصف الطريق؟',
+    answer:
+      'نعم. العمل مُسعَّر مرحلة بمرحلة، وتملك كل ما أُنجز حتى نقطة التوقف. لا رسوم انسحاب ولا شيء محتجز.',
+  },
+]
+---
+
+<Page
+  locale={locale}
+  routeKey="process"
+  title="طريقة العمل | مصدر الطاقه ديجيتال"
+  description="أربع مراحل واضحة يمكنك متابعتها: نطّلع، نخطط، ننفذ، نحسّن. أسعار ثابتة لكل مرحلة، وما تراجعه في كل خطوة، ودون رسوم انسحاب."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'الرئيسية', path: localizedPath('home', locale) },
+      { name: 'طريقة العمل', path: localizedPath('process', locale) },
+    ]}
+  />
+
+  <section class="head shell">
+    <p class="eyebrow">طريقة العمل</p>
+    <h1>من حقك أن تعرف ما سيحدث بعد ذلك.</h1>
+    <p class="lead">
+      معظم ما يجعل العمل مع الشركات مرهقاً هو عدم معرفة أين وصل المشروع وما الذي ستقوله
+      الفاتورة القادمة. أربع مراحل، كل واحدة مُسعَّرة على حدة، وكل واحدة تنتهي بشيء تراه.
+    </p>
+  </section>
+
+  <Steps
+    eyebrow="المراحل"
+    title="أربع مراحل، ويمكنك التوقف بعد أي منها"
+    steps={STAGES}
+    variant="timeline"
+  />
+
+  <FAQ eyebrow="العمل معاً" title="الأسئلة العملية" items={FAQ_ITEMS} />
+
+  <CTABand
+    locale={locale}
+    title="ابدأ بالمرحلة المجانية."
+    body="المرحلة الأولى لا تكلفك شيئاً وتحتفظ بنتائجها في كل الأحوال، وهي أسرع وسيلة لتحكم إن كنا نستحق بقية العمل."
+    ctaLabel="احصل على تدقيق مجاني"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>
+
+<style>
+  .head {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 20ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 60ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+</style>

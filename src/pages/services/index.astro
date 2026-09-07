@@ -1,0 +1,69 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import CTABand from '@/components/sections/CTABand.astro'
+import ServicesGrid from '@/components/sections/ServicesGrid.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'en' as const
+---
+
+<Page
+  locale={locale}
+  routeKey="services"
+  title="Digital Services for Saudi Businesses | Power Source Digital"
+  description="Websites, SEO, Google Business Profile, graphic design and e-commerce management, all delivered in-house for businesses in Riyadh, Jeddah and Taif."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'Home', path: localizedPath('home', locale) },
+      { name: 'Services', path: localizedPath('services', locale) },
+    ]}
+  />
+
+  <section class="intro shell">
+    <p class="eyebrow">Services</p>
+    <h1>Five services, and the reason they belong together</h1>
+    <p class="lead">
+      A website that nobody finds is a brochure. Traffic that lands on a slow page leaves.
+      A perfect Google listing pointing at a store with no product descriptions sells
+      nothing. These five fail separately and work together, which is why we do all of
+      them rather than one and a list of partners.
+    </p>
+  </section>
+
+  <ServicesGrid
+    locale={locale}
+    eyebrow="What we do"
+    title="Pick the one that is costing you most"
+    intro="Each page below says plainly what is included, what it costs you in time, and what we will not promise."
+  />
+
+  <CTABand
+    locale={locale}
+    title="Not sure which one you need?"
+    body="That is what the free audit is for. We look at the site, the Google profile and the competition, then tell you which of these five would move the needle first."
+    ctaLabel="Get a free audit"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>
+
+<style>
+  .intro {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 20ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 62ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import CTABand from '@/components/sections/CTABand.astro'
+import FAQ from '@/components/sections/FAQ.astro'
+import Steps from '@/components/sections/Steps.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'en' as const
+
+const STAGES = [
+  {
+    title: 'Look',
+    body: 'We go through your site, your Google profile and the competitors ranking above you, and write down what we find. Free, and yours to keep whether or not you hire us.',
+  },
+  {
+    title: 'Plan',
+    body: 'A ranked list of work with the reasoning and a fixed price beside each item. You choose how much of it to do, and you can stop after any stage.',
+  },
+  {
+    title: 'Build',
+    body: 'Design, then content, then development, with something real to look at after each. No four-week silence ending in a reveal you either love or have to live with.',
+  },
+  {
+    title: 'Improve',
+    body: 'After launch we watch what people actually search, click and abandon, and that decides the next round rather than a list we wrote before the site existed.',
+  },
+]
+
+const FAQ_ITEMS = [
+  {
+    question: 'What do you need from us to start?',
+    answer:
+      'Less than most agencies ask for. Access to the site and the Google profile, one person who can approve decisions, and honest answers about what has already been tried. Everything else we can draft and have you correct.',
+  },
+  {
+    question: 'What slows projects down?',
+    answer:
+      'Content, almost every time. Not development. Photographs, product details and sign-off on wording are what a schedule actually depends on, which is why we ask for them early and chase them.',
+  },
+  {
+    question: 'How many rounds of changes are included?',
+    answer:
+      'Two rounds at each stage, which is enough when there is something to review at every step rather than one reveal at the end. Beyond that we quote for the extra work rather than quietly absorbing it and rushing something else.',
+  },
+  {
+    question: 'Can we stop partway?',
+    answer:
+      'Yes. Work is quoted stage by stage, and you own everything produced up to the point you stop. There is no exit fee and nothing is held hostage.',
+  },
+]
+---
+
+<Page
+  locale={locale}
+  routeKey="process"
+  title="How We Work | Power Source Digital"
+  description="A four-stage process you can follow: look, plan, build, improve. Fixed prices per stage, something to review at every step, and no exit fee if you stop."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'Home', path: localizedPath('home', locale) },
+      { name: 'Process', path: localizedPath('process', locale) },
+    ]}
+  />
+
+  <section class="head shell">
+    <p class="eyebrow">How we work</p>
+    <h1>You should know what happens next.</h1>
+    <p class="lead">
+      Most of what makes agency work stressful is not knowing where a project stands or what
+      the next invoice will say. Four stages, priced separately, each ending in something you
+      can look at.
+    </p>
+  </section>
+
+  <Steps
+    eyebrow="The stages"
+    title="Four stages, and you can stop after any of them"
+    steps={STAGES}
+    variant="timeline"
+  />
+
+  <FAQ eyebrow="Working together" title="The practical questions" items={FAQ_ITEMS} />
+
+  <CTABand
+    locale={locale}
+    title="Start with the free stage."
+    body="The first stage costs nothing and you keep the findings either way. It is also the fastest way to judge whether we are worth the rest."
+    ctaLabel="Get a free audit"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>
+
+<style>
+  .head {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 17ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 60ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+</style>

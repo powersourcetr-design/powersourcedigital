@@ -23,12 +23,22 @@ interface Props {
   service?: string | undefined
   city?: string | undefined
   noindex?: boolean | undefined
+  /** Each locale's slug for this page, for hreflang on dynamic routes. */
+  slugs?: Partial<Record<Locale, string>> | undefined
 }
 
-const { locale, routeKey, title, description, targetSlug, service, city, noindex } = Astro.props
+const { locale, routeKey, title, description, targetSlug, service, city, noindex, slugs } =
+  Astro.props
 ---
 
-<Base locale={locale} title={title} description={description} noindex={noindex}>
+<Base
+  locale={locale}
+  title={title}
+  description={description}
+  noindex={noindex}
+  routeKey={routeKey}
+  slugs={slugs}
+>
   <Header locale={locale} routeKey={routeKey} targetSlug={targetSlug} />
   <main id="content">
     <slot />

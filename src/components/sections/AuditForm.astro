@@ -1,0 +1,291 @@
+---
+import { CITIES } from '@/i18n/slugs'
+import type { Locale } from '@/i18n/routes'
+import { getServices } from '@/lib/content'
+import { EMAIL, WHATSAPP_NUMBER } from '@/lib/whatsapp'
+
+/**
+ * The free-audit request form.
+ *
+ * It hands off to WhatsApp with every answer already written into the message,
+ * rather than posting to a server. That is a deliberate choice, not a stopgap:
+ * WhatsApp is how Saudi SMEs actually reply, the enquiry lands in a thread the
+ * business already watches, and there is no inbox to forget. It also works
+ * today, with no database, no mail provider and no spam surface.
+ *
+ * The server endpoint arrives with step 5 for email capture and lead storage.
+ * Until then nothing here silently fails: with JavaScript off, the fields are
+ * still labelled and the WhatsApp and email links below are ordinary links.
+ */
+interface Props {
+  locale: Locale
+  copy: {
+    legendAbout: string
+    legendNeed: string
+    name: string
+    business: string
+    website: string
+    websiteHint: string
+    city: string
+    cityOther: string
+    service: string
+    servicePick: string
+    message: string
+    messageHint: string
+    submit: string
+    orEmail: string
+    noJs: string
+    intro: string
+  }
+}
+
+const { locale, copy } = Astro.props
+const services = await getServices(locale)
+---
+
+<form class="audit-form" data-audit-form>
+  <p class="intro">{copy.intro}</p>
+
+  <fieldset>
+    <legend>{copy.legendAbout}</legend>
+
+    <div class="row">
+      <label for="af-name">{copy.name}</label>
+      <input id="af-name" name="name" type="text" autocomplete="name" required />
+    </div>
+
+    <div class="row">
+      <label for="af-business">{copy.business}</label>
+      <input id="af-business" name="business" type="text" autocomplete="organization" required />
+    </div>
+
+    <div class="row">
+      <label for="af-website">{copy.website}</label>
+      <input
+        id="af-website"
+        name="website"
+        type="text"
+        inputmode="url"
+        dir="ltr"
+        placeholder="example.com"
+        aria-describedby="af-website-hint"
+      />
+      <p class="hint" id="af-website-hint">{copy.websiteHint}</p>
+    </div>
+
+    <div class="row">
+      <label for="af-city">{copy.city}</label>
+      <select id="af-city" name="city">
+        {CITIES.map((city) => <option value={city.name[locale]}>{city.name[locale]}</option>)}
+        <option value={copy.cityOther}>{copy.cityOther}</option>
+      </select>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{copy.legendNeed}</legend>
+
+    <div class="row">
+      <label for="af-service">{copy.service}</label>
+      <select id="af-service" name="service">
+        <option value="">{copy.servicePick}</option>
+        {services.map((entry) => <option value={entry.data.title}>{entry.data.title}</option>)}
+      </select>
+    </div>
+
+    <div class="row">
+      <label for="af-message">{copy.message}</label>
+      <textarea id="af-message" name="message" rows="4" aria-describedby="af-message-hint"
+      ></textarea>
+      <p class="hint" id="af-message-hint">{copy.messageHint}</p>
+    </div>
+  </fieldset>
+
+  <div class="actions">
+    <button type="submit" class="submit">
+      {copy.submit}
+      <svg
+        class="icon-directional"
+        width="17"
+        height="17"
+        viewBox="0 0 16 16"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 8h11M9 4l4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+    <p class="alt">
+      {copy.orEmail} <a href={`mailto:${EMAIL}`} dir="ltr">{EMAIL}</a>
+    </p>
+  </div>
+
+  <noscript>
+    <p class="hint">{copy.noJs}</p>
+  </noscript>
+</form>
+
+<script is:inline define:vars={{ WHATSAPP_NUMBER }}>
+  document.addEventListener('submit', (event) => {
+    const form = event.target
+    if (!(form instanceof HTMLFormElement) || !form.matches('[data-audit-form]')) return
+
+    event.preventDefault()
+    if (!form.reportValidity()) return
+
+    const data = new FormData(form)
+    const get = (key) => String(data.get(key) ?? '').trim()
+
+    // Only labelled, non-empty answers go into the message, so a half-filled
+    // form does not arrive as a wall of empty headings.
+    const lines = []
+    for (const [key, label] of [
+      ['name', 'Name'],
+      ['business', 'Business'],
+      ['website', 'Website'],
+      ['city', 'City'],
+      ['service', 'Service'],
+      ['message', 'Notes'],
+    ]) {
+      const value = get(key)
+      if (value) lines.push(`${label}: ${value}`)
+    }
+
+    const heading =
+      document.documentElement.lang === 'ar'
+        ? 'طلب تدقيق مجاني'
+        : 'Free audit request'
+
+    const text = encodeURIComponent(`${heading}\n\n${lines.join('\n')}`)
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank', 'noopener')
+
+    window.dispatchEvent(
+      new CustomEvent('psd:analytics', {
+        detail: { event: 'audit_submit', page: location.pathname },
+      }),
+    )
+  })
+</script>
+
+<style>
+  .audit-form {
+    display: grid;
+    gap: 1.75rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid var(--border-subtle);
+    border-radius: 1.25rem;
+    background: var(--surface-raised);
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  fieldset {
+    display: grid;
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    padding: 0;
+    margin-block-end: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  :global([dir='rtl']) legend {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.9rem;
+  }
+
+  .row {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  label {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-strong);
+  }
+
+  input,
+  select,
+  textarea {
+    inline-size: 100%;
+    padding: 0.7rem 0.85rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--text-strong);
+    background: var(--surface);
+    border: 1px solid var(--border-interactive);
+    border-radius: 0.6rem;
+  }
+
+  textarea {
+    resize: vertical;
+    min-block-size: 6rem;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    border-color: var(--accent);
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .actions {
+    display: grid;
+    gap: 0.75rem;
+    padding-block-start: 0.25rem;
+  }
+
+  .submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.95rem 1.8rem;
+    font: inherit;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 180ms var(--ease-out-expo);
+  }
+
+  .submit:hover {
+    background: var(--accent-hover);
+  }
+
+  .alt {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .alt a {
+    color: var(--accent);
+  }
+</style>

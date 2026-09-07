@@ -1,0 +1,163 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import CTABand from '@/components/sections/CTABand.astro'
+import Steps from '@/components/sections/Steps.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'en' as const
+
+const PRINCIPLES = [
+  {
+    title: 'We say what we will not do',
+    body: 'Nobody can guarantee a Google ranking, a redesign is not always the answer, and some of what an audit finds you can fix yourself. Saying so costs us the occasional sale and saves everyone the wrong project.',
+  },
+  {
+    title: 'Everything in-house',
+    body: 'The website, the search work, the store and the artwork are done by the same team, so decisions in one do not quietly break another. Nothing is passed to a subcontractor you never meet.',
+  },
+  {
+    title: 'You own what you paid for',
+    body: 'Domain, hosting, code and source files are in your name from day one. Leaving does not require our permission, a handover fee, or a conversation about it.',
+  },
+  {
+    title: 'Arabic is written, not translated',
+    body: 'Arabic pages get their own copy, their own typefaces and their own spacing. A machine-translated Arabic site tells every Saudi visitor exactly how much thought went into it.',
+  },
+]
+---
+
+<Page
+  locale={locale}
+  routeKey="about"
+  title="About Power Source Digital | Riyadh"
+  description="A digital services company in Riyadh, and the sister company to a Schneider Electric panel builder. Websites, SEO, Google Business Profile and e-commerce, all in-house."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'Home', path: localizedPath('home', locale) },
+      { name: 'About', path: localizedPath('about', locale) },
+    ]}
+  />
+
+  <section class="head shell">
+    <p class="eyebrow">About</p>
+    <h1>A small team that does the work itself.</h1>
+    <p class="lead">
+      Power Source Digital builds websites, improves how businesses appear on Google, and
+      manages the online stores and profiles their customers actually use. We are based in
+      Riyadh and work across the Kingdom.
+    </p>
+  </section>
+
+  <section class="sister shell">
+    <div class="sister-inner">
+      <div>
+        <h2>We came out of an industrial business, not an agency</h2>
+        <p>
+          Power Source Digital is the sister company of Power Source Trading Co., which builds
+          Schneider Electric panels in Riyadh. That is an unusual place for a web company to
+          start, and it shows in the work.
+        </p>
+        <p>
+          It means technical catalogues, panel layouts, single-line diagrams and VFD
+          documentation are ordinary jobs here rather than something we outsource. It also
+          means we have spent years on the buying side of the exact problem we now solve:
+          being a real business that is hard to find online.
+        </p>
+      </div>
+      <aside class="fact">
+        <h3>Power Source Trading Co.</h3>
+        <p>Schneider Electric panel builders</p>
+        <p class="addr">RCSA2543 Asad Ibn Al Fourat, Al Amal, Riyadh 12364</p>
+      </aside>
+    </div>
+  </section>
+
+  <Steps
+    eyebrow="How we operate"
+    title="Four things we hold to"
+    steps={PRINCIPLES}
+    tone="sunken"
+  />
+
+  <CTABand
+    locale={locale}
+    title="The easiest way to judge us is to let us look."
+    body="A free audit gives you something specific and checkable about your own site. That tells you more about how we work than any about page can."
+    ctaLabel="Get a free audit"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>
+
+<style>
+  .head {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 17ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 60ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  .sister {
+    padding-block: var(--section-pad);
+    border-block: 1px solid var(--border-subtle);
+  }
+
+  .sister-inner {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .sister-inner {
+      grid-template-columns: 1fr 20rem;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 1.25rem;
+    max-inline-size: 22ch;
+  }
+
+  .sister p {
+    margin: 0 0 1rem;
+    max-inline-size: 60ch;
+    color: var(--text-muted);
+  }
+
+  .fact {
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    background: var(--surface-raised);
+  }
+
+  .fact h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .fact p {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .addr {
+    color: var(--text-muted);
+    font-size: 0.9rem !important;
+  }
+</style>

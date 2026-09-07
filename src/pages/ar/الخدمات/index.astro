@@ -1,0 +1,68 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import CTABand from '@/components/sections/CTABand.astro'
+import ServicesGrid from '@/components/sections/ServicesGrid.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'ar' as const
+---
+
+<Page
+  locale={locale}
+  routeKey="services"
+  title="خدمات رقمية للشركات السعودية | مصدر الطاقه ديجيتال"
+  description="مواقع وتحسين محركات بحث وملف تجاري على جوجل وتصميم جرافيكي وإدارة متاجر إلكترونية، تُنفَّذ داخلياً لشركات الرياض وجدة والطائف."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'الرئيسية', path: localizedPath('home', locale) },
+      { name: 'الخدمات', path: localizedPath('services', locale) },
+    ]}
+  />
+
+  <section class="intro shell">
+    <p class="eyebrow">الخدمات</p>
+    <h1>خمس خدمات، وسبب ارتباطها ببعضها</h1>
+    <p class="lead">
+      الموقع الذي لا يجده أحد مجرد كتيّب. والزيارة التي تصل إلى صفحة بطيئة تغادر. والملف
+      المثالي على جوجل الذي يقود إلى متجر بلا أوصاف منتجات لا يبيع شيئاً. هذه الخدمات تفشل
+      منفردة وتنجح مجتمعة، ولهذا ننفذها كلها بدل واحدة وقائمة شركاء.
+    </p>
+  </section>
+
+  <ServicesGrid
+    locale={locale}
+    eyebrow="ما نقدمه"
+    title="اختر ما يكلفك أكثر اليوم"
+    intro="كل صفحة في الأسفل تذكر بوضوح ما يشمله العمل، وما يتطلبه منك من وقت، وما لن نَعِدك به."
+  />
+
+  <CTABand
+    locale={locale}
+    title="لست متأكداً أي خدمة تحتاج؟"
+    body="لهذا وُجد التدقيق المجاني. نطّلع على الموقع وعلى الملف التجاري وعلى المنافسين، ثم نخبرك أي هذه الخمس سيُحدث الفرق أولاً."
+    ctaLabel="احصل على تدقيق مجاني"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>
+
+<style>
+  .intro {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 22ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 62ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+</style>

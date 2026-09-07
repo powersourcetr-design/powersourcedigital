@@ -18,6 +18,7 @@ export async function getServices(locale: Locale): Promise<ServiceEntry[]> {
 
   assertEveryServiceIsTranslated(all)
   assertServiceKeysExist(all)
+  assertDescriptionLength(all)
 
   return all
     .filter((entry) => entry.data.locale === locale)
@@ -34,6 +35,42 @@ export async function getServiceEntry(
     throw new Error(`No "${locale}" service content for translationKey "${translationKey}"`)
   }
   return found
+}
+
+/**
+ * Meta description length, bounded per locale.
+ *
+ * Google truncates by pixel width rather than character count, and Arabic
+ * carries noticeably more meaning per character than English — a well-written
+ * Arabic description lands naturally around 120-145 characters. Holding it to
+ * the English 140-158 band forces padding, and a padded description makes a
+ * worse snippet than a short one.
+ *
+ * This lives here rather than in the Zod schema because expressing it there
+ * needs `superRefine`, which returns a `ZodEffects` that Astro cannot infer
+ * entry field types through — every `entry.data.x` silently became `any`.
+ * A schema that types its own output is worth more than a check living in the
+ * most obvious file.
+ */
+const DESCRIPTION_LENGTH: Record<Locale, { min: number; max: number }> = {
+  en: { min: 140, max: 158 },
+  ar: { min: 110, max: 160 },
+}
+
+function assertDescriptionLength(entries: ServiceEntry[]): void {
+  const bad = entries.flatMap((entry) => {
+    const { min, max } = DESCRIPTION_LENGTH[entry.data.locale]
+    const length = [...entry.data.description].length
+    return length < min || length > max
+      ? [`${entry.id} is ${length} chars (${entry.data.locale} needs ${min}-${max})`]
+      : []
+  })
+
+  if (bad.length > 0) {
+    throw new Error(
+      `Meta descriptions out of bounds: ${bad.join('; ')}. Rewrite them rather than padding.`,
+    )
+  }
 }
 
 function assertEveryServiceIsTranslated(entries: ServiceEntry[]): void {

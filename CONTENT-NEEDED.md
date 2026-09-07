@@ -20,6 +20,23 @@ Ordered by what blocks work soonest.
 
 ---
 
+## Blocking pages that do not exist yet
+
+These five routes are defined in the route map but have no page, and are hidden from
+navigation until they do. Each is blocked on something only you can supply:
+
+| Route | Blocked on |
+|---|---|
+| `/work/` | Real client work: screenshots, what was built, permission to show it |
+| `/pricing/` | Actual package prices or ranges in SAR, and whether VAT is shown inclusive |
+| `/blog/` | Nothing — this is scheduled work, not a dependency |
+| `/privacy/`, `/terms/` | Legal sign-off on drafted text |
+
+The trust strip under the hero shows platforms until `CLIENTS` in `src/data/clients.ts` has
+real entries. Add a logo there and it switches automatically.
+
+---
+
 ## Still blocking
 
 ### 1. The PST flyer PDF — still outstanding

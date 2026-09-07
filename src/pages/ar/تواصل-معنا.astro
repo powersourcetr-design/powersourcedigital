@@ -1,0 +1,156 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+import { EMAIL, PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from '@/lib/whatsapp'
+
+const locale = 'ar' as const
+const mailto = 'mailto:' + EMAIL
+---
+
+<Page
+  locale={locale}
+  routeKey="contact"
+  title="تواصل مع مصدر الطاقه ديجيتال | الرياض"
+  description="تحدّث إلينا عن موقع أو تحسين محركات بحث أو ملفك التجاري على جوجل أو متجر إلكتروني. واتساب وهاتف وبريد، يرد عليها من ينفذ العمل بنفسه."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'الرئيسية', path: localizedPath('home', locale) },
+      { name: 'تواصل معنا', path: localizedPath('contact', locale) },
+    ]}
+  />
+
+  <section class="head shell">
+    <p class="eyebrow">تواصل معنا</p>
+    <h1>تحدّث مباشرة إلى من ينفذ العمل.</h1>
+    <p class="lead">
+      لا مركز اتصال ولا مدير حساب ينقل الرسائل. أي وسيلة تختارها في الأسفل تصل إلى شخص
+      يستطيع الإجابة عن سؤال تقني مباشرة.
+    </p>
+  </section>
+
+  <section class="methods shell">
+    <ul>
+      <li>
+        <h2>واتساب</h2>
+        <p>الأسرع. يُرد عليه عادة في يوم العمل نفسه.</p>
+        <a class="action" href={whatsappUrl({ locale })} target="_blank" rel="noopener">
+          <span class="num" dir="ltr">{PHONE_DISPLAY}</span>
+        </a>
+      </li>
+      <li>
+        <h2>الهاتف</h2>
+        <p>من الأحد إلى الخميس، 9 صباحاً حتى 6 مساءً بتوقيت الرياض.</p>
+        <a class="action" href={PHONE_HREF}>
+          <span class="num" dir="ltr">{PHONE_DISPLAY}</span>
+        </a>
+      </li>
+      <li>
+        <h2>البريد الإلكتروني</h2>
+        <p>الأنسب للمواجيز والمستندات وأي رسالة طويلة.</p>
+        <a class="action" href={mailto}><span dir="ltr">{EMAIL}</span></a>
+      </li>
+      <li class="wide">
+        <h2>تفضّل تدقيقاً مجانياً بدلاً من ذلك؟</h2>
+        <p>
+          إن كنت تفضّل أن نطّلع أولاً ثم نعود إليك بشيء محدد، فنموذج التدقيق يسأل بضعة
+          أسئلة ولا يستغرق أكثر من دقيقة.
+        </p>
+        <a class="action" href={href(localizedPath('freeAudit', locale))}>احصل على تدقيق مجاني</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="where shell">
+    <h2>أين نحن</h2>
+    <p>
+      الرياض، المملكة العربية السعودية. ونعمل كذلك مع منشآت في جدة والطائف ومكة المكرمة
+      والخرج؛ فأعمال المواقع والبحث نادراً ما تتطلب وجودنا في المكان، وسنخبرك حين تتطلب ذلك.
+    </p>
+  </section>
+</Page>
+
+<style>
+  .head {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 16ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 56ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  .methods ul {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .methods li {
+    display: grid;
+    align-content: start;
+    gap: 0.4rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    background: var(--surface-raised);
+  }
+
+  @media (min-width: 60rem) {
+    .methods .wide {
+      grid-column: span 3;
+    }
+  }
+
+  .methods h2 {
+    font-size: var(--text-h3);
+    margin: 0;
+  }
+
+  .methods p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .action {
+    margin-block-start: 0.75rem;
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: none;
+    justify-self: start;
+  }
+
+  .action:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .where {
+    padding-block: var(--section-pad);
+  }
+
+  .where h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.9rem;
+  }
+
+  .where p {
+    margin: 0;
+    max-inline-size: 62ch;
+    color: var(--text-muted);
+  }
+</style>

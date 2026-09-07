@@ -1,0 +1,157 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+import { EMAIL, PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from '@/lib/whatsapp'
+
+const locale = 'en' as const
+const mailto = 'mailto:' + EMAIL
+---
+
+<Page
+  locale={locale}
+  routeKey="contact"
+  title="Contact Power Source Digital | Riyadh"
+  description="Talk to us about a website, SEO, your Google Business Profile or an online store. WhatsApp, phone and email, answered by the people who do the work."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'Home', path: localizedPath('home', locale) },
+      { name: 'Contact', path: localizedPath('contact', locale) },
+    ]}
+  />
+
+  <section class="head shell">
+    <p class="eyebrow">Contact</p>
+    <h1>Talk to the people doing the work.</h1>
+    <p class="lead">
+      No call centre, and no account manager relaying messages. Whichever route you pick
+      below reaches someone who can answer a technical question directly.
+    </p>
+  </section>
+
+  <section class="methods shell">
+    <ul>
+      <li>
+        <h2>WhatsApp</h2>
+        <p>Fastest. Usually answered the same working day.</p>
+        <a class="action" href={whatsappUrl({ locale })} target="_blank" rel="noopener">
+          <span class="num" dir="ltr">{PHONE_DISPLAY}</span>
+        </a>
+      </li>
+      <li>
+        <h2>Phone</h2>
+        <p>Sunday to Thursday, 9am to 6pm Riyadh time.</p>
+        <a class="action" href={PHONE_HREF}>
+          <span class="num" dir="ltr">{PHONE_DISPLAY}</span>
+        </a>
+      </li>
+      <li>
+        <h2>Email</h2>
+        <p>Best for briefs, documents and anything long.</p>
+        <a class="action" href={mailto}><span dir="ltr">{EMAIL}</span></a>
+      </li>
+      <li class="wide">
+        <h2>Want a free audit instead?</h2>
+        <p>
+          If you would rather we looked first and came back with something specific, the
+          audit form asks a handful of questions and takes a minute.
+        </p>
+        <a class="action" href={href(localizedPath('freeAudit', locale))}>Get a free audit</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="where shell">
+    <h2>Where we are</h2>
+    <p>
+      Riyadh, Saudi Arabia. We work with businesses in Jeddah, Taif, Mecca and Al Kharj as
+      well. Web and search work rarely needs us in the room, and we will tell you when it
+      does.
+    </p>
+  </section>
+</Page>
+
+<style>
+  .head {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 16ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 56ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  .methods ul {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .methods li {
+    display: grid;
+    align-content: start;
+    gap: 0.4rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    background: var(--surface-raised);
+  }
+
+  @media (min-width: 60rem) {
+    .methods .wide {
+      grid-column: span 3;
+    }
+  }
+
+  .methods h2 {
+    font-size: var(--text-h3);
+    margin: 0;
+  }
+
+  .methods p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .action {
+    margin-block-start: 0.75rem;
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: none;
+    justify-self: start;
+  }
+
+  .action:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .where {
+    padding-block: var(--section-pad);
+  }
+
+  .where h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.9rem;
+  }
+
+  .where p {
+    margin: 0;
+    max-inline-size: 62ch;
+    color: var(--text-muted);
+  }
+</style>

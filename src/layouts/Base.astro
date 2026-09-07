@@ -1,5 +1,5 @@
 ---
-import { DIR, LOCALE_TAG, SITE, type Locale, href } from '@/i18n/routes'
+import { DIR, LOCALE_TAG, SITE, type Locale, type RouteKey, alternates, href } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 import '@/styles/global.css'
 
@@ -9,9 +9,13 @@ interface Props {
   description: string
   /** Internal pages (styleguide, thank-you) that must stay out of the index. */
   noindex?: boolean | undefined
+  /** Route key, so the hreflang cluster can be generated from the route map. */
+  routeKey?: RouteKey | undefined
+  /** Each locale's slug, for dynamic routes. */
+  slugs?: Partial<Record<Locale, string>> | undefined
 }
 
-const { locale, title, description, noindex = false } = Astro.props
+const { locale, title, description, noindex = false, routeKey, slugs } = Astro.props
 const t = useTranslations(locale)
 const dir = DIR[locale]
 
@@ -29,6 +33,16 @@ const dir = DIR[locale]
  * the hrefs emitted elsewhere.
  */
 const canonical = `${SITE}${href(decodeURI(Astro.url.pathname))}`
+
+/**
+ * The hreflang cluster, built from the route map rather than from this page's
+ * own URL, so an English page and its Arabic twin cannot declare different
+ * clusters. `alternates()` returns every locale plus x-default from one call —
+ * there is no code path that emits one side without the other.
+ *
+ * Omitted on noindexed pages, which have no business in a language cluster.
+ */
+const languageAlternates = !noindex && routeKey ? alternates(routeKey, slugs) : []
 ---
 
 <!doctype html>
@@ -40,6 +54,18 @@ const canonical = `${SITE}${href(decodeURI(Astro.url.pathname))}`
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     {!noindex && <link rel="canonical" href={canonical} />}
+    {
+      languageAlternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.url} />
+      ))
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === 'ar' ? 'ar_SA' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#00a858" />
     <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
   <body>

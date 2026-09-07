@@ -15,7 +15,9 @@
     "check:dir": "node scripts/check-logical-props.mjs",
     "redirects": "node scripts/build-redirects.mjs",
     "format": "biome check --write .",
-    "check:contrast": "node scripts/check-contrast.mjs"
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "verify": "pnpm run build && node scripts/check-links.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.6",

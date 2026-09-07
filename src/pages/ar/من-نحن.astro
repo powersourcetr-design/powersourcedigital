@@ -1,0 +1,162 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import CTABand from '@/components/sections/CTABand.astro'
+import Steps from '@/components/sections/Steps.astro'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'ar' as const
+
+const PRINCIPLES = [
+  {
+    title: 'نقول ما لن نفعله',
+    body: 'لا أحد يضمن ترتيباً على جوجل، وإعادة البناء ليست دائماً هي الحل، وبعض ما يكشفه التدقيق يمكنك إصلاحه بنفسك. قول ذلك يكلفنا صفقة أحياناً ويوفّر على الجميع مشروعاً خاطئاً.',
+  },
+  {
+    title: 'كل شيء يُنفَّذ داخلياً',
+    body: 'الموقع وأعمال البحث والمتجر والتصاميم ينفذها الفريق نفسه، فلا يكسر قرارٌ في أحدها شيئاً في الآخر بصمت. ولا يُحال شيء إلى مقاول من الباطن لا تراه.',
+  },
+  {
+    title: 'تملك ما دفعت مقابله',
+    body: 'النطاق والاستضافة والشيفرة والملفات المفتوحة باسمك من اليوم الأول. والمغادرة لا تحتاج إذناً منا ولا رسوم تسليم ولا حتى نقاشاً حولها.',
+  },
+  {
+    title: 'العربية تُكتب ولا تُترجم',
+    body: 'الصفحات العربية لها نصها وخطوطها وتباعدها الخاص. والموقع المترجم آلياً يخبر كل زائر سعودي بالضبط كم من التفكير بُذل فيه.',
+  },
+]
+---
+
+<Page
+  locale={locale}
+  routeKey="about"
+  title="من نحن | مصدر الطاقه ديجيتال"
+  description="شركة خدمات رقمية في الرياض، وشركة شقيقة لمصنّع لوحات شنايدر إلكتريك. مواقع وتحسين محركات بحث وملف تجاري ومتاجر إلكترونية، تُنفَّذ كلها داخلياً."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'الرئيسية', path: localizedPath('home', locale) },
+      { name: 'من نحن', path: localizedPath('about', locale) },
+    ]}
+  />
+
+  <section class="head shell">
+    <p class="eyebrow">من نحن</p>
+    <h1>فريق صغير ينفذ العمل بنفسه.</h1>
+    <p class="lead">
+      مصدر الطاقه ديجيتال يبني المواقع، ويحسّن طريقة ظهور المنشآت على جوجل، ويدير المتاجر
+      والملفات التي يستخدمها عملاؤها فعلاً. مقرنا الرياض ونعمل في أنحاء المملكة.
+    </p>
+  </section>
+
+  <section class="sister shell">
+    <div class="sister-inner">
+      <div>
+        <h2>خرجنا من قطاع صناعي لا من وكالة إعلانية</h2>
+        <p>
+          مصدر الطاقه ديجيتال شركة شقيقة لمصدر الطاقة التجارية، التي تصنع لوحات شنايدر
+          إلكتريك في الرياض. وهذه بداية غير معتادة لشركة مواقع، وأثرها ظاهر في العمل.
+        </p>
+        <p>
+          فهي تعني أن الكتالوجات الفنية ومخططات اللوحات والرسوم أحادية الخط ووثائق أنظمة VFD
+          أعمال معتادة لدينا لا نُسندها إلى غيرنا. وتعني أيضاً أننا أمضينا سنوات في الجهة
+          المشترية للمشكلة نفسها التي نعالجها اليوم: أن تكون منشأة حقيقية يصعب العثور عليها
+          على الإنترنت.
+        </p>
+      </div>
+      <aside class="fact">
+        <h3>مصدر الطاقة التجارية</h3>
+        <p>تصنيع لوحات شنايدر إلكتريك</p>
+        <p class="addr">RCSA2543 أسد بن الفرات، حي الأمل، الرياض 12364</p>
+      </aside>
+    </div>
+  </section>
+
+  <Steps
+    eyebrow="كيف نعمل"
+    title="أربعة مبادئ نلتزم بها"
+    steps={PRINCIPLES}
+    tone="sunken"
+  />
+
+  <CTABand
+    locale={locale}
+    title="أسهل طريقة للحكم علينا أن تدعنا نطّلع."
+    body="التدقيق المجاني يعطيك ملاحظات محددة وقابلة للتحقق على موقعك أنت، وهذا يخبرك عن طريقتنا أكثر مما تخبرك أي صفحة تعريفية."
+    ctaLabel="احصل على تدقيق مجاني"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+</Page>
+
+<style>
+  .head {
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 20ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 60ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  .sister {
+    padding-block: var(--section-pad);
+    border-block: 1px solid var(--border-subtle);
+  }
+
+  .sister-inner {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .sister-inner {
+      grid-template-columns: 1fr 20rem;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 1.25rem;
+    max-inline-size: 24ch;
+  }
+
+  .sister p {
+    margin: 0 0 1rem;
+    max-inline-size: 60ch;
+    color: var(--text-muted);
+  }
+
+  .fact {
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    background: var(--surface-raised);
+  }
+
+  .fact h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .fact p {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .addr {
+    color: var(--text-muted);
+    font-size: 0.9rem !important;
+    unicode-bidi: plaintext;
+  }
+</style>

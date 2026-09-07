@@ -1,0 +1,194 @@
+---
+import AuditForm from '@/components/sections/AuditForm.astro'
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import FAQ from '@/components/sections/FAQ.astro'
+import { localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+import { EMAIL, PHONE_DISPLAY, PHONE_HREF } from '@/lib/whatsapp'
+
+const locale = 'en' as const
+
+const CHECKS = [
+  'Speed on a phone, on mobile data, not on office fibre',
+  'Whether Google can crawl and index every page it should',
+  'Titles and descriptions that are missing, duplicated or truncated',
+  'Whether the Arabic version is written or machine-translated',
+  'How many taps it takes a stranger to contact you',
+  'Google Business Profile: category, completeness, duplicates, reviews',
+  'The two or three competitors ranking above you, and what they have',
+]
+
+const FAQ_ITEMS = [
+  {
+    question: 'What do I actually receive?',
+    answer:
+      'A written summary listing what we found, ranked by what we would fix first and why. Not a PDF template with your logo dropped into it, and not a call where someone talks at you for forty minutes.',
+  },
+  {
+    question: 'How long does it take?',
+    answer:
+      'Two to three working days in most cases. If your site is large or the Google profile is tangled it can take longer, and we will tell you that up front rather than going quiet.',
+  },
+  {
+    question: 'What does it cost?',
+    answer:
+      'Nothing, and there is no obligation afterwards. Some of what we find will be things you or your current developer can fix without paying anyone, and we will say which ones those are.',
+  },
+  {
+    question: 'Why give this away?',
+    answer:
+      'Because most businesses cannot tell a real problem from a sales pitch, and an audit that names specific, checkable issues is the fastest way to show which one we are. If the work is worth doing you will know who to call.',
+  },
+]
+---
+
+<Page
+  locale={locale}
+  routeKey="freeAudit"
+  title="Free Website & Google Audit | Power Source Digital"
+  description="A free, no-obligation review of your website, your Google Business Profile and the competitors ranking above you, with a written summary of what to fix first."
+>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { name: 'Home', path: localizedPath('home', locale) },
+      { name: 'Free audit', path: localizedPath('freeAudit', locale) },
+    ]}
+  />
+
+  <div class="layout shell">
+    <div class="pitch">
+      <p class="eyebrow">Free audit</p>
+      <h1>Find out what is costing you enquiries.</h1>
+      <p class="lead">
+        We go through your website and your Google presence the way a customer would, then
+        write down what is in the way. No charge, no obligation, and no forty-minute call.
+      </p>
+
+      <h2>What we check</h2>
+      <ul class="checks">
+        {
+          CHECKS.map((check) => (
+            <li>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M3 8.4 6.2 11.6 13 4.8"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span>{check}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="direct">
+        Prefer to talk first? Call
+        <a href={PHONE_HREF} class="num" dir="ltr">{PHONE_DISPLAY}</a>
+        or email <a href={`mailto:${EMAIL}`} dir="ltr">{EMAIL}</a>.
+      </p>
+    </div>
+
+    <div class="form-column">
+      <AuditForm
+        locale={locale}
+        copy={{
+          intro:
+            'Fill this in and it opens WhatsApp with your answers already written out. Nothing is stored on this page.',
+          legendAbout: 'About your business',
+          legendNeed: 'What you need',
+          name: 'Your name',
+          business: 'Business name',
+          website: 'Website',
+          websiteHint: 'Leave blank if you do not have one yet — that is useful to know too.',
+          city: 'City',
+          cityOther: 'Somewhere else',
+          service: 'What is the main problem?',
+          servicePick: 'Not sure yet',
+          message: 'Anything else',
+          messageHint: 'What you have already tried, or what you want fixed first.',
+          submit: 'Send on WhatsApp',
+          orEmail: 'Or email us at',
+          noJs:
+            'JavaScript is off, so the button will not open WhatsApp. Use the phone number or email address on this page instead.',
+        }}
+      />
+    </div>
+  </div>
+
+  <FAQ eyebrow="The offer" title="Before you ask" items={FAQ_ITEMS} />
+</Page>
+
+<style>
+  .layout {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: clamp(1.75rem, 1rem + 2.5vw, 3rem) var(--section-pad);
+  }
+
+  @media (min-width: 62rem) {
+    .layout {
+      grid-template-columns: 1fr 28rem;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .form-column {
+      position: sticky;
+      inset-block-start: 5.5rem;
+    }
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 16ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 2.5rem;
+    max-inline-size: 56ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  h2 {
+    font-size: var(--text-h3);
+    margin: 0 0 1rem;
+  }
+
+  .checks {
+    display: grid;
+    gap: 0.7rem;
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+
+  .checks li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+    align-items: start;
+    color: var(--text-default);
+  }
+
+  .checks svg {
+    margin-block-start: 0.28em;
+    color: var(--accent);
+  }
+
+  .direct {
+    margin: 0;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+  }
+
+  .direct a {
+    color: var(--accent);
+  }
+</style>

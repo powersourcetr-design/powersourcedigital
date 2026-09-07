@@ -359,3 +359,55 @@ licensing question for zero design cost.
 Removed at the client's request. It was carrying "5 services / 2 languages / 5 cities",
 which was honest but thin. The slot is better filled by real proof — client logos, project
 counts, a years-in-business figure — once any of that exists.
+
+## 31. Navigation is filtered through `LIVE_ROUTES`
+
+The route map defines every URL the site will eventually have; only some have pages today.
+`LIVE_ROUTES` lists the built ones, and the header, mobile menu and footer all filter through
+`isLive()`. A route defined but not yet built is simply absent from navigation rather than a
+link into a 404.
+
+The language switcher uses the same rule: if a page has no twin in the other locale it falls
+back to that locale's home rather than linking at a path nobody generated. That was a live
+bug — the switcher on the 404 pages pointed at `/404/`, which is not a served path.
+
+## 32. Broken links fail the build
+
+`scripts/check-links.mjs` crawls `dist/` and exits non-zero if any internal href points at a
+path that was not built. It runs against the *output*, not the source, because that is where
+this class of bug is visible: a route key resolving to a path nobody generated, an Arabic
+slug drifting from its directory name, a nav item added before its page. All three look
+correct in review and ship as 404s.
+
+Run with `pnpm run verify` (build, then crawl).
+
+## 33. The description-length check moved out of the Zod schema
+
+Expressing it in the schema needs `superRefine`, which returns a `ZodEffects`. Astro cannot
+infer entry field types through one, so every `entry.data.x` silently became `any` and the
+service page lost all type safety over its own content.
+
+The check now lives in `src/lib/content.ts` beside the other cross-entry assertions, and the
+collection schema is a plain `ZodObject` again. A schema that types its own output is worth
+more than a check sitting in the most obvious file.
+
+## 34. The audit form hands off to WhatsApp
+
+It builds a message from the answers and opens WhatsApp, rather than posting to a server.
+
+That is a product decision, not a stopgap. WhatsApp is how Saudi SMEs actually reply, the
+enquiry lands in a thread the business already watches, and there is no inbox to forget. It
+also needs no database, no mail provider and presents no spam surface, so it works today.
+
+The server endpoint arrives in step 5 for email capture and lead storage; the WhatsApp path
+stays as the primary action. With JavaScript off the fields are still labelled and the phone
+and email links beside the form are ordinary links, so nothing silently fails.
+
+## 35. Pages built, and what is still missing
+
+Built in both languages: home, services index, five service detail pages, about, process,
+contact, free audit, 404. Twenty-five pages.
+
+Still absent, each blocked on content rather than code — `/work/` (needs real client work),
+`/pricing/` (needs real prices), `/blog/` (step 8), `/privacy/` and `/terms/` (need legal
+sign-off). None are linked from navigation, so nothing 404s.

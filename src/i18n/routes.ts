@@ -121,6 +121,29 @@ export type ParentsAreValid = Assert<
   [ParentCheck] extends [true] ? true : ['Invalid parent route key', ParentCheck]
 >
 
+/**
+ * Routes that have actual pages behind them today.
+ *
+ * The header, the mobile menu and the footer all filter their links through
+ * this, so a route defined in the map but not yet built is simply absent from
+ * navigation rather than a link into a 404. Add a key here in the same commit
+ * that adds its page — the build fails loudly if the page is missing, which is
+ * the point.
+ */
+export const LIVE_ROUTES: readonly RouteKey[] = [
+  'home',
+  'services',
+  'serviceDetail',
+  'about',
+  'contact',
+  'process',
+  'freeAudit',
+]
+
+export function isLive(key: RouteKey): boolean {
+  return LIVE_ROUTES.includes(key)
+}
+
 /** Routes kept out of the sitemap and marked noindex. */
 export const NOINDEX_ROUTES: readonly RouteKey[] = ['styleguide', 'thankYou', 'notFound']
 
