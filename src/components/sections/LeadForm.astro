@@ -1,0 +1,366 @@
+---
+import { FORM } from '@/i18n/forms'
+import { type Locale, href, localizedPath } from '@/i18n/routes'
+import { TURNSTILE_SITE_KEY } from '@/lib/analytics'
+import { whatsappUrl } from '@/lib/whatsapp'
+
+/**
+ * The lead form. Posts to /api/lead, enhanced with fetch when JS is available.
+ *
+ * Progressive enhancement is real here, not decorative: the form has a genuine
+ * `action` and `method`, so with JavaScript off the browser posts it normally
+ * and the Function redirects to the thank-you page. With JS on we intercept,
+ * validate inline, and swap in a success state without a navigation.
+ *
+ * Validation messages are written per language rather than translated, because
+ * a form error is the one string a user reads most carefully.
+ */
+interface Props {
+  locale: Locale
+  /** Which page this form sits on, sent with the lead and the analytics event. */
+  source: string
+  /** Heading above the form. */
+  title?: string | undefined
+}
+
+const { locale, source, title } = Astro.props
+const copy = FORM[locale]
+const thankYou = href(localizedPath('thankYou', locale))
+const waHref = whatsappUrl({ locale })
+---
+
+<form
+  class="lead"
+  method="POST"
+  action="/api/lead"
+  data-lead-form
+  data-locale={locale}
+  data-thanks={thankYou}
+  novalidate
+>
+  {title && <h2 class="lead-title">{title}</h2>}
+
+  <input type="hidden" name="locale" value={locale} />
+  <input type="hidden" name="source" value={source} />
+
+  {/* Honeypot. Real people never fill this; bots almost always do. */}
+  <div class="trap" aria-hidden="true">
+    <label for={`lf-company-${source}`}>Company</label>
+    <input id={`lf-company-${source}`} name="company" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="row">
+    <label for={`lf-name-${source}`}>{copy.name}</label>
+    <input
+      id={`lf-name-${source}`}
+      name="name"
+      type="text"
+      autocomplete="name"
+      placeholder={copy.namePlaceholder}
+      required
+      aria-describedby={`lf-name-err-${source}`}
+    />
+    <p class="err" id={`lf-name-err-${source}`} data-error-for="name" hidden></p>
+  </div>
+
+  <div class="row">
+    <label for={`lf-phone-${source}`}>{copy.phone}</label>
+    <input
+      id={`lf-phone-${source}`}
+      name="phone"
+      type="tel"
+      inputmode="tel"
+      dir="ltr"
+      autocomplete="tel"
+      placeholder="05XXXXXXXX"
+      required
+      aria-describedby={`lf-phone-hint-${source} lf-phone-err-${source}`}
+    />
+    <p class="hint" id={`lf-phone-hint-${source}`}>{copy.phoneHint}</p>
+    <p class="err" id={`lf-phone-err-${source}`} data-error-for="phone" hidden></p>
+  </div>
+
+  <div class="pair">
+    <div class="row">
+      <label for={`lf-type-${source}`}>{copy.businessType}</label>
+      <select
+        id={`lf-type-${source}`}
+        name="businessType"
+        required
+        aria-describedby={`lf-type-err-${source}`}
+      >
+        {copy.businessTypes.map((type) => <option value={type.value}>{type.label}</option>)}
+      </select>
+      <p class="err" id={`lf-type-err-${source}`} data-error-for="businessType" hidden></p>
+    </div>
+
+    <div class="row">
+      <label for={`lf-budget-${source}`}>{copy.budget}</label>
+      <select id={`lf-budget-${source}`} name="budget">
+        <option value="">{copy.budgetPick}</option>
+        {copy.budgets.map((band) => <option value={band.value}>{band.label}</option>)}
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <label for={`lf-message-${source}`}>{copy.message}</label>
+    <textarea
+      id={`lf-message-${source}`}
+      name="message"
+      rows="3"
+      placeholder={copy.messagePlaceholder}></textarea>
+  </div>
+
+  <div
+    class="cf-turnstile"
+    data-sitekey={TURNSTILE_SITE_KEY}
+    data-theme="light"
+    data-language={locale}
+  >
+  </div>
+
+  <button type="submit" class="submit">{copy.submit}</button>
+
+  <p class="status" role="status" aria-live="polite" data-status hidden></p>
+  <p class="privacy">{copy.privacy}</p>
+
+  <p class="fallback" data-fallback hidden>
+    <a href={waHref} target="_blank" rel="noopener">{copy.errors.server}</a>
+  </p>
+</form>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script>
+  import { FORM, SAUDI_MOBILE } from '@/i18n/forms'
+
+  const setup = () => {
+    for (const form of document.querySelectorAll<HTMLFormElement>('[data-lead-form]')) {
+      if (form.dataset['bound']) continue
+      form.dataset['bound'] = 'true'
+
+      const locale = form.dataset['locale'] === 'ar' ? 'ar' : 'en'
+      const copy = FORM[locale]
+      const status = form.querySelector<HTMLElement>('[data-status]')
+      const fallback = form.querySelector<HTMLElement>('[data-fallback]')
+      const button = form.querySelector<HTMLButtonElement>('.submit')
+
+      let started = false
+      form.addEventListener('input', () => {
+        if (started) return
+        started = true
+        window.dispatchEvent(
+          new CustomEvent('psd:analytics', {
+            detail: { event: 'form_start', page: location.pathname, language: locale },
+          }),
+        )
+      })
+
+      const showError = (field: string, message: string) => {
+        const el = form.querySelector<HTMLElement>(`[data-error-for="${field}"]`)
+        if (!el) return
+        el.textContent = message
+        el.hidden = false
+        const input = form.querySelector<HTMLElement>(`[name="${field}"]`)
+        input?.setAttribute('aria-invalid', 'true')
+      }
+
+      const clearErrors = () => {
+        for (const el of form.querySelectorAll<HTMLElement>('[data-error-for]')) el.hidden = true
+        for (const el of form.querySelectorAll('[aria-invalid]')) el.removeAttribute('aria-invalid')
+        if (status) status.hidden = true
+        if (fallback) fallback.hidden = true
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault()
+        clearErrors()
+
+        const data = new FormData(form)
+        const value = (key: string) => String(data.get(key) ?? '').trim()
+
+        const invalid: string[] = []
+        const fail = (field: string, message: string) => {
+          showError(field, message)
+          invalid.push(field)
+        }
+
+        if (!value('name')) fail('name', copy.errors.name)
+        if (!SAUDI_MOBILE.test(value('phone').replace(/[\s\-()]/g, ''))) {
+          fail('phone', copy.errors.phone)
+        }
+        if (!value('businessType')) fail('businessType', copy.errors.businessType)
+
+        if (invalid.length > 0) {
+          form.querySelector<HTMLElement>(`[name="${invalid[0]}"]`)?.focus()
+          return
+        }
+
+        button?.setAttribute('disabled', 'true')
+        if (button) button.textContent = copy.submitting
+
+        try {
+          const response = await fetch('/api/lead', { method: 'POST', body: data })
+
+          if (response.ok) {
+            window.dispatchEvent(
+              new CustomEvent('psd:analytics', {
+                detail: {
+                  event: 'form_submit',
+                  page: location.pathname,
+                  language: locale,
+                  source: value('source'),
+                },
+              }),
+            )
+            window.location.href = form.dataset['thanks'] ?? '/'
+            return
+          }
+
+          if (response.status === 429) throw new Error(copy.errors.rateLimit)
+          if (response.status === 400) throw new Error(copy.errors.turnstile)
+          throw new Error(copy.errors.server)
+        } catch (error) {
+          const message =
+            error instanceof Error && error.message ? error.message : copy.errors.network
+          if (status) {
+            status.textContent = message
+            status.hidden = false
+          }
+          // WhatsApp is always reachable, so the lead is never simply lost.
+          if (fallback) fallback.hidden = false
+          button?.removeAttribute('disabled')
+          if (button) button.textContent = copy.submit
+        }
+      })
+    }
+  }
+
+  setup()
+  document.addEventListener('astro:after-swap', setup)
+</script>
+
+<style>
+  .lead {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+    border: 1px solid var(--border-subtle);
+    border-radius: 1.25rem;
+    background: var(--surface);
+  }
+
+  .lead-title {
+    font-size: var(--text-h3);
+    margin: 0;
+  }
+
+  .trap {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .row {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .pair {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  @media (min-width: 34rem) {
+    .pair {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  label {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-strong);
+  }
+
+  input,
+  select,
+  textarea {
+    inline-size: 100%;
+    padding: 0.7rem 0.85rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--text-strong);
+    background: var(--surface);
+    border: 1px solid var(--border-interactive);
+    border-radius: 0.6rem;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input[aria-invalid='true'],
+  select[aria-invalid='true'] {
+    border-color: var(--danger);
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .err {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--danger);
+  }
+
+  .submit {
+    padding: 0.95rem 1.8rem;
+    font: inherit;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 180ms var(--ease-out-expo);
+  }
+
+  .submit:hover:not([disabled]) {
+    background: var(--accent-hover);
+  }
+
+  .submit[disabled] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .status {
+    margin: 0;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.6rem;
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    color: var(--danger);
+    font-size: 0.92rem;
+  }
+
+  .privacy,
+  .fallback {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .fallback a {
+    color: var(--accent);
+  }
+</style>

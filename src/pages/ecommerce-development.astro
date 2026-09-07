@@ -1,0 +1,231 @@
+---
+import LandingPage, { type LandingContent } from '@/components/sections/LandingPage.astro'
+import { localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'en' as const
+const path = localizedPath('landingEcommerce', locale)
+
+const content: LandingContent = {
+  hero: {
+    eyebrow: 'Riyadh · Jeddah · Taif',
+    title: 'E-commerce store development in Saudi Arabia',
+    sub: 'Salla, Zid and Shopify stores built to sell: Mada, Tabby and Tamara connected, shipping wired in, products uploaded and written to be found in Arabic search.',
+    priceLabel: 'From',
+    // TODO(setup): replace with your real entry price — see SETUP.md
+    priceValue: '4,500 SAR',
+    priceNote: 'delivered in 14 days',
+    ctaWhatsApp: 'Ask on WhatsApp',
+    ctaForm: 'Get a quote',
+  },
+  trust: {
+    // TODO(setup): replace with real client logos — see SETUP.md
+    logosLabel: 'Client logos — to be supplied',
+    riyadh: 'Based in Riyadh',
+    // TODO(setup): replace with the real commercial registration number
+    cr: 'CR 0000000000',
+    response: 'WhatsApp answered within 2 working hours',
+  },
+  problems: {
+    eyebrow: 'The usual position',
+    title: 'A store that takes orders is not the same as a store that gets found',
+    cards: [
+      {
+        title: 'Payments half-connected',
+        body: 'Mada works but Tabby is not live, or the gateway is in test mode months after launch. Every abandoned checkout is a customer who decided you were not set up properly.',
+      },
+      {
+        title: 'Products nobody can search for',
+        body: 'Titles copied from the supplier sheet, no attributes, no Arabic descriptions. The catalogue is invisible to search and confusing to anyone who does reach it.',
+      },
+      {
+        title: 'Shipping worked out per order',
+        body: 'No carrier integration, so rates are guessed and tracking is sent by hand. It works at five orders a day and collapses at fifty.',
+      },
+    ],
+  },
+  deliverables: {
+    eyebrow: 'What you get',
+    title: 'Everything needed to take a real order',
+    intro:
+      'Fixed scope, fixed price, and a working store at the end rather than a theme you still have to fill in yourself.',
+    items: [
+      { label: 'Platform setup on Salla, Zid or Shopify', days: 'Day 1–2' },
+      { label: 'Theme configured and branded, Arabic-first layout', days: 'Day 2–5' },
+      { label: 'Mada and credit card gateway connected and tested', days: 'Day 5–7' },
+      { label: 'Tabby and Tamara instalments activated', days: 'Day 6–8' },
+      { label: 'Shipping carriers integrated with live rates', days: 'Day 7–9' },
+      { label: 'Product upload with attributes and variants', days: 'Day 8–12' },
+      { label: 'Arabic product titles and descriptions written for search', days: 'Day 9–13' },
+      { label: 'ZATCA-compliant invoicing configured', days: 'Day 12–13' },
+      { label: 'Test orders, handover and training', days: 'Day 14' },
+    ],
+    note: 'Fourteen working days from the point your products and logo reach us. Content is what moves that date, not development.',
+  },
+  pricing: {
+    eyebrow: 'Pricing',
+    title: 'Three scopes, priced before we start',
+    intro:
+      'You see the number and what it covers before any work begins. No hourly billing, and no invoice that arrives as a surprise.',
+    // TODO(setup): every figure below is a placeholder — see SETUP.md
+    tiers: [
+      {
+        name: 'Starter',
+        price: '4,500',
+        unit: 'SAR',
+        note: 'A working store, up to 30 products.',
+        includes: [
+          'Salla or Zid setup',
+          'Branded theme configuration',
+          'Mada and card payments',
+          'One shipping carrier',
+          'Up to 30 products uploaded',
+          '14 days delivery',
+        ],
+        cta: 'Get a quote',
+      },
+      {
+        name: 'Growth',
+        price: '9,500',
+        unit: 'SAR',
+        note: 'The one most stores need.',
+        includes: [
+          'Everything in Starter',
+          'Tabby and Tamara instalments',
+          'Two shipping carriers',
+          'Up to 150 products uploaded',
+          'Arabic product SEO on every listing',
+          'ZATCA invoicing configured',
+          '30 days post-launch support',
+        ],
+        featured: true,
+        cta: 'Get a quote',
+      },
+      {
+        name: 'Full catalogue',
+        price: '18,000',
+        unit: 'SAR',
+        note: 'Large or migrating catalogues.',
+        includes: [
+          'Everything in Growth',
+          'Migration from WooCommerce or another platform',
+          'Unlimited products via bulk import',
+          'Category and attribute architecture',
+          'Product photography editing',
+          '90 days support and optimisation',
+        ],
+        cta: 'Get a quote',
+      },
+    ],
+    vatNote: 'Prices exclude 15% VAT. Payment is split: half to start, half on handover.',
+  },
+  cases: {
+    eyebrow: 'Results',
+    title: 'What this work usually changes',
+    intro:
+      'Real case studies are being prepared and will replace the three below. Nothing here is a claim about a named client yet.',
+    // TODO(setup): replace all three with real, verifiable case studies — see SETUP.md
+    items: [
+      {
+        clientType: 'TODO — client type',
+        metric: 'TODO — headline metric',
+        before: 'Before: TODO',
+        after: 'After: TODO',
+        note: 'Placeholder. Supply the client, the metric and permission to publish.',
+      },
+      {
+        clientType: 'TODO — client type',
+        metric: 'TODO — headline metric',
+        before: 'Before: TODO',
+        after: 'After: TODO',
+        note: 'Placeholder. Supply the client, the metric and permission to publish.',
+      },
+      {
+        clientType: 'TODO — client type',
+        metric: 'TODO — headline metric',
+        before: 'Before: TODO',
+        after: 'After: TODO',
+        note: 'Placeholder. Supply the client, the metric and permission to publish.',
+      },
+    ],
+  },
+  process: {
+    eyebrow: 'How it runs',
+    title: 'Four stages, fourteen days',
+    steps: [
+      {
+        title: 'Scope',
+        body: 'One call to settle platform, product count and which payment methods you need. You get a fixed price the same day.',
+      },
+      {
+        title: 'Build',
+        body: 'Store, theme, payments and shipping configured. You get a link to a working store before any products go in.',
+      },
+      {
+        title: 'Fill',
+        body: 'Products uploaded with attributes, variants and Arabic descriptions written for search rather than pasted from a supplier sheet.',
+      },
+      {
+        title: 'Launch',
+        body: 'Test orders through every payment method, then handover with training. Thirty days of support follow on the Growth tier.',
+      },
+    ],
+  },
+  faq: {
+    eyebrow: 'Questions',
+    title: 'What store owners ask first',
+    items: [
+      {
+        question: 'Salla, Zid or Shopify — which should I use?',
+        answer:
+          'Salla or Zid if you sell only inside Saudi Arabia: local payment, local shipping and ZATCA invoicing are handled for you, and support is in Arabic. Shopify if you sell across borders, need a specific app, or want more control over the checkout. We build on all three and have no commission riding on the answer.',
+      },
+      {
+        question: 'How long does it take?',
+        answer:
+          'Fourteen working days from the point your logo, product data and photographs reach us. Development is rarely what delays a store — waiting on product information is, which is why we ask for it before we start rather than halfway through.',
+      },
+      {
+        question: 'Can you connect Tabby and Tamara?',
+        answer:
+          'Yes, both, and we test them with live orders before handover. They usually require your commercial registration and a short approval from the provider, which we prepare with you rather than leaving you to chase.',
+      },
+      {
+        question: 'What about ZATCA e-invoicing?',
+        answer:
+          'We configure the store so invoices carry the fields ZATCA requires and connect a compliant provider. We are not tax advisors, so final sign-off stays with your accountant, but the technical side is done.',
+      },
+      {
+        question: 'Do you upload the products, or do we?',
+        answer:
+          'We do, within the count in your tier. If you have a supplier spreadsheet we import from it; if you have nothing but photographs we write the listings. Products above your tier limit are quoted per hundred.',
+      },
+      {
+        question: 'What happens after launch?',
+        answer:
+          'Thirty days of support is included on Growth and ninety on Full catalogue, covering fixes and questions. Ongoing catalogue management is a separate monthly arrangement, priced only if you want it.',
+      },
+    ],
+  },
+  finalCta: {
+    title: 'Tell us what you sell and we will price it today.',
+    body: 'Message on WhatsApp for the fastest answer, or leave your details and we will come back with a fixed price and a delivery date.',
+    formTitle: 'Request a quote',
+  },
+  schema: {
+    name: 'E-commerce store development',
+    description:
+      'Salla, Zid and Shopify store development in Saudi Arabia, including Mada, Tabby and Tamara payment setup, shipping integration, product upload and Arabic product SEO.',
+  },
+}
+---
+
+<Page
+  locale={locale}
+  routeKey="landingEcommerce"
+  title="E-commerce Store Development in Saudi Arabia | Salla, Zid & Shopify"
+  description="We build Salla, Zid and Shopify stores in Saudi Arabia with Mada, Tabby and Tamara payments, shipping integration, product upload and Arabic product SEO. From 4,500 SAR."
+  service="E-commerce store development"
+>
+  <LandingPage locale={locale} content={content} source="ecommerce-development" path={path} />
+</Page>

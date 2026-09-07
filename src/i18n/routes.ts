@@ -64,7 +64,16 @@ export const ROUTES = {
   about: { segment: { en: 'about', ar: 'من-نحن' } },
   contact: { segment: { en: 'contact', ar: 'تواصل-معنا' } },
   freeAudit: { segment: { en: 'free-audit', ar: 'تدقيق-مجاني' } },
-  thankYou: { segment: { en: 'thank-you', ar: 'شكرا-لك' } },
+  thankYou: { segment: { en: 'thank-you', ar: 'شكرا' } },
+
+  /* Paid-traffic landing pages. These sit at the root rather than under
+     /services/ so the ad destination URL carries the keyword itself. */
+  landingEcommerce: {
+    segment: { en: 'ecommerce-development', ar: 'تصميم-متجر-الكتروني' },
+  },
+  landingWebDesign: {
+    segment: { en: 'web-design-riyadh', ar: 'تصميم-مواقع-الرياض' },
+  },
 
   work: { segment: { en: 'work', ar: 'أعمالنا' } },
   workDetail: { parent: 'work', segment: { en: '', ar: '' }, dynamic: true },
@@ -138,6 +147,9 @@ export const LIVE_ROUTES: readonly RouteKey[] = [
   'contact',
   'process',
   'freeAudit',
+  'thankYou',
+  'landingEcommerce',
+  'landingWebDesign',
 ]
 
 export function isLive(key: RouteKey): boolean {

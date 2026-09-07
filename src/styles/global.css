@@ -197,11 +197,22 @@ p {
   transform: scaleX(-1);
 }
 
-/* Phone numbers and codes stay LTR inside RTL text. */
+/* Pure-LTR runs — phone numbers, emails, code — inside RTL text. Forces LTR,
+   so it must never wrap a string that also contains Arabic words. */
 .num {
   font-variant-numeric: tabular-nums;
   unicode-bidi: isolate;
   direction: ltr;
+}
+
+/* Mixed runs: digits alongside Arabic words, such as "4,500 ريال" or
+   "اليوم 1–2". Isolated from surrounding text so neighbouring content cannot
+   reorder it, but the paragraph direction is left alone — the bidi algorithm
+   already places Western digits correctly inside Arabic. Forcing LTR here is
+   what moves the currency word to the wrong side of the number. */
+.bidi-isolate {
+  font-variant-numeric: tabular-nums;
+  unicode-bidi: isolate;
 }
 
 /* --------------------------------------------------------------------------

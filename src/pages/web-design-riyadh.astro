@@ -1,0 +1,231 @@
+---
+import LandingPage, { type LandingContent } from '@/components/sections/LandingPage.astro'
+import { localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+
+const locale = 'en' as const
+const path = localizedPath('landingWebDesign', locale)
+
+const content: LandingContent = {
+  hero: {
+    eyebrow: 'Riyadh · Jeddah · Taif',
+    title: 'Website design and development in Riyadh',
+    sub: 'Fast corporate websites designed Arabic-first, with your Google Business Profile set up, hosting handled and maintenance included. Live in 21 days.',
+    priceLabel: 'From',
+    // TODO(setup): replace with your real entry price — see SETUP.md
+    priceValue: '3,500 SAR',
+    priceNote: 'delivered in 21 days',
+    ctaWhatsApp: 'Ask on WhatsApp',
+    ctaForm: 'Get a quote',
+  },
+  trust: {
+    // TODO(setup): replace with real client logos — see SETUP.md
+    logosLabel: 'Client logos — to be supplied',
+    riyadh: 'Based in Riyadh',
+    // TODO(setup): replace with the real commercial registration number
+    cr: 'CR 0000000000',
+    response: 'WhatsApp answered within 2 working hours',
+  },
+  problems: {
+    eyebrow: 'The usual position',
+    title: 'Most company websites in Riyadh fail the same three tests',
+    cards: [
+      {
+        title: 'Slow on a phone',
+        body: 'Built and reviewed on office wifi, then served to a customer on mobile data in a car park. Every second of load costs enquiries, and nobody in the approval chain ever saw it that way.',
+      },
+      {
+        title: 'Arabic added last',
+        body: 'The English site is designed, then Arabic is poured into the same layout through a translation plugin. Any Saudi visitor can tell within one line, and it says more about the business than the copy does.',
+      },
+      {
+        title: 'Invisible on Maps',
+        body: 'The site exists but the Google Business Profile is unverified, miscategorised or duplicated, so the searches closest to buying never surface you at all.',
+      },
+    ],
+  },
+  deliverables: {
+    eyebrow: 'What you get',
+    title: 'A finished site, not a template to fill in',
+    intro:
+      'Fixed scope and a fixed price agreed before we start, including the parts most quotes leave out.',
+    items: [
+      { label: 'Structure and page plan agreed with you', days: 'Day 1–3' },
+      { label: 'Design in Arabic and English, mobile first', days: 'Day 3–8' },
+      { label: 'Copywriting in both languages, written not translated', days: 'Day 6–12' },
+      { label: 'Development, up to 8 pages', days: 'Day 10–16' },
+      { label: 'Speed optimisation and Core Web Vitals', days: 'Day 16–18' },
+      { label: 'Technical SEO: titles, schema, sitemap, Search Console', days: 'Day 17–19' },
+      { label: 'Google Business Profile created or fixed and verified', days: 'Day 17–20' },
+      { label: 'Hosting, SSL and domain configuration', days: 'Day 19–20' },
+      { label: 'Handover, training and documentation', days: 'Day 21' },
+    ],
+    note: 'Twenty-one working days from approved content. Every project runs on a written scope, so additions are quoted rather than absorbed and delivered late.',
+  },
+  pricing: {
+    eyebrow: 'Pricing',
+    title: 'Three scopes, priced before we start',
+    intro:
+      'Fixed price per project, not hourly. You know what the invoice says before anyone opens a design tool.',
+    // TODO(setup): every figure below is a placeholder — see SETUP.md
+    tiers: [
+      {
+        name: 'Presence',
+        price: '3,500',
+        unit: 'SAR',
+        note: 'A credible site, up to 5 pages.',
+        includes: [
+          'Up to 5 pages',
+          'Arabic and English',
+          'Mobile-first responsive design',
+          'Contact form and WhatsApp integration',
+          'Basic technical SEO',
+          '21 days delivery',
+        ],
+        cta: 'Get a quote',
+      },
+      {
+        name: 'Business',
+        price: '8,500',
+        unit: 'SAR',
+        note: 'The one most companies need.',
+        includes: [
+          'Up to 12 pages',
+          'Copywriting in both languages',
+          'Google Business Profile setup and verification',
+          'Speed optimisation to Core Web Vitals',
+          'Schema markup and Search Console',
+          'One year hosting included',
+          '60 days post-launch support',
+        ],
+        featured: true,
+        cta: 'Get a quote',
+      },
+      {
+        name: 'Business plus care',
+        price: '8,500',
+        unit: 'SAR + 750/mo',
+        note: 'Build, then keep it maintained.',
+        includes: [
+          'Everything in Business',
+          'Monthly updates and backups',
+          'Security monitoring and patching',
+          'Content changes, two hours monthly',
+          'Monthly Search Console reporting',
+          'Cancel with 30 days notice',
+        ],
+        cta: 'Get a quote',
+      },
+    ],
+    vatNote: 'Prices exclude 15% VAT. Payment is split: half to start, half on handover.',
+  },
+  cases: {
+    eyebrow: 'Results',
+    title: 'What this work usually changes',
+    intro:
+      'Real case studies are being prepared and will replace the three below. Nothing here is a claim about a named client yet.',
+    // TODO(setup): replace all three with real, verifiable case studies — see SETUP.md
+    items: [
+      {
+        clientType: 'TODO — client type',
+        metric: 'TODO — headline metric',
+        before: 'Before: TODO',
+        after: 'After: TODO',
+        note: 'Placeholder. Supply the client, the metric and permission to publish.',
+      },
+      {
+        clientType: 'TODO — client type',
+        metric: 'TODO — headline metric',
+        before: 'Before: TODO',
+        after: 'After: TODO',
+        note: 'Placeholder. Supply the client, the metric and permission to publish.',
+      },
+      {
+        clientType: 'TODO — client type',
+        metric: 'TODO — headline metric',
+        before: 'Before: TODO',
+        after: 'After: TODO',
+        note: 'Placeholder. Supply the client, the metric and permission to publish.',
+      },
+    ],
+  },
+  process: {
+    eyebrow: 'How it runs',
+    title: 'Four stages, twenty-one days',
+    steps: [
+      {
+        title: 'Plan',
+        body: 'One meeting to agree what the site must do, which pages it needs and who approves. You get a written scope and a fixed price.',
+      },
+      {
+        title: 'Design',
+        body: 'Mobile-first, in both languages, reviewed before a line of code is written. Two rounds of changes at this stage.',
+      },
+      {
+        title: 'Build',
+        body: 'Development, content, speed work and technical SEO. You see a staging link the whole way rather than a reveal at the end.',
+      },
+      {
+        title: 'Launch',
+        body: 'Domain, hosting, SSL, Search Console and the Google Business Profile, then handover and training.',
+      },
+    ],
+  },
+  faq: {
+    eyebrow: 'Questions',
+    title: 'What companies ask first',
+    items: [
+      {
+        question: 'How much does a company website cost in Riyadh?',
+        answer:
+          'Anywhere from 3,500 SAR for a credible five-page site to around 20,000 for something with custom functionality. Quotes far below that usually mean a template with your logo dropped in; quotes far above usually mean an agency with an office to pay for. We publish our numbers so you can judge for yourself.',
+      },
+      {
+        question: 'Do you design in Arabic properly?',
+        answer:
+          'Arabic is designed, not translated. It gets its own copy, its own typefaces and its own spacing, and the layout mirrors rather than being flipped by a plugin. Arabic set by someone who does not read it is obvious to everyone who does.',
+      },
+      {
+        question: 'Is the Google Business Profile really included?',
+        answer:
+          'On the Business tier, yes: created or claimed, categorised correctly, filled in both languages, and verified. For a local company that profile often brings more enquiries than the website itself, which is why we stopped charging for it separately.',
+      },
+      {
+        question: 'Who hosts the site, and who owns it?',
+        answer:
+          'You own everything: domain, hosting account, code and design files, all in your name from day one. Hosting for the first year is included on Business. You can move to another agency whenever you like without asking us or paying a release fee.',
+      },
+      {
+        question: 'What if we need changes after launch?',
+        answer:
+          'Small changes are covered by the support window, 60 days on Business. After that you either handle them yourself with the training we give you, or take the monthly care plan. There is no lock-in either way.',
+      },
+      {
+        question: 'Can you work with our existing site instead of rebuilding?',
+        answer:
+          'Often, yes, and it is usually cheaper. Speed, technical SEO and the Google profile can all be fixed on a site that already exists. We will tell you honestly when a rebuild is the cheaper answer and when it is not.',
+      },
+    ],
+  },
+  finalCta: {
+    title: 'Tell us what the site needs to do.',
+    body: 'Message on WhatsApp for the fastest answer, or leave your details and we will come back with a fixed price and a delivery date.',
+    formTitle: 'Request a quote',
+  },
+  schema: {
+    name: 'Website design and development',
+    description:
+      'Fast, Arabic-first corporate website design and development in Riyadh, including Google Business Profile setup, hosting, technical SEO and maintenance.',
+  },
+}
+---
+
+<Page
+  locale={locale}
+  routeKey="landingWebDesign"
+  title="Website Design & Development in Riyadh | Power Source Digital"
+  description="Fast, Arabic-first company websites built in Riyadh. Google Business Profile setup, hosting and maintenance included. Fixed price from 3,500 SAR, live in 21 days."
+  service="Website design and development"
+>
+  <LandingPage locale={locale} content={content} source="web-design-riyadh" path={path} />
+</Page>

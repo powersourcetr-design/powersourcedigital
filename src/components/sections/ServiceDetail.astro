@@ -138,7 +138,7 @@ const schema = serviceSchema({
   service={entry.data.title}
 />
 
-<script type="application/ld+json" set:html={graph([schema])} />
+<script is:inline type="application/ld+json" set:html={graph([schema])} />
 
 <style>
   .head {

@@ -1,5 +1,6 @@
 ---
 import { DIR, LOCALE_TAG, SITE, type Locale, type RouteKey, alternates, href } from '@/i18n/routes'
+import Analytics from '@/components/layout/Analytics.astro'
 import { useTranslations } from '@/i18n/ui'
 import '@/styles/global.css'
 
@@ -67,6 +68,10 @@ const languageAlternates = !noindex && routeKey ? alternates(routeKey, slugs) : 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#00a858" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    {/* Preconnect only for the Turnstile challenge, which is render-blocking
+        on the landing pages. Fonts are self-hosted, so no font origins here. */}
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#content">{t('a11y.skipToContent')}</a>

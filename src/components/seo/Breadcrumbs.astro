@@ -57,7 +57,7 @@ const schema = breadcrumbs(items)
   </ol>
 </nav>
 
-{schema && <script type="application/ld+json" set:html={graph([schema])} />}
+{schema && <script is:inline type="application/ld+json" set:html={graph([schema])} />}
 
 <style>
   .crumbs {

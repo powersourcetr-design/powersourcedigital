@@ -1,0 +1,682 @@
+---
+import FAQ from '@/components/sections/FAQ.astro'
+import LeadForm from '@/components/sections/LeadForm.astro'
+import Steps from '@/components/sections/Steps.astro'
+import Button from '@/components/ui/Button.astro'
+import type { Locale } from '@/i18n/routes'
+import { type FaqItem, graph, service as serviceSchema } from '@/lib/schema'
+import { PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from '@/lib/whatsapp'
+
+/**
+ * A paid-traffic landing page.
+ *
+ * Conversion-first ordering: the price and both CTAs are above the fold, trust
+ * signals immediately under them, and a form at the end for people who will not
+ * open WhatsApp. No slider and no carousel — both cost LCP and neither is read.
+ *
+ * All copy arrives as props so the Arabic page can be written rather than
+ * translated. Nothing here contains a language-specific string.
+ */
+export interface LandingContent {
+  hero: {
+    eyebrow: string
+    title: string
+    sub: string
+    priceLabel: string
+    priceValue: string
+    priceNote: string
+    ctaWhatsApp: string
+    ctaForm: string
+  }
+  trust: {
+    logosLabel: string
+    riyadh: string
+    cr: string
+    response: string
+  }
+  problems: { eyebrow: string; title: string; cards: { title: string; body: string }[] }
+  deliverables: {
+    eyebrow: string
+    title: string
+    intro: string
+    items: { label: string; days: string }[]
+    note: string
+  }
+  pricing: {
+    eyebrow: string
+    title: string
+    intro: string
+    tiers: {
+      name: string
+      price: string
+      unit: string
+      note: string
+      includes: string[]
+      featured?: boolean
+      cta: string
+    }[]
+    vatNote: string
+  }
+  cases: {
+    eyebrow: string
+    title: string
+    intro: string
+    items: { clientType: string; metric: string; before: string; after: string; note: string }[]
+  }
+  process: { eyebrow: string; title: string; steps: { title: string; body: string }[] }
+  faq: { eyebrow: string; title: string; items: FaqItem[] }
+  finalCta: { title: string; body: string; formTitle: string }
+  /** Schema.org Service name and description for this landing page. */
+  schema: { name: string; description: string }
+}
+
+interface Props {
+  locale: Locale
+  content: LandingContent
+  /** Used for the WhatsApp prefill and as the lead source. */
+  source: string
+  path: string
+}
+
+const { locale, content, source, path } = Astro.props
+const waHref = whatsappUrl({ locale, service: content.schema.name })
+const serviceJson = serviceSchema({
+  locale,
+  name: content.schema.name,
+  description: content.schema.description,
+  path,
+})
+---
+
+<!-- 1. Hero -->
+<section class="hero">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="shell hero-inner">
+    <p class="eyebrow">{content.hero.eyebrow}</p>
+    <h1>{content.hero.title}</h1>
+    <p class="sub">{content.hero.sub}</p>
+
+    <p class="price">
+      <span class="price-label">{content.hero.priceLabel}</span>
+      <span class="price-value bidi-isolate">{content.hero.priceValue}</span>
+      <span class="price-note">{content.hero.priceNote}</span>
+    </p>
+
+    <div class="actions">
+      <Button href={waHref} size="lg" arrow data-track="whatsapp_click" data-source={source}>
+        {content.hero.ctaWhatsApp}
+      </Button>
+      <Button href="#lead" size="lg" variant="secondary">{content.hero.ctaForm}</Button>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Trust bar -->
+<section class="trust">
+  <div class="shell trust-inner">
+    <ul class="signals">
+      <li>{content.trust.riyadh}</li>
+      <li>{content.trust.cr}</li>
+      <li>{content.trust.response}</li>
+      <li>
+        <a href={PHONE_HREF} data-track="phone_click" data-source={source}>
+          <span class="num" dir="ltr">{PHONE_DISPLAY}</span>
+        </a>
+      </li>
+    </ul>
+    {/* TODO(setup): replace with real client logos — see SETUP.md */}
+    <p class="logos-label">{content.trust.logosLabel}</p>
+  </div>
+</section>
+
+<!-- 3. Problem / outcome -->
+<section class="problems shell">
+  <p class="eyebrow">{content.problems.eyebrow}</p>
+  <h2>{content.problems.title}</h2>
+  <ul class="cards">
+    {
+      content.problems.cards.map((card) => (
+        <li>
+          <h3>{card.title}</h3>
+          <p>{card.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<!-- 4. What you get -->
+<section class="deliverables">
+  <div class="shell">
+    <p class="eyebrow">{content.deliverables.eyebrow}</p>
+    <h2>{content.deliverables.title}</h2>
+    <p class="intro">{content.deliverables.intro}</p>
+
+    <ul class="items">
+      {
+        content.deliverables.items.map((item) => (
+          <li>
+            <span class="item-label">{item.label}</span>
+            <span class="item-days bidi-isolate">{item.days}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="note">{content.deliverables.note}</p>
+  </div>
+</section>
+
+<!-- 5. Pricing -->
+<section class="pricing shell">
+  <p class="eyebrow">{content.pricing.eyebrow}</p>
+  <h2>{content.pricing.title}</h2>
+  <p class="intro">{content.pricing.intro}</p>
+
+  <ul class="tiers">
+    {
+      content.pricing.tiers.map((tier) => (
+        <li class:list={['tier', tier.featured && 'featured']}>
+          <h3>{tier.name}</h3>
+          <p class="tier-price">
+            <span class="bidi-isolate">{tier.price}</span>
+            <span class="tier-unit">{tier.unit}</span>
+          </p>
+          <p class="tier-note">{tier.note}</p>
+          <ul class="includes">
+            {tier.includes.map((line) => (
+              <li>
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3 8.4 6.2 11.6 13 4.8"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+          <Button href="#lead" variant={tier.featured ? 'primary' : 'secondary'}>
+            {tier.cta}
+          </Button>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="vat">{content.pricing.vatNote}</p>
+</section>
+
+<!-- 6. Case studies -->
+<section class="cases">
+  <div class="shell">
+    <p class="eyebrow">{content.cases.eyebrow}</p>
+    <h2>{content.cases.title}</h2>
+    <p class="intro">{content.cases.intro}</p>
+
+    <ul class="case-list">
+      {
+        content.cases.items.map((item) => (
+          <li>
+            <p class="case-type">{item.clientType}</p>
+            <p class="case-metric bidi-isolate">{item.metric}</p>
+            <dl class="ba">
+              <div>
+                <dt>{item.before}</dt>
+              </div>
+              <div>
+                <dd>{item.after}</dd>
+              </div>
+            </dl>
+            <p class="case-note">{item.note}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- 7. Process -->
+<Steps
+  eyebrow={content.process.eyebrow}
+  title={content.process.title}
+  steps={content.process.steps}
+  variant="timeline"
+/>
+
+<!-- 8. FAQ -->
+<FAQ eyebrow={content.faq.eyebrow} title={content.faq.title} items={content.faq.items} />
+
+<!-- 9. Final CTA with the lead form -->
+<section class="final" id="lead">
+  <div class="shell final-inner">
+    <div>
+      <h2>{content.finalCta.title}</h2>
+      <p>{content.finalCta.body}</p>
+      <p class="or">
+        <a href={waHref} target="_blank" rel="noopener" data-track="whatsapp_click">
+          {content.hero.ctaWhatsApp}
+        </a>
+      </p>
+    </div>
+    <LeadForm locale={locale} source={source} title={content.finalCta.formTitle} />
+  </div>
+</section>
+
+<script is:inline type="application/ld+json" set:html={graph([serviceJson])} />
+
+<script>
+  // One delegated listener for every CTA that carries a data-track attribute,
+  // rather than a listener per button.
+  const track = (event: Event) => {
+    const el = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-track]')
+    if (!el) return
+    window.dispatchEvent(
+      new CustomEvent('psd:analytics', {
+        detail: {
+          event: el.dataset['track'],
+          page: location.pathname,
+          language: document.documentElement.lang.startsWith('ar') ? 'ar' : 'en',
+          source: el.dataset['source'] ?? '',
+        },
+      }),
+    )
+  }
+
+  document.addEventListener('click', track)
+</script>
+
+<style>
+  /* --- Hero --------------------------------------------------------------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .glow {
+    position: absolute;
+    inset-block-start: -40%;
+    inset-inline-end: -8%;
+    inline-size: min(56rem, 110%);
+    aspect-ratio: 1;
+    z-index: -1;
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--accent-vivid) 16%, transparent),
+      transparent 66%
+    );
+    filter: blur(22px);
+  }
+
+  .hero-inner {
+    padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) clamp(2.5rem, 1.5rem + 3vw, 4rem);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 17ch;
+  }
+
+  .sub {
+    margin: 1.1rem 0 1.75rem;
+    max-inline-size: 54ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  .price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.75rem;
+    margin: 0 0 1.75rem;
+    padding: 0.9rem 1.15rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 0.9rem;
+    background: var(--surface-raised);
+    inline-size: fit-content;
+  }
+
+  .price-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .price-value {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+
+  .price-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  /* --- Trust bar ---------------------------------------------------------- */
+  .trust {
+    background: var(--surface-raised);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .trust-inner {
+    padding-block: 1.25rem;
+  }
+
+  .signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.92rem;
+    color: var(--text-default);
+  }
+
+  .signals li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .signals li::before {
+    content: '';
+    inline-size: 5px;
+    block-size: 5px;
+    border-radius: 999px;
+    background: var(--accent-vivid);
+    flex-shrink: 0;
+  }
+
+  .signals a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .logos-label {
+    margin: 0.85rem 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* --- Shared section furniture ------------------------------------------ */
+  .problems,
+  .pricing {
+    padding-block: var(--section-pad);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .deliverables,
+  .cases {
+    padding-block: var(--section-pad);
+    border-block-end: 1px solid var(--border-subtle);
+    background: var(--surface-raised);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.9rem;
+    max-inline-size: 24ch;
+  }
+
+  .intro {
+    margin: 0 0 2rem;
+    max-inline-size: 62ch;
+    color: var(--text-muted);
+  }
+
+  /* --- Problem cards ------------------------------------------------------ */
+  .cards {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+
+  .cards li {
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    background: var(--surface-raised);
+  }
+
+  .cards h3 {
+    font-size: var(--text-h3);
+    margin: 0 0 0.5rem;
+  }
+
+  .cards p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  /* --- Deliverables ------------------------------------------------------- */
+  .items {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .items li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-block: 0.9rem;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .item-label {
+    color: var(--text-default);
+  }
+
+  .item-days {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .note {
+    margin: 1.25rem 0 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  /* --- Pricing ------------------------------------------------------------ */
+  .tiers {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: start;
+  }
+
+  .tier {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1.1rem;
+    background: var(--surface);
+  }
+
+  .tier.featured {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .tier h3 {
+    font-size: var(--text-h3);
+    margin: 0;
+  }
+
+  .tier-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+
+  .tier-unit {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .tier-note {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .includes {
+    display: grid;
+    gap: 0.55rem;
+    list-style: none;
+    margin: 0.5rem 0 1.25rem;
+    padding: 0;
+  }
+
+  .includes li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem;
+    align-items: start;
+    font-size: 0.92rem;
+    color: var(--text-default);
+  }
+
+  .includes svg {
+    margin-block-start: 0.3em;
+    color: var(--accent);
+  }
+
+  .vat {
+    margin: 1.5rem 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  /* --- Case studies ------------------------------------------------------- */
+  .case-list {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .case-list li {
+    padding: 1.5rem;
+    border: 1px dashed var(--border-strong);
+    border-radius: 1rem;
+    background: var(--surface);
+  }
+
+  .case-type {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  :global([dir='rtl']) .case-type {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.9rem;
+  }
+
+  .case-metric {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .ba {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0 0 0.75rem;
+    padding-block: 0.75rem;
+    border-block: 1px solid var(--border-subtle);
+    font-size: 0.9rem;
+  }
+
+  .ba dt,
+  .ba dd {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .case-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  /* --- Final CTA ---------------------------------------------------------- */
+  .final {
+    padding-block: var(--section-pad);
+  }
+
+  .final-inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 62rem) {
+    .final-inner {
+      grid-template-columns: 1fr 30rem;
+      gap: 4rem;
+    }
+  }
+
+  .final h2 {
+    max-inline-size: 18ch;
+  }
+
+  .final p {
+    margin: 0;
+    max-inline-size: 52ch;
+    color: var(--text-muted);
+    font-size: var(--text-lead);
+  }
+
+  .or {
+    margin-block-start: 1.25rem !important;
+    font-size: 1rem !important;
+  }
+
+  .or a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+</style>

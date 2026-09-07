@@ -1,0 +1,81 @@
+---
+import { ANALYTICS_ENABLED, CONSENT_DEFAULT_SCRIPT, GTM_ID } from '@/lib/analytics'
+
+/**
+ * Consent defaults, then GTM, then a single listener that forwards every
+ * `psd:analytics` CustomEvent onto the dataLayer.
+ *
+ * Components dispatch that event rather than touching `dataLayer` directly, so
+ * there is exactly one place that knows the tracking shape and nothing breaks
+ * if the container is swapped for something else.
+ *
+ * Nothing loads while GTM_ID is still the placeholder — a stub container ID
+ * produces a 404 on every page load and noise in the console.
+ */
+---
+
+<script is:inline set:html={CONSENT_DEFAULT_SCRIPT} />
+
+{
+  ANALYTICS_ENABLED && (
+    <script
+      is:inline
+      set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_ID}');`}
+    />
+  )
+}
+
+<script is:inline>
+  ;(() => {
+    const lang = document.documentElement.lang.startsWith('ar') ? 'ar' : 'en'
+    let adStorageGranted = false
+
+    // Ad storage is granted on the first genuine interaction, not on load.
+    const grantAdStorage = () => {
+      if (adStorageGranted) return
+      adStorageGranted = true
+      window.dataLayer = window.dataLayer || []
+      // biome-ignore lint/style/useArrowFunction: gtag relies on `arguments`.
+      function gtag() {
+        window.dataLayer.push(arguments)
+      }
+      gtag('consent', 'update', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted',
+      })
+    }
+
+    window.addEventListener('psd:analytics', (event) => {
+      const detail = event.detail || {}
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: detail.event,
+        page: detail.page || location.pathname,
+        language: detail.language || lang,
+        ...detail,
+      })
+      grantAdStorage()
+    })
+
+    // Scroll depth, fired once.
+    let fired = false
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (fired) return
+        const scrolled =
+          (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight
+        if (scrolled < 0.75) return
+        fired = true
+        window.dispatchEvent(
+          new CustomEvent('psd:analytics', {
+            detail: { event: 'scroll_75', page: location.pathname, language: lang },
+          }),
+        )
+      },
+      { passive: true },
+    )
+  })()
+</script>
