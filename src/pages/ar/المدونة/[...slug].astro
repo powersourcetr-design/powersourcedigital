@@ -13,13 +13,16 @@ export const getStaticPaths = (async () => {
       props: {
         entry,
         related: await relatedPosts(entry),
+        // The sidebar tops up with recent posts when a young cluster has few
+        // related ones, so the rail is never nearly empty.
+        recent: posts.slice(0, 6),
         translation: await translationOf(entry, 'en'),
       },
     })),
   )
 }) satisfies GetStaticPaths
 
-const { entry, related, translation } = Astro.props
+const { entry, related, recent, translation } = Astro.props
 const { Content } = await render(entry)
 ---
 
@@ -27,8 +30,14 @@ const { Content } = await render(entry)
   locale="ar"
   entry={entry}
   related={related}
+  recent={recent}
   translationSlug={translation ? postSlug(translation) : undefined}
   copy={{
+    sidebarRelated: 'أدلة ذات صلة',
+    sidebarRecent: 'أحدث الأدلة',
+    sidebarCtaTitle: 'تفضّل ألا تنفذه بنفسك؟',
+    sidebarCtaBody: 'أسعار ثابتة ومنشورة. اطّلع على تكلفة التنفيذ قبل أن تسأل عنها.',
+    sidebarCtaLabel: 'اطّلع على الأسعار',
     relatedTitle: 'مقالات ذات صلة',
     faqEyebrow: 'أسئلة',
     ctaTitle: 'تريد من ينفذ هذا نيابة عنك؟',

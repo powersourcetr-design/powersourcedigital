@@ -5,6 +5,7 @@ import FAQ from '@/components/sections/FAQ.astro'
 import Hero from '@/components/sections/Hero.astro'
 import LogoStrip from '@/components/sections/LogoStrip.astro'
 import ServicesGrid from '@/components/sections/ServicesGrid.astro'
+import Comparison from '@/components/sections/Comparison.astro'
 import Steps from '@/components/sections/Steps.astro'
 import { href, localizedPath } from '@/i18n/routes'
 import Page from '@/layouts/Page.astro'
@@ -76,6 +77,70 @@ const FAQ_ITEMS = [
   },
 ]
 
+const INDUSTRIES = [
+  {
+    title: 'Restaurants and cafés',
+    body: 'Menu that loads on mobile data, a Google profile that shows the right hours, and ordering links that work on the first tap.',
+  },
+  {
+    title: 'Clinics and dental',
+    body: 'Appointment enquiries that reach reception, services listed the way patients search for them, and reviews answered.',
+  },
+  {
+    title: 'Contractors and MEP',
+    body: 'Project galleries, downloadable capability statements, and the technical documentation most studios refuse to lay out.',
+  },
+  {
+    title: 'Retail and e-commerce',
+    body: 'Catalogues that stay accurate across Salla, Amazon and Noon, with product text written to be found rather than pasted.',
+  },
+  {
+    title: 'Real estate',
+    body: 'Listings that load fast on a phone, WhatsApp enquiry on every unit, and Arabic that reads like it was written for buyers here.',
+  },
+  {
+    title: 'Industrial and electrical supply',
+    body: 'Product catalogues an engineer can specify from, panel and system diagrams, and search visibility for part numbers.',
+  },
+]
+
+const COMPARE = {
+  themColumn: 'Most agencies',
+  usColumn: 'Us',
+  rows: [
+    {
+      label: 'Pricing',
+      them: 'Quoted after a discovery call, hourly, revised upward',
+      us: 'Published on the site, fixed per project, before you ask',
+    },
+    {
+      label: 'Arabic',
+      them: 'Translated from English through a plugin',
+      us: 'Written for a Saudi reader, own copy and own typefaces',
+    },
+    {
+      label: 'Scope',
+      them: 'Website only; SEO and the store are other companies',
+      us: 'All five services in-house, decided together',
+    },
+    {
+      label: 'Ownership',
+      them: 'Hosting in the agency account, release fee to leave',
+      us: 'Domain, hosting and code in your name from day one',
+    },
+    {
+      label: 'What you see',
+      them: 'One reveal at the end of the project',
+      us: 'Something to review at every stage',
+    },
+    {
+      label: 'Google profile',
+      them: 'Quoted separately, often forgotten',
+      us: 'Included, because it often out-earns the website',
+    },
+  ],
+}
+
 const WHY = [
   {
     title: 'We start with the business',
@@ -122,6 +187,8 @@ const PROCESS = [
   description="We build websites, improve how you appear on Google, and manage online stores for businesses in Riyadh, Jeddah, Taif and across Saudi Arabia."
 >
   <Hero
+    locale={locale}
+    formTitle="Tell us what you need"
     eyebrow="Riyadh · Jeddah · Taif"
     titleLead="Build a presence that"
     titleAccent="works"
@@ -155,6 +222,23 @@ const PROCESS = [
     steps={PROCESS}
     variant="timeline"
     tone="sunken"
+  />
+
+  <Steps
+    eyebrow="Who we build for"
+    title="Six kinds of business, six different problems"
+    intro="The work is not the same for a clinic and a parts supplier. These are the sectors we know well enough to be useful on day one."
+    steps={INDUSTRIES}
+    tone="sunken"
+  />
+
+  <Comparison
+    eyebrow="The difference"
+    title="What changes when you work with us"
+    intro="Every agency says it is different. Here is the specific, checkable version, so you can hold it against whoever else is quoting."
+    themColumn={COMPARE.themColumn}
+    usColumn={COMPARE.usColumn}
+    rows={COMPARE.rows}
   />
 
   <AuditScope

@@ -76,7 +76,18 @@ const waHref = whatsappUrl({ locale })
       required
       aria-describedby={`lf-phone-hint-${source} lf-phone-err-${source}`}
     />
-    <p class="hint" id={`lf-phone-hint-${source}`}>{copy.phoneHint}</p>
+    {/* Each example is wrapped in <bdi>, which isolates it from the sentence
+        around it. Without that, a Latin run at the end of an Arabic sentence
+        drags the trailing punctuation to the wrong edge. */}
+    <p class="hint" id={`lf-phone-hint-${source}`}>
+      {copy.phoneHint}{' '}
+      {copy.phoneExamples.map((example, index) => (
+        <>
+          {index > 0 && <span>{' / '}</span>}
+          <bdi class="num">{example}</bdi>
+        </>
+      ))}
+    </p>
     <p class="err" id={`lf-phone-err-${source}`} data-error-for="phone" hidden></p>
   </div>
 

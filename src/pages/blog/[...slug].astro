@@ -13,13 +13,16 @@ export const getStaticPaths = (async () => {
       props: {
         entry,
         related: await relatedPosts(entry),
+        // The sidebar tops up with recent posts when a young cluster has few
+        // related ones, so the rail is never nearly empty.
+        recent: posts.slice(0, 6),
         translation: await translationOf(entry, 'ar'),
       },
     })),
   )
 }) satisfies GetStaticPaths
 
-const { entry, related, translation } = Astro.props
+const { entry, related, recent, translation } = Astro.props
 const { Content } = await render(entry)
 ---
 
@@ -27,8 +30,14 @@ const { Content } = await render(entry)
   locale="en"
   entry={entry}
   related={related}
+  recent={recent}
   translationSlug={translation ? postSlug(translation) : undefined}
   copy={{
+    sidebarRelated: 'Related guides',
+    sidebarRecent: 'Latest guides',
+    sidebarCtaTitle: 'Rather not do this yourself?',
+    sidebarCtaBody: 'Fixed prices, published. See exactly what a build costs before you ask.',
+    sidebarCtaLabel: 'See pricing',
     relatedTitle: 'Related reading',
     faqEyebrow: 'Questions',
     ctaTitle: 'Want this handled for you?',

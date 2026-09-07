@@ -1,0 +1,140 @@
+---
+/**
+ * A two-column "most agencies / us" table.
+ *
+ * Comparison is the section most agency sites skip, because it forces a
+ * position. It is also the section a buyer comparing three quotes actually
+ * reads, which is why it earns its place on the homepage.
+ */
+interface Props {
+  eyebrow: string
+  title: string
+  intro: string
+  themColumn: string
+  usColumn: string
+  rows: { label: string; them: string; us: string }[]
+}
+
+const { eyebrow, title, intro, themColumn, usColumn, rows } = Astro.props
+---
+
+<section class="compare">
+  <div class="shell">
+    <p class="eyebrow">{eyebrow}</p>
+    <h2>{title}</h2>
+    <p class="intro">{intro}</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col"><span class="sr-only">{title}</span></th>
+            <th scope="col">{themColumn}</th>
+            <th scope="col" class="ours">{usColumn}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                <td>{row.them}</td>
+                <td class="ours">{row.us}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .compare {
+    padding-block: var(--section-pad);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.9rem;
+    max-inline-size: 24ch;
+  }
+
+  .intro {
+    margin: 0 0 2rem;
+    max-inline-size: 62ch;
+    color: var(--text-muted);
+  }
+
+  /* The table scrolls inside its own box so the page never scrolls sideways. */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+  }
+
+  table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    min-inline-size: 40rem;
+  }
+
+  th,
+  td {
+    padding: 1rem 1.15rem;
+    text-align: start;
+    vertical-align: top;
+    border-block-end: 1px solid var(--border-subtle);
+    font-size: 0.95rem;
+  }
+
+  thead th {
+    background: var(--surface-raised);
+    color: var(--text-strong);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  :global([dir='rtl']) thead th {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.95rem;
+  }
+
+  tbody th {
+    color: var(--text-strong);
+    font-weight: 600;
+    inline-size: 30%;
+  }
+
+  td {
+    color: var(--text-muted);
+  }
+
+  .ours {
+    background: color-mix(in srgb, var(--accent-vivid) 5%, transparent);
+    color: var(--text-default);
+  }
+
+  thead .ours {
+    background: color-mix(in srgb, var(--accent-vivid) 12%, transparent);
+    color: var(--accent);
+  }
+
+  tbody tr:last-child :is(th, td) {
+    border-block-end: 0;
+  }
+
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

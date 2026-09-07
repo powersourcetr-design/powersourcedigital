@@ -13,7 +13,10 @@ export interface FormStrings {
   name: string
   namePlaceholder: string
   phone: string
+  /** Sentence before the examples. */
   phoneHint: string
+  /** Latin-script examples, each isolated so bidi cannot reorder them. */
+  phoneExamples: string[]
   businessType: string
   businessTypes: { value: string; label: string }[]
   budget: string
@@ -63,7 +66,8 @@ export const FORM: Record<Locale, FormStrings> = {
     name: 'Your name',
     namePlaceholder: 'Full name',
     phone: 'WhatsApp number',
-    phoneHint: 'Saudi number, e.g. 05XXXXXXXX or +9665XXXXXXXX',
+    phoneHint: 'Saudi number, for example',
+    phoneExamples: ['05XXXXXXXX', '+9665XXXXXXXX'],
     businessType: 'Type of business',
     businessTypes: BUSINESS_TYPES.map((t) => ({ value: t.value, label: t.en })),
     budget: 'Budget range',
@@ -90,7 +94,8 @@ export const FORM: Record<Locale, FormStrings> = {
     name: 'الاسم',
     namePlaceholder: 'الاسم الكامل',
     phone: 'رقم الواتساب',
-    phoneHint: 'رقم سعودي، مثل 05XXXXXXXX أو ‎+9665XXXXXXXX',
+    phoneHint: 'رقم سعودي، مثل',
+    phoneExamples: ['05XXXXXXXX', '+9665XXXXXXXX'],
     businessType: 'نوع النشاط',
     businessTypes: BUSINESS_TYPES.map((t) => ({ value: t.value, label: t.ar })),
     budget: 'الميزانية التقريبية',
