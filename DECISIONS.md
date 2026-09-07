@@ -494,8 +494,14 @@ nothing. The evidence now contradicts that: `powersourcedigital.pages.dev` serve
 current build and `powersourcedigital.workers.dev` does not resolve, which is only possible
 for a Pages project.
 
-Rather than pick a side on ambiguous evidence, the logic lives in `src/server/lead.ts` as a
-plain `(Request, LeadEnv) => Response` with no framework surface at all.
+**Resolved in production:** the deployed Function answers on both hosts — `GET /api/lead`
+returns the handler's own 405 and a `POST` returns its validation JSON — so Pages Functions
+do fire and decision 16 was wrong about the deployment model. (The earlier `workers.dev`
+probe proved nothing: Worker preview URLs carry the account subdomain, so the bare hostname
+would be absent either way.)
+
+The logic still lives in `src/server/lead.ts` as a plain `(Request, LeadEnv) => Response`
+with no framework surface at all.
 `functions/api/lead.ts` is a four-line adapter. If this turns out to be — or is later
 migrated to — a Worker, the same handler mounts as a `fetch` export with no changes and
 nothing to keep in sync.

@@ -49,24 +49,64 @@ secret goes in the Function environment (below).
 
 ## 2. Blocks the lead form actually delivering
 
-These are environment variables on the Cloudflare Pages project, not files in the repo. See
-`.env.example` for the full list.
+The endpoint at `/api/lead` is built and live. It validates, rejects bots, and answers in
+the visitor's language — verified against production. What it cannot yet do is *keep* the
+lead, because nothing is bound to store or send it.
+
+Until at least one of KV or Resend is configured, a valid submission returns **500** and the
+visitor is shown the WhatsApp fallback. That is deliberate: the endpoint never reports
+success for a lead that reached neither storage nor an inbox.
+
+### 2a. KV namespace — do this first (free, ~2 minutes)
+
+This alone makes the form stop failing. Every lead is written here *before* the email is
+attempted, so leads survive any mail problem.
+
+1. **Storage & Databases → KV → Create a namespace**, name it `powersourcedigital-leads`.
+2. **Workers & Pages → powersourcedigital → Settings → Bindings → Add → KV namespace**.
+3. Variable name **must** be exactly `LEADS_KV`. Select the namespace. Save.
+4. Redeploy (Deployments → Retry deployment) — bindings only attach on a new deployment.
+
+Read leads back under **KV → your namespace → View**, keys sorted newest last as
+`lead:<timestamp>:<id>`.
+
+The same binding also backs the per-IP rate limit (5 submissions per 10 minutes). Without
+it, there is no rate limiting at all.
+
+### 2b. Email delivery
 
 | Variable | What it is |
 |---|---|
-| `LEAD_EMAIL_KEY` | Resend API key, or leave unset to fall back to MailChannels |
+| `LEAD_EMAIL_KEY` | Resend API key. **There is no keyless fallback** — see below |
 | `LEAD_EMAIL_TO` | Where leads are sent. Currently assumed `hello@powersourcedigital.com` |
-| `LEAD_EMAIL_FROM` | A verified sending address on your domain |
-| `TURNSTILE_SECRET_KEY` | The secret half of the Turnstile pair |
+| `LEAD_EMAIL_FROM` | An address on a domain **verified with Resend** |
 
-Also needed, created in the Cloudflare dashboard and bound to the Pages project:
+Set these under **Settings → Variables and Secrets**, as *secrets* rather than plain text
+for the API key. All three must be present or email is skipped entirely.
 
-- **KV namespace** bound as `LEADS_KV` — every lead is written here as a fallback, so a mail
-  outage never loses an enquiry.
+> An earlier version of this file said an unset key falls back to MailChannels. It does not.
+> MailChannels withdrew free sending from Cloudflare Workers in June 2024.
 
-Confirm: is `hello@powersourcedigital.com` the right destination, and is the domain already
-set up for sending (SPF and DKIM)? A "from" address on an unverified domain will be
-delivered to spam or rejected outright.
+Your MX is Titan (`mx1.titan.email`), which handles *incoming* mail and is unrelated to
+sending from the site. You still need to verify the domain in Resend and add its DKIM
+records. `LEAD_EMAIL_FROM` on an unverified domain is rejected or spam-foldered silently.
+
+Confirm: is `hello@powersourcedigital.com` the right destination?
+
+### 2c. Turnstile — currently proving nothing
+
+`src/lib/analytics.ts` still holds Cloudflare's **public test site key**
+(`1x00000000000000000000AA`). That is why the widget shows a red "For testing only. If seen,
+report to site owner" strip, and it passes every request including bots.
+
+1. **Turnstile → Add site**, domain `powersourcedigital.com`.
+2. Put the **site key** in `TURNSTILE_SITE_KEY` in `src/lib/analytics.ts` (public, belongs in
+   the repo).
+3. Put the **secret key** in `TURNSTILE_SECRET_KEY` as a Cloudflare secret (never in the repo).
+
+While `TURNSTILE_SECRET_KEY` is unset the endpoint **skips verification entirely** so the
+form keeps working. Until you set it, the only spam defences are the honeypot and the rate
+limit.
 
 ---
 
