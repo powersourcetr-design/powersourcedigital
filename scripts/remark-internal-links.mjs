@@ -74,7 +74,7 @@ export function internalLinks({ href, localizedPath, servicePath }) {
             : href(localizedPath(key, locale, slug || undefined))
       } catch (cause) {
         throw new Error(
-          `Unknown route link "${node.url}"${path ? ` in ${path}` : ""}. ` +
+          `Unknown route link "${node.url}"${path ? ` in ${path}` : ''}. ` +
             'Route keys come from ROUTES in src/i18n/routes.ts.',
           { cause },
         )
