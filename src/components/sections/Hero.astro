@@ -23,7 +23,6 @@ interface Props {
   primaryHref: string
   secondaryLabel: string
   secondaryHref: string
-  stats: { value: string; label: string }[]
 }
 
 const {
@@ -36,7 +35,6 @@ const {
   primaryHref,
   secondaryLabel,
   secondaryHref,
-  stats,
 } = Astro.props
 ---
 
@@ -58,16 +56,6 @@ const {
       <Button href={secondaryHref} size="lg" variant="secondary">{secondaryLabel}</Button>
     </div>
 
-    <dl class="stats">
-      {
-        stats.map((stat) => (
-          <div>
-            <dt class="num">{stat.value}</dt>
-            <dd>{stat.label}</dd>
-          </div>
-        ))
-      }
-    </dl>
   </div>
 </section>
 
@@ -134,7 +122,7 @@ const {
   }
 
   .inner {
-    padding-block: clamp(4rem, 2rem + 10vw, 9rem) clamp(3rem, 2rem + 5vw, 6rem);
+    padding-block: clamp(3rem, 1.5rem + 5vw, 6rem) clamp(2.5rem, 1.5rem + 3vw, 4rem);
   }
 
   h1 {
@@ -173,30 +161,4 @@ const {
     gap: 0.9rem;
   }
 
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
-    gap: 1.75rem;
-    margin: clamp(3.5rem, 2rem + 6vw, 6rem) 0 0;
-    padding-block-start: 2rem;
-    border-block-start: 1px solid var(--border-subtle);
-  }
-
-  .stats div {
-    display: grid;
-    gap: 0.35rem;
-  }
-
-  .stats dt {
-    font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
-    font-weight: 600;
-    color: var(--text-strong);
-    line-height: 1;
-  }
-
-  .stats dd {
-    margin: 0;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-  }
 </style>

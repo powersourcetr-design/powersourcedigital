@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets'
+import { CLIENTS, PLATFORMS, STRIP_LABEL } from '@/data/clients'
+import type { Locale } from '@/i18n/routes'
+
+/**
+ * The trust strip under the hero.
+ *
+ * Shows client logos the moment real ones are added to src/data/clients.ts, and
+ * until then shows the platforms PSD builds on — a true claim that still
+ * answers "do they handle my stack?".
+ *
+ * The marquee is one CSS animation over a duplicated track. It pauses on hover
+ * and on focus so nobody has to chase a moving link, and stops entirely under
+ * `prefers-reduced-motion`, where it becomes a normal scrollable row.
+ */
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const hasClients = CLIENTS.length > 0
+const label = hasClients ? STRIP_LABEL[locale].clients : STRIP_LABEL[locale].platforms
+
+// The track is rendered twice so the loop has no visible seam. The copy is
+// hidden from assistive tech, which would otherwise read every name twice.
+const items = hasClients ? CLIENTS.map((c) => c.name) : [...PLATFORMS]
+---
+
+<section class="strip" aria-labelledby="strip-label">
+  <div class="shell">
+    <p class="label" id="strip-label">{label}</p>
+  </div>
+
+  <div class="viewport">
+    <ul class="track">
+      {
+        hasClients
+          ? CLIENTS.map((client) => (
+              <li>
+                <Image src={client.logo} alt={client.name} height={28} densities={[1, 2]} />
+              </li>
+            ))
+          : items.map((name) => <li>{name}</li>)
+      }
+    </ul>
+    <ul class="track" aria-hidden="true">
+      {
+        hasClients
+          ? CLIENTS.map((client) => (
+              <li>
+                <Image src={client.logo} alt="" height={28} densities={[1, 2]} />
+              </li>
+            ))
+          : items.map((name) => <li>{name}</li>)
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .strip {
+    padding-block: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    border-block: 1px solid var(--border-subtle);
+    background: var(--surface-raised);
+    overflow: hidden;
+  }
+
+  .label {
+    margin: 0 0 1.1rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  :global([dir='rtl']) .label {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.9rem;
+  }
+
+  .viewport {
+    display: flex;
+    gap: 3rem;
+    inline-size: max-content;
+    /* Fade the ends so items enter and leave rather than being cut off. */
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  .track {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .track li {
+    font-size: clamp(1.05rem, 0.9rem + 0.5vw, 1.35rem);
+    font-weight: 600;
+    color: var(--text-strong);
+    white-space: nowrap;
+    opacity: 0.62;
+    transition: opacity 200ms var(--ease-out-expo);
+  }
+
+  .track li:hover {
+    opacity: 1;
+  }
+
+  .track img {
+    block-size: 1.75rem;
+    inline-size: auto;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .viewport {
+      /* Translating by exactly half the doubled track puts the copy where the
+         original started, so the loop is seamless. */
+      animation: marquee 38s linear infinite;
+    }
+
+    .strip:hover .viewport,
+    .strip:focus-within .viewport {
+      animation-play-state: paused;
+    }
+  }
+
+  /* Without motion it becomes an ordinary row the reader can scroll. */
+  @media (prefers-reduced-motion: reduce) {
+    .strip {
+      overflow-x: auto;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-50% - 1.5rem));
+    }
+  }
+
+  /* The animation moves the track start-to-end; in RTL that is the other way. */
+  :global([dir='rtl']) .viewport {
+    animation-direction: reverse;
+  }
+</style>

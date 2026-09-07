@@ -316,3 +316,46 @@ crowding its own leading.
 
 `[dir="rtl"] h1` uses a smaller clamp and looser leading. The two languages are meant to look
 equally *confident*, which is a design goal, not equally *sized*, which is not.
+
+## 27. Vertical rhythm halved
+
+`--section-pad` was `clamp(4rem, 2rem + 8vw, 9rem)`, applied to the top *and* bottom of every
+band — 288px of empty space between sections at desktop width. Two components then stacked
+their own margins on top of it: the footer added `7rem` above itself, immediately below a CTA
+band that already ended in `9rem` of padding, for a 256px void.
+
+Now `clamp(2.75rem, 1.5rem + 3.4vw, 5rem)`, the footer's top margin is gone, and the CTA band
+pads on one side only. Nothing else changed: the density problem was spacing tokens
+compounding, not the layout.
+
+## 28. The trust strip shows platforms until there are clients
+
+`src/data/clients.ts` holds an empty `CLIENTS` array. The strip renders client logos the
+moment real ones are added, and until then shows the platforms PSD builds on — WordPress,
+Shopify, Salla, Zid, Amazon.sa, Noon and the rest.
+
+That is a true claim, it answers a real buyer question ("do they handle my stack?"), and it
+occupies the slot that a fabricated client list would otherwise be tempting to fill. Inventing
+logos is the fastest way to lose a deal to someone who recognises a brand you never worked
+with.
+
+Platform names are set in type rather than reproduced as trademark artwork, which avoids a
+licensing question for zero design cost.
+
+## 29. Interaction that does not touch layout
+
+- **The marquee** is one CSS animation over a duplicated track, so the loop has no seam. It
+  pauses on hover *and* on focus, so a keyboard user is never chasing a moving link, and under
+  `prefers-reduced-motion` it becomes an ordinary scrollable row. The duplicate track is
+  `aria-hidden`, or a screen reader would read every name twice.
+- **The card highlight** follows the pointer, but the script only writes two CSS custom
+  properties and never reads geometry in a way that forces layout. It is gated behind
+  `(hover: hover) and (pointer: fine)` and disabled under reduced motion — a coarse pointer
+  has no hover to follow, and someone who asked for less motion has not asked to be tracked
+  around the screen.
+
+## 30. The hero stat row is gone
+
+Removed at the client's request. It was carrying "5 services / 2 languages / 5 cities",
+which was honest but thin. The slot is better filled by real proof — client logos, project
+counts, a years-in-business figure — once any of that exists.

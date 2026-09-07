@@ -3,6 +3,7 @@ import AuditScope from '@/components/sections/AuditScope.astro'
 import CTABand from '@/components/sections/CTABand.astro'
 import FAQ from '@/components/sections/FAQ.astro'
 import Hero from '@/components/sections/Hero.astro'
+import LogoStrip from '@/components/sections/LogoStrip.astro'
 import ServicesGrid from '@/components/sections/ServicesGrid.astro'
 import Steps from '@/components/sections/Steps.astro'
 import { href, localizedPath } from '@/i18n/routes'
@@ -130,12 +131,9 @@ const PROCESS = [
     primaryHref={href(localizedPath('freeAudit', locale))}
     secondaryLabel="تعرّف على ما نقدمه"
     secondaryHref={href(localizedPath('services', locale))}
-    stats={[
-      { value: '5', label: 'خدمات، تُنفَّذ جميعها داخلياً' },
-      { value: '2', label: 'لغتان، كلتاهما مكتوبة لا مترجمة' },
-      { value: '5', label: 'مدن في أنحاء المملكة' },
-    ]}
   />
+
+  <LogoStrip locale={locale} />
 
   <ServicesGrid
     locale={locale}
