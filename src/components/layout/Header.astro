@@ -20,7 +20,7 @@ const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
   [
     { key: 'services', label: 'nav.services' },
     { key: 'work', label: 'nav.work' },
-    { key: 'process', label: 'nav.process' },
+    { key: 'blog', label: 'nav.blog' },
     { key: 'about', label: 'nav.about' },
     { key: 'contact', label: 'nav.contact' },
   ] as { key: RouteKey; label: Parameters<typeof t>[0] }[]
@@ -28,8 +28,8 @@ const NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
 
 const EXTRA_NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
   [
+    { key: 'process', label: 'nav.process' },
     { key: 'pricing', label: 'nav.pricing' },
-    { key: 'blog', label: 'nav.blog' },
   ] as { key: RouteKey; label: Parameters<typeof t>[0] }[]
 ).filter((item) => isLive(item.key))
 ---

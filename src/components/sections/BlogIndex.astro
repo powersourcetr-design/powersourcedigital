@@ -1,0 +1,134 @@
+---
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import { type Locale, href, localizedPath } from '@/i18n/routes'
+import { formatDate } from '@/i18n/utils'
+import { useTranslations } from '@/i18n/ui'
+import { type BlogEntry, postSlug } from '@/lib/blog'
+
+interface Props {
+  locale: Locale
+  posts: BlogEntry[]
+  copy: { eyebrow: string; title: string; lead: string; minutes: string; empty: string }
+}
+
+const { locale, posts, copy } = Astro.props
+const t = useTranslations(locale)
+---
+
+<Breadcrumbs
+  locale={locale}
+  items={[
+    { name: t('nav.home'), path: localizedPath('home', locale) },
+    { name: t('nav.blog'), path: localizedPath('blog', locale) },
+  ]}
+/>
+
+<section class="head shell">
+  <p class="eyebrow">{copy.eyebrow}</p>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+</section>
+
+<section class="list shell">
+  {
+    posts.length === 0 ? (
+      <p class="empty">{copy.empty}</p>
+    ) : (
+      <ul>
+        {posts.map((post) => (
+          <li>
+            <a href={href(localizedPath('blogPost', locale, postSlug(post)))}>
+              <p class="meta">
+                <time datetime={post.data.publishedAt.toISOString()}>
+                  {formatDate(post.data.publishedAt, locale)}
+                </time>
+                <span aria-hidden="true">·</span>
+                <span class="bidi-isolate">
+                  {post.data.readingMinutes} {copy.minutes}
+                </span>
+              </p>
+              <h2>{post.data.title}</h2>
+              <p class="desc">{post.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</section>
+
+<style>
+  .head {
+    padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem) 2.5rem;
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0;
+    max-inline-size: 18ch;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    max-inline-size: 60ch;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+  }
+
+  .list {
+    padding-block: 0 var(--section-pad);
+  }
+
+  ul {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  a {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: 1.75rem;
+    border-block-end: 1px solid var(--border-subtle);
+    text-decoration: none;
+    transition: background-color 180ms var(--ease-out-expo);
+  }
+
+  a:hover {
+    background: var(--surface-raised);
+  }
+
+  a:hover h2 {
+    color: var(--accent);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.65rem;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  h2 {
+    font-size: var(--text-h3);
+    margin: 0;
+    max-inline-size: 30ch;
+    transition: color 180ms var(--ease-out-expo);
+  }
+
+  .desc {
+    margin: 0;
+    max-inline-size: 68ch;
+    color: var(--text-muted);
+  }
+
+  .empty {
+    padding-block: 2rem;
+    color: var(--text-muted);
+  }
+</style>

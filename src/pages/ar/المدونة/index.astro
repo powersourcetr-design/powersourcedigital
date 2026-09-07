@@ -1,0 +1,27 @@
+---
+import BlogIndex from '@/components/sections/BlogIndex.astro'
+import Page from '@/layouts/Page.astro'
+import { getPosts } from '@/lib/blog'
+
+const locale = 'ar' as const
+const posts = await getPosts(locale)
+---
+
+<Page
+  locale={locale}
+  routeKey="blog"
+  title="أدلة عن المواقع والمتاجر وجوجل في السعودية"
+  description="أدلة عملية عن تكلفة تصميم المواقع في السعودية، والاختيار بين سلة وزد وشوبيفاي، وبوابات الدفع، والظهور على خرائط جوجل في الرياض."
+>
+  <BlogIndex
+    locale={locale}
+    posts={posts}
+    copy={{
+      eyebrow: 'أدلة',
+      title: 'إجابات عن الأسئلة التي تصلنا فعلاً',
+      lead: 'أسعار بالريال، ومنصات سعودية، والأسئلة التي تُطرح قبل التعاقد مع أي جهة. مكتوبة لتكون مفيدة سواء تعاملت معنا أم لا.',
+      minutes: 'دقيقة قراءة',
+      empty: 'نكتب الأدلة الأولى وستظهر هنا قريباً.',
+    }}
+  />
+</Page>

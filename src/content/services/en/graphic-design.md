@@ -25,7 +25,7 @@ platforms:
   []
 faq:
   - question: "Can you handle technical drawings?"
-    answer: "Yes. Our sister company builds Schneider Electric panels, so panel layouts, single-line diagrams and VFD documentation are ordinary work here rather than something we subcontract."
+    answer: "Yes. Panel layouts, single-line diagrams and VFD documentation are ordinary work here rather than something we subcontract. Most design studios will not touch technical drawing, which is exactly why industrial suppliers end up with catalogues nobody can specify from."
   - question: "Do you design in Arabic?"
     answer: "Yes. Arabic layout is not a mirrored version of a Latin one. The type, spacing and line breaks all differ, and text set by someone who does not read it shows immediately."
   - question: "Do we get the source files?"

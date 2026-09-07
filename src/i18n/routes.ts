@@ -148,6 +148,8 @@ export const LIVE_ROUTES: readonly RouteKey[] = [
   'process',
   'freeAudit',
   'thankYou',
+  'blog',
+  'blogPost',
   'landingEcommerce',
   'landingWebDesign',
 ]

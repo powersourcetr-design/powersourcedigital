@@ -1,0 +1,27 @@
+---
+import BlogIndex from '@/components/sections/BlogIndex.astro'
+import Page from '@/layouts/Page.astro'
+import { getPosts } from '@/lib/blog'
+
+const locale = 'en' as const
+const posts = await getPosts(locale)
+---
+
+<Page
+  locale={locale}
+  routeKey="blog"
+  title="Guides on Websites, Stores and Google in Saudi Arabia"
+  description="Practical guides on what a website costs in Saudi Arabia, choosing between Salla, Zid and Shopify, payment gateways, and getting found on Google Maps in Riyadh."
+>
+  <BlogIndex
+    locale={locale}
+    posts={posts}
+    copy={{
+      eyebrow: 'Guides',
+      title: 'Answers to what people actually ask us',
+      lead: 'Prices in riyals, Saudi platforms, and the questions that come up before someone hires anyone. Written to be useful whether or not you work with us.',
+      minutes: 'min read',
+      empty: 'The first guides are being written and will appear here shortly.',
+    }}
+  />
+</Page>

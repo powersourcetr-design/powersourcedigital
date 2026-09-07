@@ -411,3 +411,36 @@ contact, free audit, 404. Twenty-five pages.
 Still absent, each blocked on content rather than code — `/work/` (needs real client work),
 `/pricing/` (needs real prices), `/blog/` (step 8), `/privacy/` and `/terms/` (need legal
 sign-off). None are linked from navigation, so nothing 404s.
+
+## 36. Power Source Trading removed sitewide
+
+Every mention of the sister company is gone: the About page section, the footer line, the
+graphic-design FAQ answer, and the documentation.
+
+The About page now leads on what the client actually asked to lead on — experience across
+European and Saudi markets — which is a stronger claim for a digital agency than a
+relationship to a panel builder, and it is the client's own account rather than something
+inferred from the brief.
+
+The technical-drawing capability stays on the graphic design page. That is a genuine
+differentiator and does not depend on naming the other company.
+
+## 37. Blog engine, and why posts are not required to be bilingual
+
+Unlike services, a blog post may exist in one language only. An article written for the
+Saudi market does not always have an English counterpart worth writing, and forcing one
+produces translated filler.
+
+So `src/lib/blog.ts` has no "every post must be translated" assertion. `translationOf()`
+returns null and the page omits that half of the hreflang pair, rather than pointing at a
+URL that does not exist. Services keep the stricter rule, because a service without its
+twin genuinely is a broken site.
+
+Related posts rank by shared tag count, ties breaking towards the newer post, so a cluster
+that grows keeps surfacing its most current article.
+
+## 38. Navigation: Blog in, Process out
+
+Process moved to the footer and the mobile menu. The top nav is the highest-value real
+estate on the site and a process page is not what a paid visitor is looking for; a guide
+answering their actual question is.

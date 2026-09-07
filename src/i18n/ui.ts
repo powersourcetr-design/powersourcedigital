@@ -53,7 +53,6 @@ const en = {
   'footer.privacy': 'Privacy policy',
   'footer.terms': 'Terms & conditions',
   'footer.rights': 'All rights reserved.',
-  'footer.sister': 'Sister company to Power Source Trading Co., Schneider Electric panel builders.',
 
   'whatsapp.label': 'Chat on WhatsApp',
   'whatsapp.aria': 'Open a WhatsApp chat with Power Source Digital',
@@ -111,7 +110,6 @@ const ar = {
   'footer.privacy': 'سياسة الخصوصية',
   'footer.terms': 'الشروط والأحكام',
   'footer.rights': 'جميع الحقوق محفوظة.',
-  'footer.sister': 'شركة شقيقة لمصدر الطاقة التجارية، المتخصصة في تصنيع لوحات شنايدر إلكتريك.',
 
   'whatsapp.label': 'تواصل عبر واتساب',
   'whatsapp.aria': 'ابدأ محادثة واتساب مع مصدر الطاقه ديجيتال',

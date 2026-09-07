@@ -1,0 +1,43 @@
+---
+import { render } from 'astro:content'
+import Article from '@/layouts/Article.astro'
+import { getPosts, postSlug, relatedPosts, translationOf } from '@/lib/blog'
+import type { GetStaticPaths } from 'astro'
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts('en')
+
+  return Promise.all(
+    posts.map(async (entry) => ({
+      params: { slug: postSlug(entry) },
+      props: {
+        entry,
+        related: await relatedPosts(entry),
+        translation: await translationOf(entry, 'ar'),
+      },
+    })),
+  )
+}) satisfies GetStaticPaths
+
+const { entry, related, translation } = Astro.props
+const { Content } = await render(entry)
+---
+
+<Article
+  locale="en"
+  entry={entry}
+  related={related}
+  translationSlug={translation ? postSlug(translation) : undefined}
+  copy={{
+    relatedTitle: 'Related reading',
+    faqEyebrow: 'Questions',
+    ctaTitle: 'Want this handled for you?',
+    ctaBody:
+      'We build and manage this for businesses across Saudi Arabia. Fixed prices, published before you ask.',
+    ctaLabel: 'See pricing',
+    updated: 'Updated',
+    minutes: 'min read',
+  }}
+>
+  <Content />
+</Article>

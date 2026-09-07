@@ -31,7 +31,7 @@ const PRINCIPLES = [
   locale={locale}
   routeKey="about"
   title="من نحن | مصدر الطاقه ديجيتال"
-  description="شركة خدمات رقمية في الرياض، وشركة شقيقة لمصنّع لوحات شنايدر إلكتريك. مواقع وتحسين محركات بحث وملف تجاري ومتاجر إلكترونية، تُنفَّذ كلها داخلياً."
+  description="شركة خدمات رقمية في الرياض بخبرة في السوقين الأوروبي والسعودي. مواقع وتحسين محركات بحث وملف تجاري على جوجل ومتاجر إلكترونية، تُنفَّذ كلها داخلياً."
 >
   <Breadcrumbs
     locale={locale}
@@ -50,25 +50,28 @@ const PRINCIPLES = [
     </p>
   </section>
 
-  <section class="sister shell">
-    <div class="sister-inner">
+  <section class="markets shell">
+    <div class="markets-inner">
       <div>
-        <h2>خرجنا من قطاع صناعي لا من وكالة إعلانية</h2>
+        <h2>عملنا في سوقين مختلفين تماماً</h2>
         <p>
-          مصدر الطاقه ديجيتال شركة شقيقة لمصدر الطاقة التجارية، التي تصنع لوحات شنايدر
-          إلكتريك في الرياض. وهذه بداية غير معتادة لشركة مواقع، وأثرها ظاهر في العمل.
+          بدأت أعمالنا مع عملاء في أوروبا، حيث تختلف المعطيات: دورات بيع أطول، واشتراطات
+          أدق في إتاحة الوصول، ومشترٍ يقارن بين ثلاث شركات قبل أن يرد على واحدة.
         </p>
         <p>
-          فهي تعني أن الكتالوجات الفنية ومخططات اللوحات والرسوم أحادية الخط ووثائق أنظمة VFD
-          أعمال معتادة لدينا لا نُسندها إلى غيرنا. وتعني أيضاً أننا أمضينا سنوات في الجهة
-          المشترية للمشكلة نفسها التي نعالجها اليوم: أن تكون منشأة حقيقية يصعب العثور عليها
-          على الإنترنت.
+          ونعمل اليوم في الرياض، حيث السرعة أهم، وحيث يؤدي واتساب ما يؤديه البريد في أماكن
+          أخرى، وحيث يجب أن تكون العربية صحيحة لا مقبولة فحسب. والعمل في السوقين جعلنا
+          أفضل في القاسم المشترك بينهما: الموقع لا يؤدي عمله إلا حين يحوّل زائراً غريباً
+          إلى استفسار حقيقي.
         </p>
       </div>
       <aside class="fact">
-        <h3>مصدر الطاقة التجارية</h3>
-        <p>تصنيع لوحات شنايدر إلكتريك</p>
-        <p class="addr">RCSA2543 أسد بن الفرات، حي الأمل، الرياض 12364</p>
+        <h3>أين نعمل</h3>
+        <ul>
+          <li>الرياض وجدة والطائف</li>
+          <li>في أنحاء المملكة العربية السعودية</li>
+          <li>وسابقاً مع عملاء في أوروبا</li>
+        </ul>
       </aside>
     </div>
   </section>
@@ -107,18 +110,18 @@ const PRINCIPLES = [
     color: var(--text-muted);
   }
 
-  .sister {
+  .markets {
     padding-block: var(--section-pad);
     border-block: 1px solid var(--border-subtle);
   }
 
-  .sister-inner {
+  .markets-inner {
     display: grid;
     gap: 2.5rem;
   }
 
   @media (min-width: 60rem) {
-    .sister-inner {
+    .markets-inner {
       grid-template-columns: 1fr 20rem;
       gap: 4rem;
       align-items: start;
@@ -131,7 +134,7 @@ const PRINCIPLES = [
     max-inline-size: 24ch;
   }
 
-  .sister p {
+  .markets p {
     margin: 0 0 1rem;
     max-inline-size: 60ch;
     color: var(--text-muted);
@@ -149,14 +152,13 @@ const PRINCIPLES = [
     margin: 0 0 0.4rem;
   }
 
-  .fact p {
-    margin: 0 0 0.5rem;
+  .fact ul {
+    display: grid;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
     font-size: 0.95rem;
-  }
-
-  .addr {
     color: var(--text-muted);
-    font-size: 0.9rem !important;
-    unicode-bidi: plaintext;
   }
 </style>

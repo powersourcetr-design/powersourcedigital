@@ -63,4 +63,24 @@ const services = defineCollection({
   }),
 })
 
-export const collections = { services }
+const blog = defineCollection({
+  loader: glob({ base: './src/content/blog', pattern: '**/*.md' }),
+  schema: z.object({
+    ...seoFields,
+    /** Publication date. Drives ordering and the Article schema. */
+    publishedAt: z.coerce.date(),
+    /** Shared tags drive the related-posts block. At least one is required. */
+    tags: z.array(z.string().min(1)).min(1),
+    /**
+     * Route key of the landing page this post supports. Every post links to it
+     * inside the first 200 words and again in the conclusion, which is what
+     * makes a content cluster a cluster rather than a pile of articles.
+     */
+    cluster: z.enum(['landingEcommerce', 'landingWebDesign', 'none']),
+    /** Rough reading time in minutes, shown on the index. */
+    readingMinutes: z.number().int().min(1).max(30),
+    faq,
+  }),
+})
+
+export const collections = { services, blog }
