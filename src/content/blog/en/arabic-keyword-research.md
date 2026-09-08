@@ -15,8 +15,8 @@ tags:
   - seo
   - arabic
 readingMinutes: 6
-publishedAt: 2026-09-16
-updatedAt: 2026-09-16
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "Can I just translate my English keywords?"
     answer: "No, and it is the most common mistake. Translation gives you the formal Arabic term for a thing. It does not tell you which of several possible words people actually type, or which of those has commercial intent."

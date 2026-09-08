@@ -15,8 +15,8 @@ tags:
   - ecommerce
   - compliance
 readingMinutes: 6
-publishedAt: 2026-09-13
-updatedAt: 2026-09-13
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "Does a small store need to comply?"
     answer: "If you are VAT-registered and issuing invoices in Saudi Arabia, the rules apply to you regardless of size. Whether you are in the current integration wave depends on your revenue, and ZATCA notifies businesses directly rather than expecting you to guess."

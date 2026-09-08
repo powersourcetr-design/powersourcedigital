@@ -15,8 +15,8 @@ tags:
   - web design
   - performance
 readingMinutes: 6
-publishedAt: 2026-09-12
-updatedAt: 2026-09-12
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "How fast is fast enough?"
     answer: "Aim for the main content appearing within 2.5 seconds on a mid-range phone on mobile data, not on your office wifi on a laptop. That is the condition most of your visitors are actually in."

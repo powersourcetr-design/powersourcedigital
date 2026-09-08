@@ -15,8 +15,8 @@ tags:
   - web design
   - arabic
 readingMinutes: 6
-publishedAt: 2026-09-11
-updatedAt: 2026-09-11
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "Is a translation plugin ever good enough?"
     answer: "For an internal tool or a temporary page, yes. For the version of your business a Saudi customer judges you by, no. A plugin translates words but keeps English sentence rhythm, English page structure and Latin typography, and readers notice all three."

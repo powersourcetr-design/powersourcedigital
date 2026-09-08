@@ -16,8 +16,8 @@ tags:
   - salla
   - platforms
 readingMinutes: 7
-publishedAt: 2026-09-09
-updatedAt: 2026-09-09
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "Which is cheapest?"
     answer: "Salla and Zid, for a store selling only inside Saudi Arabia. Their subscriptions are lower and the things a Saudi store needs, such as Mada and ZATCA invoicing, are built in rather than added as paid apps. Shopify often looks cheaper until you add the four or five apps you end up needing."

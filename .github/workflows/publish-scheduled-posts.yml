@@ -1,0 +1,58 @@
+# Releases the day's scheduled post.
+#
+# The site is static, so a post dated tomorrow does not appear tomorrow — it
+# appears the next time the site is built. This rebuilds it once a day so the
+# schedule in the post front matter actually means something.
+#
+# It calls a Cloudflare Pages deploy hook rather than building here: the build
+# already runs on Cloudflare on every push, and having two places that can
+# produce a deployment is how they drift apart.
+#
+# Setup (both steps are required — see SETUP.md section 6):
+#   1. Cloudflare → Workers & Pages → powersourcedigital → Settings →
+#      Builds & deployments → Deploy hooks → Add. Branch: main.
+#   2. GitHub → this repo → Settings → Secrets and variables → Actions →
+#      New repository secret, named CLOUDFLARE_DEPLOY_HOOK, holding that URL.
+#
+# The hook URL is a credential: anyone holding it can trigger deployments, so
+# it belongs in a secret and never in this file.
+
+name: Publish scheduled posts
+
+on:
+  schedule:
+    # 01:00 UTC = 04:00 Riyadh, so a post is live before the working day.
+    # GitHub's scheduled runs are best-effort and can lag by 30 minutes or
+    # more under load. That is fine for a daily cadence and is the reason not
+    # to schedule this near a time anybody is watching.
+    - cron: '0 1 * * *'
+  # So a post can be released early without waiting for the cron.
+  workflow_dispatch:
+
+# Two overlapping rebuilds would deploy the same commit twice for no reason.
+concurrency:
+  group: scheduled-publish
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger a Cloudflare Pages build
+        env:
+          HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::CLOUDFLARE_DEPLOY_HOOK is not set. Scheduled posts will not publish."
+            echo "Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+          # --fail turns a 4xx/5xx into a non-zero exit, so a revoked or
+          # mistyped hook fails the run loudly instead of passing silently and
+          # leaving posts unpublished for weeks before anyone notices.
+          status=$(curl --silent --show-error --fail \
+            --request POST "$HOOK" \
+            --output /dev/null --write-out '%{http_code}')
+
+          echo "Deploy hook accepted the request (HTTP $status)."

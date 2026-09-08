@@ -15,8 +15,8 @@ tags:
   - local seo
   - google
 readingMinutes: 6
-publishedAt: 2026-09-10
-updatedAt: 2026-09-10
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "How long does it take to move up the map?"
     answer: "Category and completeness changes can show within days. Review volume and consistency work over months. Anyone promising a fixed position by a fixed date is guessing, because the ranking depends on competitors you do not control."

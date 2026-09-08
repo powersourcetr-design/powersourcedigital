@@ -15,8 +15,8 @@ tags:
   - seo
   - local seo
 readingMinutes: 7
-publishedAt: 2026-09-15
-updatedAt: 2026-09-15
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "How long before SEO produces enquiries?"
     answer: "Technical fixes and Google Business Profile work can show within weeks. Competitive search terms take months. Anyone quoting a fixed ranking by a fixed date is either targeting terms nobody searches or is not being straight with you."

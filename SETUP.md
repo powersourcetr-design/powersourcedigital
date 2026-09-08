@@ -134,7 +134,57 @@ The landing pages have their own logo row, currently reading "Client logos — t
 
 ---
 
-## 5. Not blocking, but worth doing
+## 5. Build variables — the ones that must be set at BUILD time
+
+This trips people up, so it is worth stating plainly: this is a **static site**.
+Anything that appears in the HTML has to exist when the build runs. A value added as a
+*runtime secret* is invisible to the build, the placeholder ships instead, and everything
+looks configured while nothing changed.
+
+That is exactly how the Turnstile test key survived being "set up".
+
+Set these under **Workers & Pages → powersourcedigital → Settings → Variables and Secrets**,
+as **plain text variables** (not secrets), then **redeploy**:
+
+| Variable | What it is |
+|---|---|
+| `PUBLIC_TURNSTILE_SITE_KEY` | The **site** key from Turnstile → your site. Public by design |
+| `PUBLIC_GTM_ID` | Your GTM container, e.g. `GTM-ABC1234` |
+
+The matching `TURNSTILE_SECRET_KEY` stays a **secret**, because the Function reads it at
+runtime. Site key public and at build time, secret key private and at runtime — they are
+different halves and they go in different places.
+
+The build prints a warning while the test key is still in use, so the deploy log will tell
+you whether it took.
+
+---
+
+## 6. The daily publishing schedule
+
+Twelve posts are written and dated forward, one per day. A post appears only once the site
+is **rebuilt** on or after its date — nothing happens on its own.
+
+`.github/workflows/publish-scheduled-posts.yml` rebuilds the site daily at 01:00 UTC
+(04:00 Riyadh). It needs two things:
+
+1. **Cloudflare → Workers & Pages → powersourcedigital → Settings → Builds & deployments →
+   Deploy hooks → Add.** Name it `daily-publish`, branch `main`. Copy the URL.
+2. **GitHub → the repo → Settings → Secrets and variables → Actions → New repository
+   secret**, named `CLOUDFLARE_DEPLOY_HOOK`, holding that URL.
+
+Until the secret exists the workflow fails loudly on its first run, which is deliberate —
+the alternative is a workflow that reports success while publishing nothing.
+
+To release a post early: **Actions → Publish scheduled posts → Run workflow**.
+
+To change the schedule, edit `publishedAt` in the post's front matter. `pnpm run check`
+enforces that no post links to one published after it, because such a link is dead until
+the target's date and fails the build that morning.
+
+---
+
+## 7. Not blocking, but worth doing
 
 - **A PSD wordmark.** The site currently uses the PST mark. It works, but a digital agency
   sharing a panel-builder's logo is a weaker signal than it could be.

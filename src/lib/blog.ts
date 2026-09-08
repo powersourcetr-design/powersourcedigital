@@ -13,15 +13,51 @@ export type BlogEntry = CollectionEntry<'blog'>
  * page omits the hreflang pair rather than pointing at a URL that 404s.
  */
 export async function getPosts(locale: Locale): Promise<BlogEntry[]> {
-  const all = await getCollection('blog', ({ data }) => !data.draft)
+  const all = await getCollection(
+    'blog',
+    ({ data }) => !data.draft && isPublished(data.publishedAt),
+  )
   return all
     .filter((entry) => entry.data.locale === locale)
     .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
 }
 
-/** The same article in the other language, or null if it was never written. */
+/**
+ * A post dated in the future has not been published yet.
+ *
+ * This is what makes a publishing schedule possible on a static site: posts are
+ * written in batches, dated forward, and each appears on its own date the next
+ * time the site builds. Filtering here rather than in the templates means a
+ * future post is never *built* — so it cannot be reached by guessing the URL,
+ * cannot appear in the sitemap, and cannot be indexed before its date.
+ *
+ * The comparison is against build time in UTC, because that is the clock
+ * Cloudflare builds on. A date-only front-matter value parses as midnight UTC,
+ * so a post dated today goes live at 03:00 Riyadh time.
+ *
+ * Nothing appears without a build. The daily rebuild is what turns a dated post
+ * into a published one — see .github/workflows/publish-scheduled-posts.yml.
+ */
+export function isPublished(publishedAt: Date, now: Date = new Date()): boolean {
+  return publishedAt.valueOf() <= now.valueOf()
+}
+
+/**
+ * The same article in the other language, or null if it was never written —
+ * or has not been published yet.
+ *
+ * The publish gate matters here as much as it does on the index. A translated
+ * pair does not have to be scheduled for the same day, so between the two dates
+ * one half exists and the other does not. Without this filter the published
+ * half would advertise an hreflang alternate pointing at a page that was never
+ * built, which is the one kind of broken link the crawler is actively told to
+ * follow. It links up on its own when the twin's date arrives.
+ */
 export async function translationOf(entry: BlogEntry, target: Locale): Promise<BlogEntry | null> {
-  const all = await getCollection('blog', ({ data }) => !data.draft)
+  const all = await getCollection(
+    'blog',
+    ({ data }) => !data.draft && isPublished(data.publishedAt),
+  )
   return (
     all.find(
       (other) =>

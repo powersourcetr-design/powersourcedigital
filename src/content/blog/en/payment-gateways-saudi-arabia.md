@@ -15,8 +15,8 @@ tags:
   - ecommerce
   - payments
 readingMinutes: 6
-publishedAt: 2026-09-14
-updatedAt: 2026-09-14
+publishedAt: 2026-09-08
+updatedAt: 2026-09-08
 faq:
   - question: "Do I really need Mada, or is Visa enough?"
     answer: "You need Mada. It is the domestic debit network and a large share of Saudi shoppers use it as their default card. Offering only international credit cards excludes a meaningful part of the market at the last step, which is the most expensive place to lose someone."

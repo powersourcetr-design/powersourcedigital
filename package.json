@@ -11,7 +11,7 @@
     "dev": "astro dev",
     "build": "node scripts/build-redirects.mjs && astro build",
     "preview": "astro preview",
-    "check": "node scripts/check-logical-props.mjs && node scripts/check-contrast.mjs && astro check && biome check .",
+    "check": "node scripts/check-logical-props.mjs && node scripts/check-contrast.mjs && node scripts/check-schedule.mjs && astro check && biome check .",
     "check:dir": "node scripts/check-logical-props.mjs",
     "redirects": "node scripts/build-redirects.mjs",
     "format": "biome check --write .",
