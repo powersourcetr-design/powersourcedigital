@@ -4,6 +4,7 @@ import CTABand from '@/components/sections/CTABand.astro'
 import FAQ from '@/components/sections/FAQ.astro'
 import Hero from '@/components/sections/Hero.astro'
 import LogoStrip from '@/components/sections/LogoStrip.astro'
+import SelectedWork from '@/components/sections/SelectedWork.astro'
 import ServicesGrid from '@/components/sections/ServicesGrid.astro'
 import Comparison from '@/components/sections/Comparison.astro'
 import Steps from '@/components/sections/Steps.astro'
@@ -207,6 +208,19 @@ const PROCESS = [
     eyebrow="ما نقدمه"
     title="خمس خدمات مصممة لتعمل معاً"
     intro="معظم الشركات تبيع واحدة منها وتُسند البقية إلى غيرها. نحن ننفذ الخمس داخلياً، ما يعني أن الموقع وعمل البحث والمتجر تُقرَّر معاً لا عبر ثلاث جهات لا يتحدث بعضها إلى بعض."
+  />
+
+  <SelectedWork
+    locale={locale}
+    copy={{
+      eyebrow: 'أعمال مختارة',
+      title: 'مواقع تعمل لصالح نشاطها التجاري.',
+      intro:
+        'مجموعة مختارة من المواقع والمتاجر الإلكترونية لشركات في المملكة العربية السعودية وخارجها. مواقع حقيقية تعمل اليوم.',
+      all: 'عرض كل الأعمال ←',
+      prev: 'المشاريع السابقة',
+      next: 'المشاريع التالية',
+    }}
   />
 
   <Steps eyebrow="لماذا نحن" title="ما الذي يصنع الفرق فعلاً" steps={WHY} />

@@ -1,0 +1,727 @@
+[
+  {
+    "order": 1,
+    "slug": "cooliva",
+    "name": "Cooliva",
+    "nameAr": "Cooliva",
+    "kind": {
+      "en": "Bilingual company website",
+      "ar": "موقع شركة ثنائي اللغة"
+    },
+    "country": {
+      "en": "Saudi Arabia",
+      "ar": "المملكة العربية السعودية"
+    },
+    "industry": {
+      "en": "Cold room and refrigeration solutions",
+      "ar": "حلول غرف التبريد والتجميد"
+    },
+    "tags": ["WordPress", "Arabic & English"],
+    "category": "saudi",
+    "featured": true,
+    "url": "https://cooliva.sa/",
+    "domain": "cooliva.sa",
+    "images": {
+      "front": "portfolio/cooliva/front.jpg",
+      "back": "portfolio/cooliva/back.jpg",
+      "thumb": "portfolio/cooliva/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 2,
+    "slug": "indeco",
+    "name": "Indeco",
+    "nameAr": "Indeco",
+    "kind": {
+      "en": "Online store and catalogue",
+      "ar": "متجر إلكتروني وكتالوج منتجات"
+    },
+    "country": {
+      "en": "Saudi Arabia",
+      "ar": "المملكة العربية السعودية"
+    },
+    "industry": {
+      "en": "Electrical products and accessories",
+      "ar": "منتجات وملحقات كهربائية"
+    },
+    "tags": ["Shopify"],
+    "category": "saudi",
+    "featured": true,
+    "url": "https://indeco.sa/",
+    "domain": "indeco.sa",
+    "images": {
+      "front": "portfolio/indeco/front.jpg",
+      "back": "portfolio/indeco/back.jpg",
+      "thumb": "portfolio/indeco/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 3,
+    "slug": "madarat",
+    "name": "Madarat Al Tanfeeth",
+    "nameAr": "مدارات التنفيذ",
+    "kind": {
+      "en": "Arabic company website",
+      "ar": "موقع شركة باللغة العربية"
+    },
+    "country": {
+      "en": "Saudi Arabia",
+      "ar": "المملكة العربية السعودية"
+    },
+    "industry": {
+      "en": "Industrial manufacturing",
+      "ar": "التصنيع الصناعي"
+    },
+    "tags": ["Arabic", "Video hero"],
+    "category": "saudi",
+    "featured": true,
+    "url": "https://madarat-altanfeeth.com/",
+    "domain": "madarat-altanfeeth.com",
+    "images": {
+      "front": "portfolio/madarat/front.jpg",
+      "mobile": "portfolio/madarat/mobile.jpg",
+      "thumb": "portfolio/madarat/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 4,
+    "slug": "sparx",
+    "name": "Sparx Smartphones",
+    "nameAr": "Sparx Smartphones",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "Pakistan",
+      "ar": "باكستان"
+    },
+    "industry": {
+      "en": "Smartphones and smart devices",
+      "ar": "هواتف وأجهزة ذكية"
+    },
+    "tags": ["Shopify"],
+    "category": "store",
+    "featured": true,
+    "url": "https://sparx.pk/",
+    "domain": "sparx.pk",
+    "images": {
+      "front": "portfolio/sparx/front.jpg",
+      "back": "portfolio/sparx/back.jpg",
+      "thumb": "portfolio/sparx/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 5,
+    "slug": "beautytreats",
+    "name": "Beauty Treats",
+    "nameAr": "Beauty Treats",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "",
+      "ar": ""
+    },
+    "industry": {
+      "en": "Beauty and cosmetics",
+      "ar": "مستحضرات التجميل والعناية"
+    },
+    "tags": ["E-commerce"],
+    "category": "store",
+    "featured": false,
+    "url": null,
+    "domain": null,
+    "images": {
+      "front": "portfolio/beautytreats/front.jpg",
+      "back": "portfolio/beautytreats/back.jpg",
+      "thumb": "portfolio/beautytreats/thumb.jpg"
+    },
+    "sourceNote": "from client-supplied composition (1600px); no live URL available at capture time"
+  },
+  {
+    "order": 6,
+    "slug": "moebel",
+    "name": "Möbelverkauf",
+    "nameAr": "Möbelverkauf",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "Switzerland",
+      "ar": "سويسرا"
+    },
+    "industry": {
+      "en": "Furniture, beds and mattresses",
+      "ar": "المفروشات والأسرّة والمراتب"
+    },
+    "tags": ["Shopify"],
+    "category": "store",
+    "featured": true,
+    "url": "https://www.moebelverkauf.ch/",
+    "domain": "moebelverkauf.ch",
+    "images": {
+      "front": "portfolio/moebel/front.jpg",
+      "back": "portfolio/moebel/back.jpg",
+      "thumb": "portfolio/moebel/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 7,
+    "slug": "zane",
+    "name": "Zane",
+    "nameAr": "Zane",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "",
+      "ar": ""
+    },
+    "industry": {
+      "en": "Fashion and clothing",
+      "ar": "الأزياء والملابس"
+    },
+    "tags": ["E-commerce"],
+    "category": "store",
+    "featured": false,
+    "url": null,
+    "domain": null,
+    "images": {
+      "front": "portfolio/zane/front.jpg",
+      "back": "portfolio/zane/back.jpg",
+      "thumb": "portfolio/zane/thumb.jpg"
+    },
+    "sourceNote": "from client-supplied composition (1600px); no live URL available at capture time"
+  },
+  {
+    "order": 8,
+    "slug": "cleantaste",
+    "name": "CleanTaste",
+    "nameAr": "CleanTaste",
+    "kind": {
+      "en": "Online ordering store",
+      "ar": "متجر للطلب عبر الإنترنت"
+    },
+    "country": {
+      "en": "Switzerland",
+      "ar": "سويسرا"
+    },
+    "industry": {
+      "en": "Food delivery",
+      "ar": "توصيل الطعام"
+    },
+    "tags": ["Shopify"],
+    "category": "store",
+    "featured": false,
+    "url": "https://cleantaste.ch/",
+    "domain": "cleantaste.ch",
+    "images": {
+      "front": "portfolio/cleantaste/front.jpg",
+      "back": "portfolio/cleantaste/back.jpg",
+      "thumb": "portfolio/cleantaste/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 9,
+    "slug": "hannahs",
+    "name": "Hannah's Jewels",
+    "nameAr": "Hannah's Jewels",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "New Zealand",
+      "ar": "نيوزيلندا"
+    },
+    "industry": {
+      "en": "Indian and Pakistani jewellery",
+      "ar": "مجوهرات هندية وباكستانية"
+    },
+    "tags": ["Shopify"],
+    "category": "store",
+    "featured": true,
+    "url": "https://hannahsjewels.co.nz/",
+    "domain": "hannahsjewels.co.nz",
+    "images": {
+      "front": "portfolio/hannahs/front.jpg",
+      "back": "portfolio/hannahs/back.jpg",
+      "thumb": "portfolio/hannahs/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 10,
+    "slug": "lionlight",
+    "name": "Lion & Light",
+    "nameAr": "Lion & Light",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "United States",
+      "ar": "الولايات المتحدة"
+    },
+    "industry": {
+      "en": "Diaper bags for mothers",
+      "ar": "حقائب حفاضات للأمهات"
+    },
+    "tags": ["Shopify"],
+    "category": "store",
+    "featured": true,
+    "url": "https://shoplionandlight.com/",
+    "domain": "shoplionandlight.com",
+    "images": {
+      "front": "portfolio/lionlight/front.jpg",
+      "back": "portfolio/lionlight/back.jpg",
+      "thumb": "portfolio/lionlight/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 11,
+    "slug": "snugglebuds",
+    "name": "Snuggle Buds",
+    "nameAr": "Snuggle Buds",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "United States",
+      "ar": "الولايات المتحدة"
+    },
+    "industry": {
+      "en": "Baby blankets and sleepwear",
+      "ar": "بطانيات وملابس نوم للأطفال"
+    },
+    "tags": ["Shopify"],
+    "category": "store",
+    "featured": false,
+    "url": "https://www.snugglebudsbaby.com/",
+    "domain": "snugglebudsbaby.com",
+    "images": {
+      "front": "portfolio/snugglebuds/front.jpg",
+      "back": "portfolio/snugglebuds/back.jpg",
+      "thumb": "portfolio/snugglebuds/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 12,
+    "slug": "sasch",
+    "name": "SASCH Brands",
+    "nameAr": "SASCH Brands",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "Kosovo",
+      "ar": "كوسوفو"
+    },
+    "industry": {
+      "en": "Men's fashion",
+      "ar": "أزياء رجالية"
+    },
+    "tags": ["Shopify"],
+    "category": "store",
+    "featured": false,
+    "url": "https://saschbrands.com/",
+    "domain": "saschbrands.com",
+    "images": {
+      "front": "portfolio/sasch/front.jpg",
+      "back": "portfolio/sasch/back.jpg",
+      "thumb": "portfolio/sasch/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 13,
+    "slug": "rafahiya",
+    "name": "Rafahiya Jewelers",
+    "nameAr": "Rafahiya Jewelers",
+    "kind": {
+      "en": "Online store",
+      "ar": "متجر إلكتروني"
+    },
+    "country": {
+      "en": "Pakistan",
+      "ar": "باكستان"
+    },
+    "industry": {
+      "en": "Silver jewellery",
+      "ar": "مجوهرات فضية"
+    },
+    "tags": ["E-commerce"],
+    "category": "store",
+    "featured": false,
+    "url": null,
+    "domain": null,
+    "images": {
+      "front": "portfolio/rafahiya/front.jpg",
+      "back": "portfolio/rafahiya/back.jpg",
+      "thumb": "portfolio/rafahiya/thumb.jpg"
+    },
+    "sourceNote": "from client-supplied composition (1600px); no live URL available at capture time"
+  },
+  {
+    "order": 14,
+    "slug": "blackmoon",
+    "name": "Black Moon Coiffeur",
+    "nameAr": "Black Moon Coiffeur",
+    "kind": {
+      "en": "Business website",
+      "ar": "موقع نشاط تجاري"
+    },
+    "country": {
+      "en": "Switzerland",
+      "ar": "سويسرا"
+    },
+    "industry": {
+      "en": "Hair salon for women and men",
+      "ar": "صالون شعر للسيدات والرجال"
+    },
+    "tags": ["Business website"],
+    "category": "business",
+    "featured": true,
+    "url": "https://blackmooncoiffeur.ch/",
+    "domain": "blackmooncoiffeur.ch",
+    "images": {
+      "front": "portfolio/blackmoon/front.jpg",
+      "back": "portfolio/blackmoon/back.jpg",
+      "thumb": "portfolio/blackmoon/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 15,
+    "slug": "premierstone",
+    "name": "Premier Stone Systems",
+    "nameAr": "Premier Stone Systems",
+    "kind": {
+      "en": "Company website",
+      "ar": "موقع شركة"
+    },
+    "country": {
+      "en": "Pakistan",
+      "ar": "باكستان"
+    },
+    "industry": {
+      "en": "Engineered quartz surfaces",
+      "ar": "أسطح الكوارتز الصناعي"
+    },
+    "tags": ["Business website"],
+    "category": "business",
+    "featured": false,
+    "url": null,
+    "domain": null,
+    "images": {
+      "front": "portfolio/premierstone/front.jpg",
+      "back": "portfolio/premierstone/back.jpg",
+      "thumb": "portfolio/premierstone/thumb.jpg"
+    },
+    "sourceNote": "from client-supplied composition (1600px); no live URL available at capture time"
+  },
+  {
+    "order": 16,
+    "slug": "solight",
+    "name": "SoLight",
+    "nameAr": "SoLight",
+    "kind": {
+      "en": "Company website",
+      "ar": "موقع شركة"
+    },
+    "country": {
+      "en": "Switzerland",
+      "ar": "سويسرا"
+    },
+    "industry": {
+      "en": "Fibre-optic installation and industrial services",
+      "ar": "تركيب الألياف الضوئية وخدمات صناعية"
+    },
+    "tags": ["Business website"],
+    "category": "business",
+    "featured": false,
+    "url": "https://so-light.ch/",
+    "domain": "so-light.ch",
+    "images": {
+      "front": "portfolio/solight/front.jpg",
+      "back": "portfolio/solight/back.jpg",
+      "thumb": "portfolio/solight/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 17,
+    "slug": "shgt",
+    "name": "SH Gebäudetechnik",
+    "nameAr": "SH Gebäudetechnik",
+    "kind": {
+      "en": "Business website",
+      "ar": "موقع نشاط تجاري"
+    },
+    "country": {
+      "en": "Switzerland",
+      "ar": "سويسرا"
+    },
+    "industry": {
+      "en": "Heating and plumbing",
+      "ar": "التدفئة والأعمال الصحية"
+    },
+    "tags": ["WordPress"],
+    "category": "business",
+    "featured": false,
+    "url": "https://sh-gebaeudetechnik.ch/",
+    "domain": "sh-gebaeudetechnik.ch",
+    "images": {
+      "front": "portfolio/shgt/front.jpg",
+      "back": "portfolio/shgt/back.jpg",
+      "thumb": "portfolio/shgt/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 18,
+    "slug": "swissgt",
+    "name": "Swiss Gebäudetechnik",
+    "nameAr": "Swiss Gebäudetechnik",
+    "kind": {
+      "en": "Business website",
+      "ar": "موقع نشاط تجاري"
+    },
+    "country": {
+      "en": "Switzerland",
+      "ar": "سويسرا"
+    },
+    "industry": {
+      "en": "Plumbing, heating and solar",
+      "ar": "الأعمال الصحية والتدفئة والطاقة الشمسية"
+    },
+    "tags": ["WordPress"],
+    "category": "business",
+    "featured": false,
+    "url": "https://swissgt.ch/",
+    "domain": "swissgt.ch",
+    "images": {
+      "front": "portfolio/swissgt/front.jpg",
+      "back": "portfolio/swissgt/back.jpg",
+      "thumb": "portfolio/swissgt/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 19,
+    "slug": "dibrix",
+    "name": "Dibrix",
+    "nameAr": "Dibrix",
+    "kind": {
+      "en": "Lead-generation website",
+      "ar": "موقع لاستقطاب العملاء"
+    },
+    "country": {
+      "en": "United Kingdom",
+      "ar": "المملكة المتحدة"
+    },
+    "industry": {
+      "en": "Rendering and plastering",
+      "ar": "أعمال اللياسة والتشطيبات"
+    },
+    "tags": ["WordPress"],
+    "category": "business",
+    "featured": false,
+    "url": "https://dibrix.co.uk/",
+    "domain": "dibrix.co.uk",
+    "images": {
+      "front": "portfolio/dibrix/front.jpg",
+      "back": "portfolio/dibrix/back.jpg",
+      "thumb": "portfolio/dibrix/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 20,
+    "slug": "cardiff",
+    "name": "Cardiff Landscapers",
+    "nameAr": "Cardiff Landscapers",
+    "kind": {
+      "en": "Local service website",
+      "ar": "موقع خدمات محلية"
+    },
+    "country": {
+      "en": "United Kingdom",
+      "ar": "المملكة المتحدة"
+    },
+    "industry": {
+      "en": "Driveways and block paving",
+      "ar": "تبليط المداخل والأرصفة"
+    },
+    "tags": ["WordPress"],
+    "category": "business",
+    "featured": false,
+    "url": "https://cardifflandscapers.co.uk/",
+    "domain": "cardifflandscapers.co.uk",
+    "images": {
+      "front": "portfolio/cardiff/front.jpg",
+      "back": "portfolio/cardiff/back.jpg",
+      "thumb": "portfolio/cardiff/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 21,
+    "slug": "kingroofing",
+    "name": "King Roofing",
+    "nameAr": "King Roofing",
+    "kind": {
+      "en": "Lead-generation website",
+      "ar": "موقع لاستقطاب العملاء"
+    },
+    "country": {
+      "en": "United States",
+      "ar": "الولايات المتحدة"
+    },
+    "industry": {
+      "en": "Roofing contractor",
+      "ar": "مقاول أسقف"
+    },
+    "tags": ["WordPress"],
+    "category": "business",
+    "featured": false,
+    "url": "https://kingroofingca.com/",
+    "domain": "kingroofingca.com",
+    "images": {
+      "front": "portfolio/kingroofing/front.jpg",
+      "back": "portfolio/kingroofing/back.jpg",
+      "thumb": "portfolio/kingroofing/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 22,
+    "slug": "pophaus",
+    "name": "Pop Haus",
+    "nameAr": "Pop Haus",
+    "kind": {
+      "en": "Business website",
+      "ar": "موقع نشاط تجاري"
+    },
+    "country": {
+      "en": "United States",
+      "ar": "الولايات المتحدة"
+    },
+    "industry": {
+      "en": "Beverage catering",
+      "ar": "تقديم المشروبات للمناسبات"
+    },
+    "tags": ["WordPress"],
+    "category": "business",
+    "featured": false,
+    "url": "https://pophausatl.com/",
+    "domain": "pophausatl.com",
+    "images": {
+      "front": "portfolio/pophaus/front.jpg",
+      "back": "portfolio/pophaus/back.jpg",
+      "thumb": "portfolio/pophaus/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 23,
+    "slug": "pilot",
+    "name": "Pilot",
+    "nameAr": "Pilot",
+    "kind": {
+      "en": "Health service website",
+      "ar": "موقع خدمة صحية"
+    },
+    "country": {
+      "en": "Australia",
+      "ar": "أستراليا"
+    },
+    "industry": {
+      "en": "Men's health",
+      "ar": "صحة الرجال"
+    },
+    "tags": ["Webflow"],
+    "category": "business",
+    "featured": false,
+    "url": "https://pilot.com.au/",
+    "domain": "pilot.com.au",
+    "images": {
+      "front": "portfolio/pilot/front.jpg",
+      "back": "portfolio/pilot/back.jpg",
+      "thumb": "portfolio/pilot/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 24,
+    "slug": "helpfull",
+    "name": "Helpfull",
+    "nameAr": "Helpfull",
+    "kind": {
+      "en": "Product website",
+      "ar": "موقع منتج رقمي"
+    },
+    "country": {
+      "en": "",
+      "ar": ""
+    },
+    "industry": {
+      "en": "Consumer research platform",
+      "ar": "منصة لأبحاث السوق والمستهلكين"
+    },
+    "tags": ["Webflow"],
+    "category": "business",
+    "featured": false,
+    "url": "https://helpfull.com/",
+    "domain": "helpfull.com",
+    "images": {
+      "front": "portfolio/helpfull/front.jpg",
+      "back": "portfolio/helpfull/back.jpg",
+      "thumb": "portfolio/helpfull/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  },
+  {
+    "order": 25,
+    "slug": "mutual",
+    "name": "Mutual Equity",
+    "nameAr": "Mutual Equity",
+    "kind": {
+      "en": "Company website",
+      "ar": "موقع شركة"
+    },
+    "country": {
+      "en": "",
+      "ar": ""
+    },
+    "industry": {
+      "en": "Investment firm",
+      "ar": "شركة استثمارية"
+    },
+    "tags": ["Business website"],
+    "category": "business",
+    "featured": false,
+    "url": "https://www.mutualequity.com/",
+    "domain": "mutualequity.com",
+    "images": {
+      "front": "portfolio/mutual/front.jpg",
+      "back": "portfolio/mutual/back.jpg",
+      "thumb": "portfolio/mutual/thumb.jpg"
+    },
+    "sourceNote": "captured 2026-09-08 at 2x from the live site"
+  }
+]

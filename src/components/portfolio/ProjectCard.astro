@@ -1,0 +1,262 @@
+---
+import { Picture } from 'astro:assets'
+import { type Locale } from '@/i18n/routes'
+import { type Project, metaLine, nameFor } from '@/data/portfolio'
+
+/**
+ * One project, in a browser-style frame.
+ *
+ * Shared by the homepage slider and the portfolio grid so the two cannot drift
+ * into two visual languages. The only differences are the hover behaviour and
+ * whether tags are shown, both passed in.
+ */
+interface Props {
+  locale: Locale
+  project: Project
+  /**
+   * `peek` lifts the image slightly on hover — a hint that the page continues.
+   * `scroll` runs the full crop, the classic "scroll the page" effect.
+   */
+  hover?: 'peek' | 'scroll' | undefined
+  showTags?: boolean | undefined
+  /** The LCP candidate on each page must not be lazy. */
+  eager?: boolean | undefined
+}
+
+const { locale, project, hover = 'peek', showTags = false, eager = false } = Astro.props
+
+const name = nameFor(project, locale)
+const meta = metaLine(project, locale)
+const alt = locale === 'ar' ? `موقع ${name}` : `${name} website`
+
+/**
+ * One capture is a landscape desktop shot rather than a tall page crop.
+ * Cropping it to the 4:5 frame would cut most of the width away, so it is
+ * fitted whole against the raised surface instead — which still reads as a
+ * desktop site inside a browser. Decided from the image's own dimensions
+ * rather than from its slug, so a future landscape capture behaves the same.
+ */
+const isLandscape = project.images.front.width > project.images.front.height
+---
+
+<article class:list={['card', `hover-${hover}`, isLandscape && 'is-landscape']}>
+  <div class="frame">
+    {/* Decorative chrome: it says "this is a website" and nothing more. */}
+    <div class="bar" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="shot">
+      <Picture
+        src={project.images.front}
+        alt={alt}
+        widths={[480, 768, 1200]}
+        sizes="(min-width: 62rem) 22rem, (min-width: 48rem) 40vw, 80vw"
+        formats={['avif', 'webp']}
+        quality={80}
+        loading={eager ? 'eager' : 'lazy'}
+        {...(eager ? { fetchpriority: 'high' as const } : {})}
+      />
+    </div>
+  </div>
+
+  <div class="body">
+    <p class="kind">{project.kind[locale]}</p>
+    <h3>{name}</h3>
+    {meta && <p class="meta">{meta}</p>}
+
+    {
+      showTags && project.tags.length > 0 && (
+        <ul class="tags">
+          {project.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      /* Four projects have no live URL. They get the card without the pill
+         rather than a link that goes nowhere. */
+      project.url && project.domain && (
+        <a class="domain" href={project.url} target="_blank" rel="noopener">
+          {project.domain}
+        </a>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+  }
+
+  .frame {
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(19 26 43 / 4%), 0 8px 24px rgb(19 26 43 / 6%);
+  }
+
+  .bar {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    padding: 0.55rem 0.75rem;
+    background: var(--surface-raised);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .bar span {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-ink-200);
+  }
+
+  /* The aspect ratio is reserved before the image loads, so nothing shifts. */
+  .shot {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .shot :global(img) {
+    inline-size: 100%;
+    block-size: auto;
+    display: block;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  /* Fitted rather than cropped, and no hover travel — there is nothing below
+     the fold of a single desktop screenshot to scroll to. */
+  .is-landscape .shot {
+    background: var(--surface-raised);
+    display: grid;
+    place-items: center;
+  }
+
+  .is-landscape .shot :global(img) {
+    object-fit: contain;
+    block-size: 100%;
+  }
+
+  .body {
+    padding-block-start: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .kind {
+    margin: 0 0 0.3rem;
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Arabic is cursive: tracking breaks the joins and uppercasing does nothing. */
+  :global([dir='rtl']) .kind {
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
+    color: var(--text-strong);
+  }
+
+  /* Latin brand names keep the Latin face even on the Arabic page. */
+  :global([dir='rtl']) h3 {
+    font-family: var(--font-sans);
+  }
+
+  .meta {
+    margin: 0 0 0.75rem;
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0 0 0.85rem;
+    padding: 0;
+  }
+
+  .tags li {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-muted);
+  }
+
+  .domain {
+    align-self: flex-start;
+    margin-block-start: auto;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-default);
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .domain:hover,
+  .domain:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Hover moves the image inside the frame rather than moving the card, so the
+     grid never reflows and the effect reads as the page scrolling. */
+  .hover-peek .shot :global(img),
+  .hover-scroll .shot :global(img) {
+    transition: transform 0.6s ease;
+    will-change: transform;
+  }
+
+  .hover-peek:hover .shot :global(img) {
+    transform: translateY(-6%);
+  }
+
+  /* translateY(-100% + container height) walks the crop to its bottom edge. */
+  .hover-scroll .shot :global(img) {
+    transition: transform 4s linear;
+  }
+
+  .hover-scroll:hover .shot :global(img),
+  .hover-scroll:focus-within .shot :global(img) {
+    transform: translateY(calc(-100% + 100cqh));
+  }
+
+  .hover-scroll .shot {
+    container-type: size;
+  }
+
+  .is-landscape:hover .shot :global(img),
+  .is-landscape:focus-within .shot :global(img) {
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shot :global(img) {
+      transition: none !important;
+    }
+
+    .card:hover .shot :global(img),
+    .card:focus-within .shot :global(img) {
+      transform: none !important;
+    }
+  }
+</style>
