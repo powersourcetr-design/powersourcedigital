@@ -161,3 +161,43 @@ export function graph(nodes: readonly (Json | null)[]): string {
 export function homepageGraph(locale: Locale, extra: readonly (Json | null)[] = []): string {
   return graph([organization(locale), website(locale), ...extra])
 }
+
+/**
+ * The portfolio page as a CollectionPage wrapping an ItemList of the sites.
+ *
+ * Only projects with a live URL are listed: an ItemList entry is a claim that
+ * something is at that address, and four of the captures have no public URL.
+ * Built from the same array the page renders, so the list cannot describe a
+ * card that is not on the page.
+ */
+export function collectionPage(options: {
+  locale: Locale
+  path: string
+  name: string
+  description: string
+  items: readonly { name: string; url: string | null }[]
+}): Json {
+  const live = options.items.filter(
+    (item): item is { name: string; url: string } => item.url !== null,
+  )
+
+  return {
+    '@type': 'CollectionPage',
+    '@id': `${absoluteUrl(options.path)}#collection`,
+    url: absoluteUrl(options.path),
+    name: options.name,
+    description: options.description,
+    inLanguage: LOCALE_TAG[options.locale],
+    isPartOf: { '@id': SITE_ID },
+    about: { '@id': ORG_ID },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: live.length,
+      itemListElement: live.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: { '@type': 'WebSite', name: item.name, url: item.url },
+      })),
+    },
+  }
+}

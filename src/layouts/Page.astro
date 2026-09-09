@@ -25,9 +25,11 @@ interface Props {
   noindex?: boolean | undefined
   /** Each locale's slug for this page, for hreflang on dynamic routes. */
   slugs?: Partial<Record<Locale, string>> | undefined
+  /** Site-relative path to this page's share image. */
+  ogImage?: string | undefined
 }
 
-const { locale, routeKey, title, description, targetSlug, service, city, noindex, slugs } =
+const { locale, routeKey, title, description, targetSlug, service, city, noindex, slugs, ogImage } =
   Astro.props
 ---
 
@@ -38,6 +40,7 @@ const { locale, routeKey, title, description, targetSlug, service, city, noindex
   noindex={noindex}
   routeKey={routeKey}
   slugs={slugs}
+  ogImage={ogImage}
 >
   <Header locale={locale} routeKey={routeKey} targetSlug={targetSlug} />
   <main id="content">

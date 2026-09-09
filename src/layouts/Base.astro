@@ -14,9 +14,15 @@ interface Props {
   routeKey?: RouteKey | undefined
   /** Each locale's slug, for dynamic routes. */
   slugs?: Partial<Record<Locale, string>> | undefined
+  /**
+   * Site-relative path to a share image. The card type below is already
+   * `summary_large_image`, so a page without one promises a large card and
+   * then supplies nothing to fill it.
+   */
+  ogImage?: string | undefined
 }
 
-const { locale, title, description, noindex = false, routeKey, slugs } = Astro.props
+const { locale, title, description, noindex = false, routeKey, slugs, ogImage } = Astro.props
 const t = useTranslations(locale)
 const dir = DIR[locale]
 
@@ -65,6 +71,15 @@ const languageAlternates = !noindex && routeKey ? alternates(routeKey, slugs) : 
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={locale === 'ar' ? 'ar_SA' : 'en_US'} />
+    {
+      ogImage && (
+        <>
+          <meta property="og:image" content={`${SITE}${ogImage}`} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+        </>
+      )
+    }
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#00a858" />
     <link rel="sitemap" href="/sitemap-index.xml" />

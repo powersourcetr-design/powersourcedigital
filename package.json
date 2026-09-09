@@ -9,7 +9,7 @@
   "packageManager": "pnpm@10.34.5",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/build-redirects.mjs && astro build",
+    "build": "node scripts/build-redirects.mjs && node scripts/build-og.mjs && astro build",
     "preview": "astro preview",
     "check": "node scripts/check-logical-props.mjs && node scripts/check-contrast.mjs && node scripts/check-schedule.mjs && astro check && biome check .",
     "check:dir": "node scripts/check-logical-props.mjs",

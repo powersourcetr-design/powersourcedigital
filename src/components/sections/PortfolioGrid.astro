@@ -1,0 +1,508 @@
+---
+import { Picture } from 'astro:assets'
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro'
+import ProjectCard from '@/components/portfolio/ProjectCard.astro'
+import { type Category, PROJECTS, TOTALS, metaLine, nameFor } from '@/data/portfolio'
+import { type Locale, localizedPath } from '@/i18n/routes'
+import { useTranslations } from '@/i18n/ui'
+
+/**
+ * The portfolio page: hero, filters, three feature rows, then the grid.
+ *
+ * Filtering is done in the browser against markup that already contains every
+ * project, rather than by building four pages. The full list is 25 cards and
+ * the images are lazy, so nothing is saved by splitting it — and a filtered
+ * view stays a shareable URL through the hash rather than a separate route to
+ * keep in the sitemap.
+ */
+interface Props {
+  locale: Locale
+  copy: {
+    eyebrow: string
+    title: string
+    /** Receives the project and country counts, both derived from the data. */
+    lead: (projects: number, countries: number) => string
+    filters: { all: string; saudi: string; store: string; business: string }
+    filterLabel: string
+  }
+}
+
+const { locale, copy } = Astro.props
+const t = useTranslations(locale)
+
+/** The first three carry the page; everything after is a standard card. */
+const FEATURE_COUNT = 3
+const features = PROJECTS.slice(0, FEATURE_COUNT)
+const rest = PROJECTS.slice(FEATURE_COUNT)
+
+const FILTERS: { value: 'all' | Category; label: string }[] = [
+  { value: 'all', label: copy.filters.all },
+  { value: 'saudi', label: copy.filters.saudi },
+  { value: 'store', label: copy.filters.store },
+  { value: 'business', label: copy.filters.business },
+]
+
+const countFor = (value: 'all' | Category) =>
+  value === 'all' ? PROJECTS.length : PROJECTS.filter((p) => p.category === value).length
+---
+
+<Breadcrumbs
+  locale={locale}
+  items={[
+    { name: t('nav.home'), path: localizedPath('home', locale) },
+    { name: t('nav.work'), path: localizedPath('work', locale) },
+  ]}
+/>
+
+<section class="hero shell">
+  <p class="eyebrow">{copy.eyebrow}</p>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead(TOTALS.projects, TOTALS.countries)}</p>
+</section>
+
+<div class="shell">
+  <div class="filters" role="group" aria-label={copy.filterLabel}>
+    {
+      FILTERS.map((filter) => (
+        <button
+          type="button"
+          class="chip"
+          data-filter={filter.value}
+          aria-pressed={filter.value === 'all' ? 'true' : 'false'}
+        >
+          {filter.label}
+          <span class="count bidi-isolate">{countFor(filter.value)}</span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<section class="features shell">
+  {
+    features.map((project, index) => {
+      const name = nameFor(project, locale)
+      const meta = metaLine(project, locale)
+      const alt = locale === 'ar' ? `موقع ${name}` : `${name} website`
+
+      return (
+        <article
+          class:list={['feature', index % 2 === 1 && 'reverse', project.images.mobile && 'duo']}
+          data-category={project.category}
+        >
+          <div class="feature-visual">
+            <div class="frame">
+              <div class="bar" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+              <div class="shot">
+                <Picture
+                  src={project.images.front}
+                  alt={alt}
+                  widths={[480, 768, 1200]}
+                  sizes="(min-width: 62rem) 34rem, 90vw"
+                  formats={['avif', 'webp']}
+                  quality={80}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  {...(index === 0 ? { fetchpriority: 'high' as const } : {})}
+                />
+              </div>
+            </div>
+
+            {/* One project was captured as a desktop view plus a phone view.
+                Showing both is truer to what was built than cropping the
+                desktop shot into the same portrait frame as everything else. */}
+            {project.images.mobile && (
+              <div class="phone">
+                <Picture
+                  src={project.images.mobile}
+                  alt=""
+                  widths={[240, 480]}
+                  sizes="10rem"
+                  formats={['avif', 'webp']}
+                  quality={80}
+                  loading="lazy"
+                />
+              </div>
+            )}
+          </div>
+
+          <div class="feature-body">
+            <p class="kind">{project.kind[locale]}</p>
+            <h2>{name}</h2>
+            {meta && <p class="meta">{meta}</p>}
+            {project.tags.length > 0 && (
+              <ul class="tags">
+                {project.tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            )}
+            {project.url && project.domain && (
+              <a class="domain" href={project.url} target="_blank" rel="noopener">
+                {project.domain}
+              </a>
+            )}
+          </div>
+        </article>
+      )
+    })
+  }
+</section>
+
+<section class="grid-wrap shell">
+  <ul class="grid" data-portfolio-grid>
+    {
+      rest.map((project) => (
+        <li data-category={project.category}>
+          <ProjectCard locale={locale} project={project} hover="scroll" showTags />
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  /**
+   * Filter chips and the scroll reveal.
+   *
+   * The filter reads and writes `location.hash`, so a filtered view can be
+   * pasted to someone and arrive filtered. Feature cards carry a category too,
+   * so filtering hides them as well rather than leaving three Saudi projects
+   * pinned above a grid of stores.
+   */
+  const CATEGORIES = ['all', 'saudi', 'store', 'business'] as const
+  type Category = (typeof CATEGORIES)[number]
+
+  const isCategory = (value: string): value is Category =>
+    (CATEGORIES as readonly string[]).includes(value)
+
+  const setup = () => {
+    const grid = document.querySelector<HTMLElement>('[data-portfolio-grid]')
+    if (!grid || grid.dataset['bound']) return
+    grid.dataset['bound'] = 'true'
+
+    const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')]
+    const items = [
+      ...document.querySelectorAll<HTMLElement>('[data-category]'),
+    ]
+
+    const apply = (active: Category, pushHash: boolean) => {
+      for (const chip of chips) {
+        chip.setAttribute('aria-pressed', String(chip.dataset['filter'] === active))
+      }
+      for (const item of items) {
+        const show = active === 'all' || item.dataset['category'] === active
+        item.hidden = !show
+      }
+      if (pushHash) {
+        // replaceState rather than a hash assignment: this should not add a
+        // history entry per chip, and it must not scroll the page.
+        history.replaceState(null, '', active === 'all' ? location.pathname : `#${active}`)
+      }
+    }
+
+    for (const chip of chips) {
+      chip.addEventListener('click', () => {
+        const value = chip.dataset['filter'] ?? 'all'
+        if (isCategory(value)) apply(value, true)
+      })
+    }
+
+    const fromHash = location.hash.replace('#', '')
+    if (isCategory(fromHash)) apply(fromHash, false)
+
+    // Reveal on entry, once. Skipped entirely when the visitor asks for less
+    // motion — including the starting opacity, so nothing can stay invisible.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          const el = entry.target as HTMLElement
+          el.style.transitionDelay = `${Math.min(Number(el.dataset['i'] ?? 0), 6) * 40}ms`
+          el.classList.add('in')
+          observer.unobserve(el)
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px' },
+    )
+
+    const cards = [...grid.querySelectorAll<HTMLElement>(':scope > li')]
+    cards.forEach((card, index) => {
+      card.dataset['i'] = String(index % 7)
+      card.classList.add('reveal-card')
+      observer.observe(card)
+    })
+  }
+
+  setup()
+  document.addEventListener('astro:after-swap', setup)
+</script>
+
+<style>
+  .hero {
+    padding-block: var(--section-pad) 1.75rem;
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    margin: 0 0 1rem;
+    max-inline-size: 18ch;
+  }
+
+  .lead {
+    margin: 0;
+    max-inline-size: 60ch;
+    color: var(--text-muted);
+    font-size: var(--text-lead);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-block-end: 2.5rem;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-default);
+    font-size: var(--text-small);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .count {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .features {
+    display: grid;
+    gap: 3.5rem;
+    padding-block-end: 3.5rem;
+  }
+
+  .feature {
+    display: grid;
+    gap: 1.75rem;
+    align-items: center;
+  }
+
+  @media (min-width: 62rem) {
+    .feature {
+      grid-template-columns: 1.25fr 1fr;
+      gap: 3rem;
+    }
+
+    /* Alternating sides. `order` rather than `direction`, so the text inside
+       keeps the page's own reading direction in both languages. */
+    .feature.reverse .feature-visual {
+      order: 2;
+    }
+  }
+
+  .feature-visual {
+    position: relative;
+  }
+
+  .frame {
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(19 26 43 / 4%), 0 8px 24px rgb(19 26 43 / 6%);
+  }
+
+  .bar {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    padding: 0.55rem 0.75rem;
+    background: var(--surface-raised);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .bar span {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-ink-200);
+  }
+
+  .shot {
+    block-size: 420px;
+    overflow: hidden;
+  }
+
+  .shot :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  /* The desktop-plus-phone project: fit the whole desktop shot, then overlap
+     the phone on the lower inline-start corner, which mirrors under RTL. */
+  .duo .shot {
+    background: var(--surface-raised);
+  }
+
+  .duo .shot :global(img) {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .phone {
+    position: absolute;
+    inset-block-end: -1.25rem;
+    inset-inline-start: -0.75rem;
+    inline-size: clamp(6rem, 18%, 9rem);
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.9rem;
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: 0 8px 24px rgb(19 26 43 / 12%);
+  }
+
+  .phone :global(img) {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .duo {
+    margin-block-end: 1.25rem;
+  }
+
+  .kind {
+    margin: 0 0 0.35rem;
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  :global([dir='rtl']) .kind {
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 0.5rem;
+  }
+
+  :global([dir='rtl']) h2 {
+    font-family: var(--font-sans);
+  }
+
+  .meta {
+    margin: 0 0 1rem;
+    color: var(--text-muted);
+  }
+
+  .tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 1.25rem;
+    padding: 0;
+  }
+
+  .tags li {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-muted);
+  }
+
+  .domain {
+    display: inline-block;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-default);
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .domain:hover,
+  .domain:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .grid-wrap {
+    padding-block-end: var(--section-pad);
+  }
+
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 48rem) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 62rem) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* The class is added by script, so a visitor without JavaScript never gets
+     the starting opacity and therefore never gets a blank grid. */
+  .grid :global(.reveal-card) {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .grid :global(.reveal-card.in) {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grid :global(.reveal-card) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

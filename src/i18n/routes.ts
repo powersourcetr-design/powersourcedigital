@@ -75,7 +75,10 @@ export const ROUTES = {
     segment: { en: 'web-design-riyadh', ar: 'تصميم-مواقع-الرياض' },
   },
 
-  work: { segment: { en: 'work', ar: 'أعمالنا' } },
+  // The English segment is `portfolio` rather than `work` because the old
+  // WordPress site published /portfolio/ and that URL still has history.
+  // Serving the page there reclaims it instead of spending a redirect on it.
+  work: { segment: { en: 'portfolio', ar: 'أعمالنا' } },
   workDetail: { parent: 'work', segment: { en: '', ar: '' }, dynamic: true },
 
   pricing: { segment: { en: 'pricing', ar: 'الأسعار' } },
@@ -150,6 +153,7 @@ export const LIVE_ROUTES: readonly RouteKey[] = [
   'thankYou',
   'blog',
   'blogPost',
+  'work',
   'landingEcommerce',
   'landingWebDesign',
 ]

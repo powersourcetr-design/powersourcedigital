@@ -15,9 +15,9 @@ import { dirname, join } from 'node:path'
 /** [from, to, status] — `from` is the live WordPress URL, `to` is the new one. */
 const REDIRECTS = [
   // --- English -------------------------------------------------------------
-  // /work/ is not built yet, so portfolio traffic goes to the services index
-  // rather than 301-ing into a 404. Restore this when the case studies land.
-  ['/portfolio/', '/services/', 301],
+  // NOTE: /portfolio/ has no rule. The portfolio page is served at that exact
+  // URL now, so the legacy address resolves directly and the redirect it used
+  // to need would only get in the way.
 
   // --- Arabic: services index and details -----------------------------------
   ['/ar/خدماتنا/', '/ar/الخدمات/', 301],

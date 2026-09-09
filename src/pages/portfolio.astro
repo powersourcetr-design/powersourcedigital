@@ -1,0 +1,53 @@
+---
+import CTABand from '@/components/sections/CTABand.astro'
+import PortfolioGrid from '@/components/sections/PortfolioGrid.astro'
+import { PROJECTS } from '@/data/portfolio'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+import { collectionPage, graph } from '@/lib/schema'
+
+const locale = 'en' as const
+
+const DESCRIPTION =
+  'Selected websites and online stores by Power Source Digital for businesses in Saudi Arabia and international markets.'
+
+const schema = graph([
+  collectionPage({
+    locale,
+    path: localizedPath('work', locale),
+    name: 'Our Work',
+    description: DESCRIPTION,
+    items: PROJECTS.map((project) => ({ name: project.name, url: project.url })),
+  }),
+])
+---
+
+<Page locale={locale} routeKey="work" title="Our Work | Power Source Digital" description={DESCRIPTION}
+  ogImage="/og/portfolio.jpg">
+  <PortfolioGrid
+    locale={locale}
+    copy={{
+      eyebrow: 'Portfolio',
+      title: 'Work that speaks for itself.',
+      lead: (projects, countries) =>
+        `${projects} websites and online stores across ${countries} countries, for cold-room specialists, electrical suppliers, salons, contractors, fashion brands and more. Every site here is live today.`,
+      filters: {
+        all: 'All',
+        saudi: 'Saudi Arabia',
+        store: 'Online stores',
+        business: 'Business websites',
+      },
+      filterLabel: 'Filter work',
+    }}
+  />
+
+  <CTABand
+    locale={locale}
+    title="Not sure what your business needs?"
+    body="We will look at your website and your Google presence and tell you what we would fix first — including the things you can do yourself without paying anyone."
+    ctaLabel="Get a free audit"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Page>

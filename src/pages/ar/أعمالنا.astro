@@ -1,0 +1,60 @@
+---
+import CTABand from '@/components/sections/CTABand.astro'
+import PortfolioGrid from '@/components/sections/PortfolioGrid.astro'
+import { PROJECTS } from '@/data/portfolio'
+import { href, localizedPath } from '@/i18n/routes'
+import Page from '@/layouts/Page.astro'
+import { collectionPage, graph } from '@/lib/schema'
+
+const locale = 'ar' as const
+
+const DESCRIPTION =
+  'أعمال مختارة من المواقع والمتاجر الإلكترونية التي نقدمها لشركات في المملكة العربية السعودية والأسواق العالمية.'
+
+const schema = graph([
+  collectionPage({
+    locale,
+    path: localizedPath('work', locale),
+    name: 'أعمالنا',
+    description: DESCRIPTION,
+    // Site names stay in their own Latin branding; the list describes real
+    // addresses, not translated labels.
+    items: PROJECTS.map((project) => ({ name: project.name, url: project.url })),
+  }),
+])
+---
+
+<Page
+  locale={locale}
+  routeKey="work"
+  title="أعمالنا | Power Source Digital"
+  description={DESCRIPTION}
+  ogImage="/og/portfolio.jpg"
+>
+  <PortfolioGrid
+    locale={locale}
+    copy={{
+      eyebrow: 'أعمالنا',
+      title: 'أعمال تتحدث عن نفسها.',
+      lead: (projects, countries) =>
+        `${projects} موقعاً ومتجراً إلكترونياً في ${countries} دول، لشركات تبريد، ومورّدي كهرباء، وصالونات، ومقاولين، وعلامات أزياء، وغيرها. كل موقع هنا يعمل اليوم.`,
+      filters: {
+        all: 'الكل',
+        saudi: 'المملكة العربية السعودية',
+        store: 'متاجر إلكترونية',
+        business: 'مواقع شركات',
+      },
+      filterLabel: 'تصفية الأعمال',
+    }}
+  />
+
+  <CTABand
+    locale={locale}
+    title="لست متأكداً مما يحتاجه نشاطك؟"
+    body="سنطّلع على موقعك وحضورك على جوجل ونخبرك بما سنعالجه أولاً، بما في ذلك ما يمكنك تنفيذه بنفسك دون أن تدفع لأحد."
+    ctaLabel="احصل على تدقيق مجاني"
+    ctaHref={href(localizedPath('freeAudit', locale))}
+  />
+
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Page>
