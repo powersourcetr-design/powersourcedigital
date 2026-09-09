@@ -7,7 +7,7 @@
 import sharp from 'sharp'
 
 const SRC = 'brand-source/psd-live-logo.jpg'
-const OUT = 'src/assets/pst-logo.png'
+const OUT = 'src/assets/logo.png'
 
 const { data, info } = await sharp(SRC).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
 const { width, height, channels } = info

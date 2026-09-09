@@ -2,7 +2,7 @@
 import Button from '@/components/ui/Button.astro'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher.astro'
 import { Image } from 'astro:assets'
-import logo from '@/assets/pst-logo.png'
+import logo from '@/assets/logo.png'
 import { type Locale, type RouteKey, href, isLive, localizedPath } from '@/i18n/routes'
 import { useTranslations } from '@/i18n/ui'
 
@@ -37,9 +37,11 @@ const EXTRA_NAV: { key: RouteKey; label: Parameters<typeof t>[0] }[] = (
 <header class="header">
   <div class="bar">
     <a class="brand" href={href(localizedPath('home', locale))}>
+      {/* The mark is decorative: the wordmark beside it already names the
+          company, so an alt here makes a screen reader say the name twice. */}
       <Image
         src={logo}
-        alt="Power Source Digital"
+        alt=""
         width={132}
         height={71}
         loading="eager"

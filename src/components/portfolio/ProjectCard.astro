@@ -47,8 +47,8 @@ const isLandscape = project.images.front.width > project.images.front.height
       <Picture
         src={project.images.front}
         alt={alt}
-        widths={[480, 768, 1200]}
-        sizes="(min-width: 62rem) 22rem, (min-width: 48rem) 40vw, 80vw"
+        widths={[400, 640, 900]}
+        sizes="(min-width: 62rem) 22rem, (min-width: 48rem) 40vw, calc(100vw - 3rem)"
         formats={['avif', 'webp']}
         quality={80}
         loading={eager ? 'eager' : 'lazy'}

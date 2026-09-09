@@ -59,7 +59,11 @@ export default defineConfig({
 
   build: {
     format: 'directory',
-    inlineStylesheets: 'auto',
+    // 'auto' leaves anything over ~4kB as a blocking <link>, and Lighthouse
+    // measured three of those holding up first paint. Every stylesheet here
+    // is a few kB, so inlining them all trades a little repetition across
+    // pages for removing a render-blocking round trip.
+    inlineStylesheets: 'always',
   },
 
   markdown: {

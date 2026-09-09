@@ -101,8 +101,8 @@ const countFor = (value: 'all' | Category) =>
                 <Picture
                   src={project.images.front}
                   alt={alt}
-                  widths={[480, 768, 1200]}
-                  sizes="(min-width: 62rem) 34rem, 90vw"
+                  widths={[400, 640, 900, 1200]}
+                  sizes="(min-width: 62rem) 34rem, calc(100vw - 3rem)"
                   formats={['avif', 'webp']}
                   quality={80}
                   loading={index === 0 ? 'eager' : 'lazy'}
@@ -294,9 +294,15 @@ const countFor = (value: 'all' | Category) =>
     color: #fff;
   }
 
+  /* Not `opacity`, which failed contrast against white at 0.7 — a dimmed
+     colour is still a colour and has to pass on its own. */
   .count {
     font-size: 0.75rem;
-    opacity: 0.7;
+    color: var(--text-muted);
+  }
+
+  .chip[aria-pressed='true'] .count {
+    color: #fff;
   }
 
   .features {

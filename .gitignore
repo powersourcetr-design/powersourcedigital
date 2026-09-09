@@ -11,3 +11,4 @@ dist/
 
 # Generated at build time by scripts/build-redirects.mjs
 public/_redirects
+lh-*.json

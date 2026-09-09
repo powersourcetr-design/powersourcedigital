@@ -412,7 +412,7 @@ Still absent, each blocked on content rather than code — `/work/` (needs real 
 `/pricing/` (needs real prices), `/blog/` (step 8), `/privacy/` and `/terms/` (need legal
 sign-off). None are linked from navigation, so nothing 404s.
 
-## 36. Power Source Trading removed sitewide
+## 36. The parent company is not named anywhere
 
 Every mention of the sister company is gone: the About page section, the footer line, the
 graphic-design FAQ answer, and the documentation.

@@ -4,7 +4,8 @@
 
 Intentionally absent until they are public (add with the same shape):
 
-- Power Source Trading — powersourcetrading.com (Shopify store behind password, "Opening soon")
+- The parent company's own Shopify store (behind a password, "Opening soon"). Named
+  nowhere in this repo by request — ask before adding it.
 - Stone Paving Solutions — stonepavingsolutions.co.uk (bot protection blocked screenshot capture)
 - Teylor Fashion — teylorfashion.de (domain offline at capture time)
 
